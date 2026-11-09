@@ -1,4 +1,4 @@
-# 2027 MCM/ICM · Problem A — *Where Does the Sand Go?*
+﻿# 2027 MCM/ICM · Problem A — *Where Does the Sand Go?*
 
 > 海岸演化与补沙策略（beach nourishment）建模工作区。
 > Outer Banks · Rodanthe 附近 5 km 走廊 · 2027–2042。
@@ -84,7 +84,7 @@ python erf_prototype.py > results.txt     # 约 1 秒
   `handoff/README_交接说明.md`（交接包说明）
 - `DECISIONS.md` 中 **D1–D8 仍为待定**，等建模手拍板；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
 - ✅ 已通过：erf 解析基准与原型一致；沙量恒等式与质量守恒（原型实测 1e-8）；匀铺可行性判据有闭式解
-- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账中 8 条 `need-manual-check` 待核实
+- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 36 行（15 OBS / 5 MODEL / 16 ASSUME），其中 4 条 `need-manual-check`、9 条仅搜索摘要待开原文
 - 红队第 1 轮：9 Partial / 0 Pass / 0 Fail —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
 
 ---

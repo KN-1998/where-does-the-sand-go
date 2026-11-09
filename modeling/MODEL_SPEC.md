@@ -89,12 +89,25 @@ $$
 $D$ [m²/yr] 为**岸线扩散系数**，由破碎波高与入射角决定：
 
 $$
-D=\frac{2K_c H_{b}^{5/2}\cos(2\alpha_b)}{H},\qquad
-Q=K_c H_b^{5/2}\sin(2\alpha_b)
+Q=K_c\,H_b^{5/2}\sin(2\alpha_b),\qquad
+D=\frac{2K_c H_b^{5/2}\cos(2\alpha_b)}{H}\times 3.156\times10^{7}\ \Bigl[\tfrac{\text{m}^2}{\text{s}}\to\tfrac{\text{m}^2}{\text{yr}}\Bigr]
 $$
 
-取 $K_c=0.39$（SPM/CERC，$H_s$ 口径）、$H_b\approx1.0$–$1.5$ m、$H=10$ m 时
-$D\approx 3\times10^{5}$ m²/yr（范围 $1\times10^{5}$–$8\times10^{5}$）。
+其中
+$$
+K_c=\frac{K_{\rm SPM}}{16\,(s-1)(1-p)}\sqrt{\frac{g}{\gamma_b}}\quad[\text{m}^{1/2}/\text{s}]
+$$
+取 $K_{\rm SPM}=0.39$（SPM/CERC，$H_s$ 口径）、$s=2.65$、$p=0.4$、$\gamma_b=0.78$ ⇒ $K_c=0.0873\ \text{m}^{1/2}/\text{s}$。
+
+| $H_b$ | $D$（由上式，$H=10$ m，$\alpha_b=8°$） |
+|---|---|
+| 1.0 m | $5.5\times10^{5}$ m²/yr |
+| 1.2 m | $8.7\times10^{5}$ m²/yr |
+| 1.5 m | $1.4\times10^{6}$ m²/yr |
+
+> ⚠ **模型取 $D=3\times10^{5}$ m²/yr，低于上式估计。这是一条显式的建模选择，理由如下**：
+> CERC 给的是**总输沙能力**（gross capacity）；而"补沙凸起被沿岸摊平"这一过程的有效扩散率，受**双向输沙、岸线曲率平滑、节点（nodal point）约束**的共同作用，通常显著低于总能力。文献中障壁岛岸线的 $D$ 常落在 $10^{5}$–$10^{6}$ m²/yr。
+> 因此 $D$ 是**必须做敏感性覆盖**的参数（扫描 $1\times10^{5}$–$8\times10^{5}$），论文必须同时给出上式估计与所采用值，并说明差异来源。**不要**把 CERC 的估计值当成"算出来的真值"。
 
 > **净漂移**：把 $Q_0(x)$ 的**空间梯度**并入 $L_c(x)$（见 3.5），因此 $Q_0$ 本身不带散度。
 > 若需要"岸线特征体以速度 $u$ 沿岸漂移"（把问题搬到下游），在 $y$ 方程中追加对流项 $-\,u\,\partial y/\partial x$（见 D2 选项 B）：

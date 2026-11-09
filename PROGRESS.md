@@ -1,4 +1,4 @@
-# PROGRESS.md — 进度台账
+﻿# PROGRESS.md — 进度台账
 
 > 每轮迭代开场必读：`PROGRESS.md` → `DECISIONS.md` → `CHECKLIST.md` → 找最靠前的未通过门禁。
 > 同步节奏：每 6–8 小时一次，每次不超过 10 分钟。
@@ -13,7 +13,7 @@
 |---|---|---|---|
 | 阶段 0 读题 | M0 | ✅ **通过**（47 条检查项覆盖题面） | `modeling/CHECKLIST.md` |
 | 阶段 1 模型骨架 | M1 | 🟡 **部分通过**（文档齐、解析基准与原型一致；**D1–D6 未签字**） | `MODEL_SPEC.md`、`NONDIM.md`、`DECISIONS.md`、`sanity/erf_prototype.py` + `results.txt` |
-| 阶段 2 数据与参数 | M2 | 🟡 **部分通过**（参数登记与台账齐；**8 条 evidence 待人工核实**；求解器未实现） | `params.yaml`、`PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`ledger/claims.csv` |
+| 阶段 2 数据与参数 | M2 | 🟡 **部分通过**（参数登记与台账齐；**4 条 `need-manual-check` + 9 条仅摘要待核**；求解器未实现） | `params.yaml`、`PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`ledger/claims.csv` |
 | 阶段 3 情景与策略 | M3 | 🟡 **部分通过**（设计完整；**无结果**） | `SCENARIOS_STRATEGIES.md` |
 | 阶段 4 交接 | M4 | ✅ **文档齐**（**等建模手签字**） | `handoff/CODER_SPEC.md`、`handoff/WRITER_NOTES.md`、`handoff/README_交接说明.md` |
 | 阶段 5 结果解读 | — | ⬜ 未开始（等编程手） | — |
@@ -31,7 +31,7 @@
 
 - **M0 通过** —— 题面每句有对应条目。
 - **M1 未完全通过** —— 阻塞项：`DECISIONS.md` 的 D1–D6 需要建模手签字。文档层面已齐。
-- **M2 未通过** —— 阻塞项：① 求解器未实现（编程手）；② `claims.csv` 中 8 条 `need-manual-check`（建模手）。
+- **M2 未通过** —— 阻塞项：① 求解器未实现（编程手）；② `claims.csv` 中 4 条 `need-manual-check` + 9 条仅摘要（建模手）。
 - **M3 未开始验证** —— 情景设计已冻结，等求解器。
 
 ### 阻塞（需要人）

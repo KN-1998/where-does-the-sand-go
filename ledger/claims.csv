@@ -1,8 +1,8 @@
-id,claim,value,unit,source_type,source_url,access_date,verify_status,used_in,note
+﻿id,claim,value,unit,source_type,source_url,access_date,verify_status,used_in,note
 O-01,"Rodanthe Ocean Drive 段 1998-2022 平均年侵蚀率 9-12 ft/yr（约 2.7-3.7 m/yr）",9-12,ft/yr,OBS,https://coastalreview.org/2023/01/dare-moves-toward-a-rodanthe-beach-nourishment-study/,2026-11-09,snippet-only,rho_e,"Coastal Review 2023-01-05；仅取搜索摘要，未逐句核对原文"
 O-02,"Rodanthe 平均年侵蚀率 5-22 ft（约 1.5-6.7 m/yr）",5-22,ft,OBS,https://islandfreepress.org/outer-banks-news/murphy-assures-dare-board-corps-will-do-study-if-funded/,2026-11-09,snippet-only,rho_e,"引述 Pilkey 等著作；Island Free Press 2023-08-02"
 O-03,"NC 2011 长期平均年海滨侵蚀率更新研究；Avon-Rodanthe 段约 16.9 mile 海滨，约 92.6% 处于侵蚀",16.9/92.6,mile/%,OBS,https://www.deq.nc.gov/coastal-management/documents/oceanfront-long-term-average-annual-erosion-rate-and-setbacks-2011/open,2026-11-09,snippet-only,rho_e(x) 空间分布,"DEQ 官方文档；建议编程手下载 PDF 取逐段速率表"
-O-04,"Dare County Rodanthe 补沙需求评估：关键侵蚀区 14,000 ft 基础亏空 2.3M cy；侵蚀约 300,000 cy/yr；建议补足并加 5 年侵蚀量",2.3e6/3.0e5,cy, OBS,https://www.darenc.gov/home/showpublisheddocument/12218/638194963727970000,2026-11-09,need-manual-check,V_max 与沙源规模,"PDF 直连返回 403；数值来自搜索摘要，必须人工打开核对"
+O-04,"Dare County Rodanthe 补沙需求评估：关键侵蚀区 14,000 ft 基础亏空 2.3M cy；侵蚀约 300,000 cy/yr；建议补足并加 5 年侵蚀量",2.3e6/3.0e5,cy,OBS,https://www.darenc.gov/home/showpublisheddocument/12218/638194963727970000,2026-11-09,need-manual-check,V_max 与沙源规模,"PDF 直连返回 403；数值来自搜索摘要，必须人工打开核对"
 O-05,"AP：自 2020 年以来 Rodanthe 已有 10 栋海滨房屋倒塌",10,buildings,OBS,https://apnews.com/article/rodanthe-home-collapses-north-carolina-outer-banks-6f82caa6d329058fe0f58f6c7c88becb,2026-11-09,snippet-only,风险暴露背景,"2024-09-25；正文被 403，摘要可用"
 O-06,"WTKR：Rodanthe 第 9 栋倒塌；OBX 自 2020 年累计 21 栋",9/21,buildings,OBS,https://www.wtkr.com/news/in-the-community/outer-banks/ninth-obx-oceanfront-house-falls-in-rodanthe-bringing-the-total-to-21-since-2020,2026-11-09,snippet-only,风险暴露背景,"与 O-05 口径不同（Rodanthe vs 全 OBX），引用时必须区分"
 O-07,"USACE 北海洋县（NJ）2024-10 合同 7350 万美元补 210 万 cy",73.5e6/2.1e6,USD/cy,OBS,https://www.nad.usace.army.mil/Media/News-Releases/Article/4000795/army-corps-shares-update-on-northern-ocean-county-beachfill/,2026-11-09,snippet-only,c1,"折合约 35 USD/cy；2024-12-13"
@@ -15,7 +15,7 @@ O-13,"NOAA 潮位站相对海平面趋势表（NC 站）",null,null,OBS,https://
 O-14,"Beaufort NC 相对海平面 3.1 mm/yr（1953-2018）",3.1,mm/yr,OBS,https://ncseagrant.ncsu.edu/coastwatch/land-versus-sea/,2026-11-09,snippet-only,slr_base,"仅作量级参照；Beaufort 与外滩不同站，不可直接替换"
 O-15,"NC 海平面上升评估报告：相对海平面速率在北卡北部（Cape Hatteras 以北）更高",null,null,OBS,https://www.deq.nc.gov/documents/pdf/science-panel/2015-nc-slr-assessment-final-report-jan-28-2016/download,2026-11-09,snippet-only,slr_base + D-4 讨论,"支持'区域 SLR != 局地后退'的论证"
 M-01,"H = h_* + B = 10 m（区间 8-12 m）",10,m,MODEL,,2026-11-09,derived,H_dep,"由 h_*=8、B=2 导出；1 m 岸线 <=> 10 m^3/m 沙"
-M-02,"D = 2 K_c H_b^2.5 cos(2a)/H ~ 3e5 m^2/yr（区间 1e5-8e5）",3.0e5,m^2/yr,MODEL,,2026-11-09,derived,D_diff,"K_c=0.39、H_b=1.2、H=10 代入；敏感性必须覆盖"
+M-02,"D：CERC 估计 5.5-14e5 m^2/yr；模型采用 3e5（显式保守选择）",3.0e5,m^2/yr,MODEL,,2026-11-09,derived,D_diff,"K_c=0.0873 m^0.5/s（由 SPM K=0.39 换算）、H_b=1.0-1.5、H=10；总输沙能力 != 有效扩散率，故取低值；敏感性覆盖 1e5-8e5"
 M-03,"w_crit = d_b - m_s = 30 - 8 = 20 m",20,m,MODEL,,2026-11-09,derived,w_crit,"纯由假设导出，必须标明 ASSUME 来源（A-13）"
 M-04,"V_max = 1.5e6 m^3（15 年），C_max = 6e7 USD",1.5e6/6e7,m^3/USD,MODEL,,2026-11-09,derived,management,"由 O-04 的 300k cy/yr 缩放到 5 km 走廊后取保守值"
 M-05,"w_trig = w_crit + 5 = 25 m",25,m,MODEL,,2026-11-09,derived,D8 触发规则,"见 DECISIONS D8"

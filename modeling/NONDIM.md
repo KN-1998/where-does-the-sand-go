@@ -97,7 +97,7 @@ $$
 $y(0,t)=\Delta y_0\operatorname{erf}(\ell/(4\sqrt{Dt}))-\rho_e t=\Delta y_{\text{req}}$ 的一维求根。两个极限：
 
 - 扩散主导（$\ell$ 小）：$T_p\approx$ 4.1 的结果；
-- 侵蚀主导（$\ell$ 大）：$T_p\approx\dfrac{\Delta y_0-\Delta y_{\text{req}}}{\rho_e}=\dfrac{\Delta y_0}{ \rho_e}-\tau_e$（就是"多出来的沙除以侵蚀率"）。
+- 侵蚀主导（$\ell$ 大，$\operatorname{erf}\to1$）：$T_p\approx\dfrac{\Delta y_0-\Delta y_{\text{req}}}{\rho_e}$（就是"多出来的沙除以侵蚀率"）。
 
 ### 4.3 匀铺可行性判据（★ 本篇最有用的一个式子）
 

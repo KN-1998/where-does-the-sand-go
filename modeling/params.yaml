@@ -30,7 +30,7 @@ waves:
   alpha_b: {symbol: "alpha_b", name: "特征破碎波入射角", unit: deg, value: 8.0, range: [0.0, 15.0], source_type: ASSUME, evidence_id: A-05, calibrate: false, note: "线性化用；cos(2a) 在 0-15 deg 内变化很小"}
 
 transport:
-  D_diff: {symbol: "D", name: "岸线扩散系数", unit: "m^2/yr", value: 300000.0, range: [100000.0, 800000.0], source_type: MODEL, evidence_id: M-02, calibrate: "锚定", note: "D = 2 K_c H_b^2.5 cos(2a)/H；核心参数，敏感性必须覆盖"}
+  D_diff: {symbol: "D", name: "岸线扩散系数", unit: "m^2/yr", value: 300000.0, range: [100000.0, 800000.0], source_type: MODEL, evidence_id: M-02, calibrate: "锚定", note: "CERC 估计给 5.5-14e5；采用 3e5 为显式保守选择（总输沙能力 != 有效扩散率）；核心参数，敏感性必须覆盖"}
   u_drift: {symbol: "u", name: "净沿岸漂移速度", unit: m/yr, value: 50.0, range: [0.0, 150.0], source_type: ASSUME, evidence_id: A-06, calibrate: true, note: "弱可辨识；与 D 通过'重心位移 vs 二阶矩增长'分离"}
   rho_e:  {symbol: "rho_e", name: "长期平均岸线侵蚀率", unit: m/yr, value: 3.0, range: [0.9, 6.7], source_type: OBS, evidence_id: O-01, calibrate: "先验", note: "9-22 ft/yr => 2.7-6.7 m/yr；主算例取 3.0"}
   rho_e_hotspot_amp: {symbol: "a_h", name: "热点侵蚀率放大倍数", unit: dimensionless, value: 0.5, range: [0.0, 1.0], source_type: ASSUME, evidence_id: A-07, calibrate: true, note: "rho_e(x)=rho_0[1+a_h exp(-(x-x_h)^2/2 sigma_h^2)]"}

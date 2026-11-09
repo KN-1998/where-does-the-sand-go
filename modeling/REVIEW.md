@@ -1,4 +1,4 @@
-# REVIEW.md — 红队审查（阶段 7，自查版）
+﻿# REVIEW.md — 红队审查（阶段 7，自查版）
 
 > 规则（AGENT_BRIEF §6）：逐条 **Pass / Fail / Partial**，并附**证据位置**。
 > 本文件在**求解器运行之前**做了一次；每次出结果后必须重做一遍。
@@ -21,7 +21,7 @@
 | 7 | 是否有至少两种布置且总沙量相同？ | **Partial** | ✅ 三种（A/B/C），总方量同为 $\mathcal{V}$（`MODEL_SPEC` §5、`NONDIM` §7 给了对照数值）。⚠ 缺：三种布置**同一随机种子下**的 MC 结果 |
 | 8 | 验证数据是否确实未参与标定？ | **Partial** | ✅ 划分原则写在 `VALIDATION_PLAN` §1（速率标定 / 位置验证，信息不重叠）。⚠ **风险**：若实际拿不到独立时段数据，必须改口为 "consistency check"，不许假装验证（已在该文件 §1 写明处置） |
 | 9 | 不可辨识机制是否说明，并给出补测？ | **Pass（文档层）** | ✅ `PARAM_EVIDENCE` §3 可辨识性总表 + `VALIDATION_PLAN` §7 补测清单（事件级灾后岸线为第一优先）。这是少数可以现在就判 Pass 的项，因为它是"论述"而非"结果" |
-| 10 | 每个数字是否有单位、来源、区间？ | **Partial** | ✅ `params.yaml` 全部带单位与 range；`claims.csv` 36 行全部带 `source_type` 与 `access_date`。⚠ **有 8 条标了 `need-manual-check`**（`O-04`、`O-11`、`O-12`、`O-13` 等），冻结前必须人工核实，否则不能进论文 |
+| 10 | 每个数字是否有单位、来源、区间？ | **Partial** | ✅ `params.yaml` 全部带单位与 range；`claims.csv` 36 行全部带 `source_type` 与 `access_date`。⚠ **有 4 条标 `need-manual-check`、9 条仅搜索摘要**（如 `O-04`、`O-11`、`O-12`、`O-13`），冻结前必须人工核实，否则不能进论文 |
 | 11 | 风暴时机对照实验是否存在？ | **Partial** | ✅ 设计已在 `SCENARIOS_STRATEGIES` §1.2（T-early/T-spread/T-late，同样 6 次事件）；E3 已列入 `CODER_SPEC` §7。⚠ 缺：结果 |
 | 12 | 触发规则是否仅依赖可观测量？ | **Pass（文档层）** | ✅ `SCENARIOS_STRATEGIES` §4.3 有逐项核对表：$\hat w$、灾后岸线、预算余额可观测；参数后验与预测标 MODEL |
 | 13 | 是否讨论补沙不适用与撤退？ | **Pass（文档层）** | ✅ 三条判据（性价比 / 保护期 / 物理不可持续），见 `SCENARIOS_STRATEGIES` §5 |
@@ -48,7 +48,7 @@
 - [ ] E0 基线与 E2 情景的**贡献分解**（慢性侵蚀 vs 扩散 vs 风暴各占多少）
 - [ ] S3 中 SLR 两通道的**单独归因**运行
 - [ ] 三方案在**同一随机种子**下的 MC 对照
-- [ ] `need-manual-check` 的 8 条台账全部核实并改状态
+- [ ] `need-manual-check` 的 4 条 + 9 条仅摘要的台账全部核实并改状态
 - [ ] F8 的排序稳定性结论（稳/不稳都要写）
 
 ---
