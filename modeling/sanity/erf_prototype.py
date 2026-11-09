@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 erf_prototype.py — 参考原型（阶段 1 门禁用，非成品，<150 行）
@@ -11,7 +11,7 @@ erf_prototype.py — 参考原型（阶段 1 门禁用，非成品，<150 行）
 import numpy as np
 from math import erf
 
-H, D, RHO = 10.0, 3.0e5, 3.0     # m, m^2/yr, m/yr
+H, D, RHO = 10.0, 3.0e5, 2.3     # m, m^2/yr, m/yr
 WC0, WCRIT, V_TOT, L_CORR = 18.0, 20.0, 1.0e6, 5000.0
 
 _erf = np.vectorize(erf)
@@ -107,7 +107,7 @@ def main():
             dy0 = V_TOT / (H * ell)
             print(f"    ell={ell:5.0f} dy0={dy0:6.1f} m  "
                   f"T_p(rho=0)={Tp(ell,dy0,WCRIT-w0,D,0):8.2f} yr"
-                  f"  T_p(rho=3)={Tp(ell,dy0,WCRIT-w0,D,RHO):6.2f} yr")
+                  f"  T_p(rho=2.3)={Tp(ell,dy0,WCRIT-w0,D,RHO):6.2f} yr")
 
     print("=" * 72); print("[4] 投放宽度扫描（V=1e6 m^3, w0=18, w_crit=20）")
     rows = [(e, *protected_years(e)) for e in np.linspace(400, 6000, 29)]
@@ -117,7 +117,7 @@ def main():
         print(f"    {ell:8.0f}{dy0:9.1f}{py:14.0f}{py/pmax:9.3f}"
               + ("  <== 最优" if py >= pmax - 1e-9 else ""))
 
-    print("=" * 72); print("[5] 三方案对照（V=1e6 m^3, rho=3）")
+    print("=" * 72); print("[5] 三方案对照（V=1e6 m^3, rho=2.3）")
     for name, ell in (("A 匀铺 5km", 5000.0), ("B 热点 1km", 1000.0), ("C 5段 0.5km", 500.0)):
         dy0 = V_TOT / (H * ell)
         print(f"    {name:12s} ell={ell:5.0f} dy0={dy0:6.1f} m"
@@ -140,5 +140,7 @@ if __name__ == "__main__":
     open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.txt"),
          "w", encoding="utf-8").write(txt)
     print(txt)  # 控制台可能乱码，以 results.txt 为准
+
+
 
 

@@ -41,3 +41,8 @@ modeling/sanity/*.png
 results/*.nc
 *.h5
 *.pkl
+
+# 资料库：大体积原始 PDF 与提取文本不入库（保留 .md 摘要）
+资料/06_原始摘录/_pdf/
+资料/06_原始摘录/_txt/
+

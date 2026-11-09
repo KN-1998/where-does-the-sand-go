@@ -42,6 +42,8 @@
 │       ├── erf_prototype.py       ← erf 解对拍、保护期闭式解、投放宽度扫描
 │       └── results.txt            ← 上述脚本的可复算输出
 │
+├── 资料/                          ← 【资料库】真实数据 + 原始 PDF + 提取文本
+│   └── 00_数据主表.md             ← 每个数字的出处（先看这个）
 ├── handoff/                       ← 【交接包】给编程手与论文手的契约文档
 ├── ledger/claims.csv              ← 声明台账：每个数字的来源类型与出处
 ├── data/raw/                      ← 原始数据（只读，附 SOURCES.md）
@@ -85,7 +87,7 @@ python erf_prototype.py > results.txt     # 约 1 秒
 - `DECISIONS.md` 中 **D1–D8 仍为待定**，等建模手拍板；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
 - ✅ 已通过：erf 解析基准与原型一致；沙量恒等式与质量守恒（原型实测 1e-8）；匀铺可行性判据有闭式解
 - ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 36 行（15 OBS / 5 MODEL / 16 ASSUME），其中 4 条 `need-manual-check`、9 条仅搜索摘要待开原文
-- 红队第 1 轮：9 Partial / 0 Pass / 0 Fail —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
+- 红队第 1 轮（口径已修）：**3 Pass（文档层）/ 12 Partial / 0 Fail** —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
 
 ---
 
