@@ -94,7 +94,8 @@ w(x,t) = w_0(x) + \bigl[y(x,t)-y_0(x)\bigr]
 % 输沙本构
 Q = Q_0 - D\,H\,\frac{\partial y}{\partial x},
 \qquad
-D = \frac{2K_c H_b^{5/2}\cos(2\alpha_b)}{H}
+D = \frac{2K_c H_b^{5/2}\cos(2\alpha_b)}{H}\times 3.156\times10^{7}
+\quad[\mathrm{m^2/s\to m^2/yr}]
 
 % 等价岸线方程
 \frac{\partial y}{\partial t}
@@ -156,6 +157,10 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 | $B$ | 滩肩高度 | m |
 | $H$ | $=h_*+B$，岸线-体积换算深度 | m |
 | $D$ | 岸线扩散系数 | m²/yr |
+| $K_c$ | 量纲化 CERC 系数 $=K_{\rm SPM}/[16(s-1)(1-p)]\sqrt{g/\gamma_b}$ | m$^{1/2}$/s |
+| $K_{\rm SPM}$ | CERC/SPM 无量纲系数（0.39） | — |
+| $H_b$ | 破碎波高 | m |
+| $\alpha_b$ | 特征破碎波入射角 | rad（正文可写 deg） |
 | $u$ | 净沿岸漂移速度 | m/yr |
 | $\rho_e$ | 长期平均岸线侵蚀率 | m/yr |
 | $\lambda_s$ | 侵蚀性事件到达率 | yr⁻¹ |
@@ -177,7 +182,7 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 | $h_*$ | 8（Buxton 设计 7.3） | m | 6–10 | MODEL/OBS |
 | $B$ | 2.0 | m | 1.5–2.5 | ASSUME |
 | $H$ | 10（Buxton 组合 9.3） | m | 8–12 | MODEL |
-| $D$ | $3\times10^{5}$ | m²/yr | $1$–$8\times10^{5}$ | MODEL |
+| $D$ | $3\times10^{5}$（CERC 0.8–1.2 m 给 3.0–8.4e5，中心 4.1e5） | m²/yr | $1$–$8\times10^{5}$ | MODEL |
 | $u$ | 50（南向为正） | m/yr | 0–150 | ASSUME |
 | $\rho_e$（背景） | 1.7 | m/yr | 1.2–2.1 | **OBS** |
 | $a_h$（热点放大） | 1.2 | – | 0.5–2.0 | **OBS/MODEL** |

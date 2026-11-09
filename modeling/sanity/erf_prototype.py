@@ -118,7 +118,7 @@ def main():
               + ("  <== 最优" if py >= pmax - 1e-9 else ""))
 
     print("=" * 72); print("[5] 三方案对照（V=1e6 m^3, rho=2.3）")
-    for name, ell in (("A 匀铺 5km", 5000.0), ("B 热点 1km", 1000.0), ("C 5段 0.5km", 500.0)):
+    for name, ell in (("A 匀铺 5km", 5000.0), ("B 热点 1km", 1000.0), ("C 单段 0.5km", 500.0)):
         dy0 = V_TOT / (H * ell)
         print(f"    {name:12s} ell={ell:5.0f} dy0={dy0:6.1f} m"
               f"  T_p(中心)={Tp(ell,dy0,WCRIT-WC0,D,RHO):5.2f} yr"

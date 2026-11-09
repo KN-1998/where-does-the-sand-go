@@ -55,7 +55,7 @@ $$
 令 $a=k+\lambda$。一个时间步 $\Delta t$ 内，先注入风暴沙 $S$（m²，即时），随后
 
 $$
-O^{n+1}=O^{n}e^{-a\Delta t}+\frac{S}{\Delta t\,a}\left(1-e^{-a\Delta t}\right)
+O^{n+1}=\bigl(O^{n}+S\bigr)\,e^{-a\Delta t}
 $$
 
 $$
@@ -65,6 +65,8 @@ $$
 $$
 
 **守恒校验**：$\Delta O+\Delta V_{\text{rec}}+\text{loss}=S$。这三行是 T1 能过 $10^{-12}$ 的关键，**不要**用 Euler 离散 $O$。
+
+> **为什么是 $(O^n+S)e^{-a\Delta t}$ 而不是"连续注入"式**：§2.4b 规定风暴沙在事件时刻**一次性**注入（$S$ 是总量 m²，不是速率），随后自由衰减。连续注入式 $O^n e^{-a\Delta t}+\frac{S}{\Delta t a}(1-e^{-a\Delta t})$ 会把事件摊到整个 $\Delta t$，与"即时"不符；两者相差约 $a\Delta t/2\approx0.8\%$，虽小但会让 T6 的 0.87 判据漂移。恢复/损失两式对两种写法都成立（都只依赖 $O^n,O^{n+1},S$）。
 
 ### 2.4 时间推进
 
@@ -185,8 +187,9 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 ```
 
 - `V_inside` = $\sum_i y_i\Delta x\cdot H$（m³）；`O_inside` = $\sum_i O_i\Delta x$（m³）
-- `residual = placed_cum + (初始总量) − (V+O) − flux − offshore − chronic`
-- **每行都要写 `residual_rel`**，T1 就是看它的最大值。
+- **口径（必须固定）**：$y$ 是相对 $t=0$ 岸线的位置，$O(0)=0$，所以"初始总量"$=0$；$V_{\text{inside}}$ 是**增量体积**，不是含 $V_0$ 的绝对体积。若实现里保留 $V_0$，则 `V_inside` 必须同步减去 $\int V_0 dx$，两种写法只能选一种。
+- `residual = placed_cum + 0 − (V+O) − flux − offshore − chronic`
+- **每行都要写 `residual_rel`**，T1 就是看它的最大值。分母取 $\max(1\ \mathrm{m^3},\ \lvert\text{placed\_cum}\rvert+\lvert\text{初始总量}\rvert)$，避免 $t=0$ 时除零。
 
 **⚠ 关于 chronic_loss**：它会吃掉背景沙。所以**必须同时跑一条"无补沙基线"**，台账里再给一列 `baseline_chronic_loss_cum`，并在 `results.json` 里用**两跑相减**得到"补沙自身的去向"。别把基线侵蚀算到补沙头上。
 
