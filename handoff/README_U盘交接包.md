@@ -3,7 +3,7 @@
 > 备份时间：2026-11-09（Round 5 资料库扩充后刷新）
 > 基准仓库：https://github.com/KN-1998/where-does-the-sand-go
 > 本地工作副本：`D:\where-does-the-sand-go`
-> 当前提交：`a5ec6a3`（Round 5 完成；含 Round 3/4 的审计修复）
+> 当前提交：见 `git/COMMIT.txt`（本次备份的 HEAD；Round 5 完成）
 
 ---
 
@@ -30,7 +30,7 @@ where-does-the-sand-go_handoff/
 ```bash
 git clone where-does-the-sand-go.bundle where-does-the-sand-go
 cd where-does-the-sand-go
-git log --oneline -5        # 应看到 a5ec6a3 在顶部
+git log --oneline -5        # 顶部应是最新的 [data]/[handoff] 提交
 git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 ```
 
@@ -81,4 +81,4 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 
 - 文档/参数/台账一致性已过：YAML 可解析、台账 10 列、全仓无控制字符、Markdown 表格无截断。
 - 原型可复算：`python docs/modeling/sanity/erf_prototype.py`（<2 s）。
-- 若 U 盘文件与 `docs/` 不一致，以 git bundle 恢复出的 `a5ec6a3` 为准。
+- 若 U 盘文件与 `docs/` 不一致，以 git bundle 恢复出的 HEAD（见 `git/COMMIT.txt`）为准。
