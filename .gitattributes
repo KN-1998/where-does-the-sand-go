@@ -1,0 +1,19 @@
+# 统一换行符：仓库内存 LF，检出时按平台转换
+* text=auto
+
+# 文本
+*.md    text
+*.py    text
+*.yaml  text
+*.yml   text
+*.csv   text
+*.txt   text
+
+# 二进制（禁止自动换行转换与 diff）
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.svg   text
+*.pyc   binary
