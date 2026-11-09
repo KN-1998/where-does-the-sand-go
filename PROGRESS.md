@@ -194,6 +194,6 @@
 
 ### 数据资产
 
-- 新增本地全文：USGS 2015-1002、CSE 2013、Flynn 2023、Stauble 2007、Kitty Hawk 2021（5 份 PDF）
+- 新增本地全文：USGS 2015-1002、CSE 2013、Flynn 2023、Stauble 2007、Kitty Hawk 2021（6 份 PDF；含 2025 DEQ CRC 25-34）
 - NDBC 41025 气候表 1 份；USGS 岸线 GIS 1 套（`_gis/`，已 gitignore）
 - 旧 6 份 PDF 的数值已核对但本地副本缺失，已在 `资料/06_原始摘录/README.md` 如实标注

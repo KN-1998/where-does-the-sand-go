@@ -1,7 +1,7 @@
 # 原始摘录清单（`_pdf` / `_txt` / `_gis`）
 
 > 所有下载文件的原始副本。**不要改**，需要引用时从这里取。
-> 下载时间：2026-11-09（第 5 轮检索新增 5 份全文 + 1 份浮标表 + 1 套 GIS）。
+> 下载时间：2026-11-09（第 5 轮检索新增 6 份全文 + 1 份浮标表 + 1 套 GIS）。
 
 ## 1. 本地确实存在的文件（`_pdf/`）
 
@@ -12,6 +12,7 @@
 | `flynn2023_caha.pdf` | 9.9 MB | 24 | NPS/ODU 2023 CAHA 海岸科学（1998–2022 热点速率表） | E11 |
 | `stauble2007_fill.pdf` | 1.3 MB | 16 | Dare County 补沙物源适应性（670 个底质样） | P3 背景 |
 | `kittyhawk_2021_monitoring.pdf` | 7.8 MB | 45 | Kitty Hawk/KDH 2017 工程 2021 监测（3.3 年留存率） | N19 |
+| `crc2534_erosion_2025.pdf` | 12 MB | 44 | NC DEQ 2025 侵蚀率/setback factor 更新简报（Waves–Rodanthe 上调 1–1.5） | E13 |
 | `41025_climate.txt` | 278 KB | — | NDBC 41025 气候摘要（波高/风速频数表） | W9 |
 | `usgs_shorelines.zip` | 1.4 MB | — | USGS 14 条岸线 + baseline + index 的 shapefile | VAL-1 |
 

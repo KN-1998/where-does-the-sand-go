@@ -18,7 +18,7 @@ where-does-the-sand-go_handoff/
 │   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
 │   ├─ ledger/claims.csv        ← 92 条数字台账（68 OBS / 16 ASSUME / 8 MODEL）
 │   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
-│   │   └─ 06_原始摘录/         ← _pdf（5 份全文）、_txt（提取文本）、_gis（USGS 岸线）
+│   │   └─ 06_原始摘录/         ← _pdf（6 份全文）、_txt（提取文本）、_gis（USGS 岸线）
 │   └─ problem/                 ← 题目 PDF
 └─ git/
     ├─ where-does-the-sand-go.bundle   ← 完整 git 历史（含 main）
