@@ -207,6 +207,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
 | **T7** | 边界对比 | `zeroflux` vs `open` | 前者留存率**更高**（方向必须对） | 差异应 >0 |
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同（或用 `np.allclose`）+ `fields.npz` md5 相同 | — |
+| **T9** | **历史岸线独立验证（Q3，不是代码测试）** | 读 `资料/06_原始摘录/_gis/` 的 14 条 USGS 岸线（1978–2002）；以 baseline 布正交 transect，算 Rodanthe 段 LRR；与模型"无补沙基线"对比 | 同一量级：模型基线速率应落在 **1.5–2.8 m/yr**（USGS 全岛 1.5、Flynn 热点 2.26） | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 
@@ -252,8 +253,8 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | E1 | `--scenario S1 --strategy {A,B,C}` | 三方案对照表 + 沙去向堆叠图 |
 | E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | $T_p$ 分位、$E$ 分位 |
 | E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_p$、min $w$、2042 年 $w$） |
-| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[3,15]$ M\$ 扫描 | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
-| E5 | `sweep.py --oat` + `--sobol` | tornado 图 + Sobol 图 |
+| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[0,10]$ M\$ 扫描（Q-38 建议；未批前可按 $[3,15]$ 跑，但必须同时给 $[0,10]$） | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
+| E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}` | 边界敏感性表 |
 | E7 | $\mathcal{V}\in[1e5,3e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
 

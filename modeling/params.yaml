@@ -41,12 +41,12 @@ transport:
 storm:
   lambda_s: {symbol: "lambda_s", name: "侵蚀性事件到达率", unit: "1/yr", value: 0.4, range: [0.2, 1.5], source_type: ASSUME, evidence_id: A-08, calibrate: true, note: "仅计造成 >3 m 等效后退的事件；风暴浪(>=1.5m)约 30/yr、NC 飓风登陆约 0.5/yr，两者都不是此口径"}
   dy_ref:   {symbol: "dy_ref", name: "单事件等效后退中位值", unit: m, value: 8.0, range: [4.0, 12.0], source_type: ASSUME, evidence_id: A-09, calibrate: true}
-  dy_p95:   {symbol: "dy_95", name: "单事件等效后退 95 分位", unit: m, value: 25.0, range: [15.0, 40.0], source_type: ASSUME, evidence_id: A-09, calibrate: false}
+  dy_p95:   {symbol: "dy_95", name: "单事件等效后退 95 分位", unit: m, value: 25.0, range: [15.0, 40.0], source_type: ASSUME, evidence_id: A-09, calibrate: false, note: "2025 Buxton 连续风暴观测到最大 43 m（W10），说明 25 m 是设计事件分位而非观测上界；敏感性必须扫到 40 m"}
   dy_cut:   {symbol: "dy_cut", name: "单事件后退超过当前滩宽的允许余量", unit: m, value: 5.0, range: [2.0, 10.0], source_type: ASSUME, evidence_id: A-09, calibrate: false, note: "Delta_y_max = w + dy_cut；防止事件把滩宽推到负值，旧版 min(w+dy_cut,0.5H) 会错误地把 25 m 事件截到 5 m"}
   gamma_s:  {symbol: "gamma", name: "强度-侵蚀非线性指数", unit: dimensionless, value: 1.5, range: [1.0, 2.0], source_type: ASSUME, evidence_id: A-10, calibrate: false, note: "仅在按 R_k 强度参数化时使用；若直接按对数正态抽样 Delta_y_pot，则本参数不参与主算，只作敏感性"}
   w_sat:    {symbol: "w_s", name: "侵蚀饱和滩宽尺度", unit: m, value: 20.0, range: [10.0, 40.0], source_type: ASSUME, evidence_id: A-10, calibrate: false, note: "S_k 中 [1-exp(-w/w_s)] 因子"}
   k_rec:    {symbol: "k", name: "沙坝回滩恢复率", unit: "1/yr", value: 0.667, range: [0.33, 2.0], source_type: OBS, evidence_id: O-11, calibrate: true, note: "对应恢复时间 0.5-3 yr"}
-  lam_off:  {symbol: "lambda", name: "近岸沙库永久离岸损失率", unit: "1/yr", value: 0.1, range: [0.02, 0.3], source_type: ASSUME, evidence_id: A-11, calibrate: true, note: "对应 10 yr 损失时间"}
+  lam_off:  {symbol: "lambda", name: "近岸沙库永久离岸损失率", unit: "1/yr", value: 0.1, range: [0.02, 0.3], source_type: ASSUME, evidence_id: A-11, calibrate: true, note: "对应 10 yr 损失时间；Kitty Hawk 3.3 年留存 79-87.5% 反推 lambda_eff=0.04-0.07（N19），取 0.1 偏保守"}
 
 beach_state:
   w0_far:  {symbol: "w_far", name: "初始干滩宽度（热点外远场值）", unit: m, value: 25.0, range: [20.0, 40.0], source_type: ASSUME, evidence_id: A-12, calibrate: false, note: "热点外远场值；走廊均值约 21.8 m，热点最小 16 m；无实测剖面，必须做敏感性"}
@@ -59,14 +59,14 @@ beach_state:
 
 management:
   V_max:  {symbol: "V_max", name: "15 年总沙量上限", unit: "m^3", value: 2500000.0, range: [1000000.0, 4000000.0], source_type: MODEL, evidence_id: N4, calibrate: "敏感性", note: "CSE 2023 全文：总需沙 3.8M cy = 2.905M m3；取 2.5M 为向下取整的保守上限（非观测原值）"}
-  c0:     {symbol: "c_0", name: "单次工程固定成本", unit: "USD", value: 8000000.0, range: [3000000.0, 15000000.0], source_type: ASSUME, evidence_id: A-14, calibrate: false, note: "mobilisation/审批/监测；无该项则'多 vs 少'比较失效"}
+  c0:     {symbol: "c_0", name: "单次工程固定成本", unit: "USD", value: 8000000.0, range: [3000000.0, 15000000.0], source_type: ASSUME, evidence_id: A-14, calibrate: false, note: "mobilisation/审批/监测；无该项则'多 vs 少'比较失效。2026 Buxton/Avon 全成本反推 c0=0.5-4.0M（N17/N18），8M 偏高；Q-38 建议扫描范围改 [0,10]M"}
   c1:     {symbol: "c_1", name: "单位方量成本", unit: "USD/m^3", value: 25.0, range: [13.0, 46.0], source_type: OBS, evidence_id: N11, calibrate: false, note: "NJ 35 USD/cy、OakIsland 30.5、Rodanthe 估算 10.5-13 USD/cy；换算后 13-46 USD/m^3"}
   C_max:  {symbol: "C_max", name: "15 年总预算上限", unit: "USD", value: 120000000.0, range: [40000000.0, 120000000.0], source_type: OBS, evidence_id: N6, calibrate: false, note: "PSDS 引 CSE：120M 是 3 次全量补沙的费用（3x40M），不是外生预算；⚠ 与 V_max=2.5M、c0=8M 同时使用时不绑定（N<=7 都买满 V_max），c0* 无定义。Q-33 推荐改为 6.0e7 并标 ASSUME；未获建模手批准前保持 1.2e8，但 E4 不得据此出结论"}
   w_trig: {symbol: "w_trig", name: "触发评估的滩宽阈值", unit: m, value: 25.0, source_type: MODEL, evidence_id: M-05, calibrate: false, note: "w_crit + delta, delta=5 m"}
   T_min:  {symbol: "T_min", name: "可接受的最短保护期（低于则考虑撤退）", unit: yr, value: 3.0, range: [2.0, 5.0], source_type: ASSUME, evidence_id: A-15, calibrate: false}
 
 climate_scenarios:
-  slr_base: {symbol: "R_SLR", name: "相对海平面上升速率（基准）", unit: "mm/yr", value: 4.55, range: [3.4, 5.5], source_type: OBS, evidence_id: S1, calibrate: false, note: "Duck Pier 8651370 = 4.55+-0.75 mm/yr (1978-2016)；Oregon Inlet 4.17；Beaufort 2.99；不得直接换算为岸线后退"}
+  slr_base: {symbol: "R_SLR", name: "相对海平面上升速率（基准）", unit: "mm/yr", value: 4.55, range: [3.4, 5.5], source_type: OBS, evidence_id: S1, calibrate: false, note: "Duck Pier 8651370 = 4.55+-0.75 mm/yr (1978-2016)；NOAA 现行 1978-2023 = 4.88+-0.56（S4），Q-39 建议改 4.88，未批前保留 4.55；Oregon Inlet 4.17；Beaufort 2.99；不得直接换算为岸线后退"}
   slr_2027: {symbol: "R_SLR,2027", name: "S3 情景初期速率", unit: "mm/yr", value: 4.0, source_type: ASSUME, evidence_id: A-16, calibrate: false}
   slr_2042: {symbol: "R_SLR,2042", name: "S3 情景末期速率", unit: "mm/yr", value: 8.0, source_type: ASSUME, evidence_id: A-16, calibrate: false}
   Hs_trend: {symbol: "dHs/dt", name: "S3 情景波高趋势", unit: "%/decade", value: 3.0, range: [0.0, 6.0], source_type: ASSUME, evidence_id: A-16, calibrate: false}
