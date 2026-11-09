@@ -10,6 +10,8 @@
 D:\数学建模acm\
 ├── README.md                    ← 仓库入口（GitHub 首页）
 ├── 00_README_索引.md            ← 你正在读的文件
+├── PROGRESS.md                  ← 进度台账（每轮开场必读）
+├── OPEN_QUESTIONS.md            ← 待建模手拍板 / 待他人回答的问题
 ├── .gitignore / .gitattributes  ← 仓库卫生（缓存、LaTeX 中间产物、换行符）
 │
 ├── problem/
@@ -27,10 +29,10 @@ D:\数学建模acm\
 │   ├── PARAM_EVIDENCE.md        ← 每个参数的出处与可辨识性评估
 │   ├── VALIDATION_PLAN.md       ← 标定/验证划分、指标、敏感性方案
 │   ├── SCENARIOS_STRATEGIES.md  ← 情景设计 + 策略设计 + 触发规则
-│   ├── REVIEW.md                ← 红队审查（15 条逐条 Pass/Fail + 证据）〔待补〕
+│   ├── REVIEW.md                ← 红队审查（15 条逐条 Pass/Partial/Fail + 证据）
 │   └── sanity/                  ← 参考原型（≤150 行/个，仅用于自检，非成品）
 │
-├── handoff/                     ← 【★ 交接文档，独立成包】〔待补〕
+├── handoff/                     ← 【★ 交接文档，独立成包】
 │   ├── README_交接说明.md        ← 交接包说明：给谁、怎么用、边界在哪
 │   ├── CODER_SPEC.md            ← → 编程手（方程离散 / IO 接口 / 验收测试 / 实验清单）
 │   └── WRITER_NOTES.md          ← → 论文手（论证线 / 公式 / 图表规格 / 评分点映射）
@@ -41,8 +43,6 @@ D:\数学建模acm\
 └── data/
     ├── raw/                     ← 原始数据（只读，不改动）
     └── processed/               ← 清洗后数据（编程手维护，附 SOURCES.md）
-
-根目录另需（尚未创建）：PROGRESS.md（进度台账，每轮开场必读）、OPEN_QUESTIONS.md（待拍板问题）。
 ```
 
 
@@ -54,11 +54,27 @@ D:\数学建模acm\
 4. **y（岸线位置）、w（滩宽）、V（沙量）不可互换**，换算必须写出 `h_* + B` 这个中间量。
 5. 门禁不过不进下一阶段（M2 求解器未验收，不跑 Q2 之后的实验）。
 
-## 当前状态
+## 当前状态（2026-11-09）
 
-截至 2026-11-09：阶段 0–3 文档已出（`CHECKLIST.md` / `MODEL_SPEC.md` / `NONDIM.md` /
-`params.yaml` / `PARAM_EVIDENCE.md` / `VALIDATION_PLAN.md` / `SCENARIOS_STRATEGIES.md`），
-`erf_prototype.py` 与 `sanity/results.txt` 可复算通过。
+| 阶段 | 门禁 | 状态 |
+|---|---|---|
+| 0 读题 | M0 | ✅ 通过（47 条检查项覆盖题面每句） |
+| 1 模型骨架 | M1 | 🟡 文档齐、解析基准与原型对拍一致；**D1–D8 待建模手签字** |
+| 2 数据与参数 | M2 | 🟡 参数表与台账齐；**8 条 evidence 待人工核实**；求解器未实现 |
+| 3 情景与策略 | M3 | 🟡 设计完整，**无结果** |
+| 4 交接 | M4 | ✅ `handoff/` 可交付编程手与论文手，**等建模手签字** |
+| 7 红队 | — | 🟡 第 1 轮：9 Partial / 0 Pass / 0 Fail（没有结果就没有 Pass） |
 
-待办：`DECISIONS.md` 中 D1–D8 待建模手拍板；`handoff/`（CODER_SPEC / WRITER_NOTES）与
-`REVIEW.md` 待补；`PROGRESS.md`、`OPEN_QUESTIONS.md` 尚未创建。进度以 `README.md` 的"当前状态"节为准。
+### 三个已经能用的结论
+
+1. **补沙寿命 $\propto \ell^2/D$**：$T_{1/2}=0.2748\,\ell^2/D$；1 km 投放、$D=3\times10^5$ m²/yr 时约 0.92 yr。
+2. **匀铺可行性阈值** $\mathcal{V}_{\text{thr}}=HL\,(w_{\text{crit}}-w_{\min})$；低于它，匀铺**必然**留下不达标岸段。
+3. **没有单次工程固定成本，"一次大补 vs 多次小补"是假比较**（见 `DECISIONS.md` D7）。
+
+### 下一步
+
+1. 建模手签 `modeling/DECISIONS.md` 的 D1–D8（**D7 最急**，改了要重跑全部 Q5）；
+2. 编程手按 `handoff/CODER_SPEC.md` 实现求解器，先让 T1（沙量收支）过；
+3. 论文手按 `handoff/WRITER_NOTES.md` 搭骨架，结果章节先占位。
+
+进度以 `PROGRESS.md` 为准。

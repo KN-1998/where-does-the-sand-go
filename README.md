@@ -78,12 +78,14 @@ python erf_prototype.py > results.txt     # 约 1 秒
 
 ## 当前状态（2026-11-09）
 
-- 阶段 0–3 文档已出：`CHECKLIST.md`、`MODEL_SPEC.md`、`NONDIM.md`、`params.yaml`、
-  `PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`SCENARIOS_STRATEGIES.md`
-- `DECISIONS.md` 中 **D1–D8 仍为待定**，等建模手拍板；未定项按"推荐项"推进并标注依赖
-- `handoff/`（CODER_SPEC / WRITER_NOTES）待补
-- ✅ 已通过：erf 解析基准与原型一致
-- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）
+- 阶段 0–4 文档已出：`CHECKLIST.md`、`MODEL_SPEC.md`、`NONDIM.md`、`DECISIONS.md`、`params.yaml`、
+  `PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`SCENARIOS_STRATEGIES.md`、`REVIEW.md`
+- **交接包已完成**：`handoff/CODER_SPEC.md`（→ 编程手）、`handoff/WRITER_NOTES.md`（→ 论文手）、
+  `handoff/README_交接说明.md`（交接包说明）
+- `DECISIONS.md` 中 **D1–D8 仍为待定**，等建模手拍板；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
+- ✅ 已通过：erf 解析基准与原型一致；沙量恒等式与质量守恒（原型实测 1e-8）；匀铺可行性判据有闭式解
+- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账中 8 条 `need-manual-check` 待核实
+- 红队第 1 轮：9 Partial / 0 Pass / 0 Fail —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
 
 ---
 

@@ -25,13 +25,15 @@
 ### 2.1 连续形式
 
 $$
-\frac{\partial y}{\partial t}=-u\frac{\partial y}{\partial x}+D\frac{\partial^2 y}{\partial x^2}+\frac{I-S}{H}+\frac{k\,O-\lambda O}{H}-\rho_e(x)
+\frac{\partial y}{\partial t}=-u\frac{\partial y}{\partial x}+D\frac{\partial^2 y}{\partial x^2}+\frac{I-S}{H}+\frac{k\,O}{H}-\rho_e(x)
 $$
 
 $$
-\frac{\partial O}{\partial t}=\frac{S}{H}-\left(k+\lambda\right)O
-\qquad\text{（注意：}O\text{ 用 m}^2\text{ 存储，}S/H\text{ 以 m/yr 计，见 §2.3）}
+\frac{\partial O}{\partial t}=S-\left(k+\lambda\right)O
+\qquad\text{（}y\text{ 用 m，}O\text{ 用 m}^2\text{=m}^3\text{/m，}S\text{ 用 m}^2\text{/yr）}
 $$
+
+> 量纲自检：$kO$ 是 m²/yr，除 $H$ 得 m/yr ✓；$\lambda O$ **不出现在** $y$ 的方程里（它是 $O$ 的永久损失，不是海滩的体积变化）——写成 $(kO-\lambda O)/H$ 是常见错误。
 
 > 实现建议：**主变量用 $y$（m）和 $O$（m²）**；$V=H y+$常数，只在需要报体积时换算。
 > 这样 $y$ 的量级（米）与 $O$ 的量级（m²）都可以直接做量纲检查。
