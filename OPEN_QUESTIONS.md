@@ -91,7 +91,7 @@ $$\mathcal{V}_{\text{tot}}(N)=\min\Bigl\{V_{\max},\ \frac{C_{\max}-Nc_0}{c_1}\Bi
 | # | 问题 | 修复 |
 |---|---|---|
 | F1 | `modeling/params.yaml` 第 37 行有字面 `\n`，YAML **解析失败**（编程手无法读参数） | 拆成两行；`yaml.safe_load` 通过 |
-| F2 | `w_crit=20` 与 `d_b-m_s=30-8=22` 不一致 | `d_b` 改为 28，使 $w_{crit}=20$ 与基准表一致 |
+| F2 | `w_crit=20` 与 `d_b-m_s=30-8=22` 不一致 | ~~`d_b` 改为 28，使 $w_{crit}=20$ 与基准表一致~~ **（第 6 轮已推翻：不能反向推 d_b；w_crit 改为独立管理阈值，见 Q-40）** |
 | F3 | `w0_mean=25` 实际是热点外远场值，不是走廊均值 | 改名为 `w0_far=25`，新增 `w0_corridor_mean=21.8`、`sigma_w=700`；MODEL_SPEC 初值改为热点场 |
 | F4 | 风暴上限 `min{w+dy_cut,0.5H}` 在 $H=10$ 时把 25 m 事件截到 5 m | 改为 `w+dy_cut`，新增 `dy_cut=5` m；补 §2.4b 对数正态抽样口径 |
 | F5 | `open` 边界写成"记账但不在总量里扣"，实际不是开边界，T7 会失败 | CODER_SPEC §2.6 改为"面通量施加到边界单元 + 台账"；`zeroflux` 明确置 $F=0$ |

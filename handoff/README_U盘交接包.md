@@ -55,7 +55,8 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 
 | # | 事 | 影响 | agent 的建议 |
 |---|---|---|---|
-| **Q-33** | D7 预算约束不绑定：$C_{\max}=120$M、$V_{\max}=2.5$M、$c_0=8$M 时 $N=1,3$ 都买满，$c_0^*$ 无定义 | **阻塞 E4/Q5** | 改 $C_{\max}=60$M（标 ASSUME），敏感性 40–120M |
+| **Q-33** | D7 预算不绑定：旧 $V_{\max}=2.5$M 是 5 年量，被误标成 15 年 | E4/Q5 | **已定位**：$V_{\max}$ 改 5.0M 后 $N=1$ 买 4.48M、$N=3$ 买 3.84M，都绑定；**不需要改 $C_{\max}$**。待签字 |
+| **Q-40–44** | 主风险指标、$V_{\max}$ 语义、成本口径、滩宽耗尽、本地速率 | 全部定量结论 | 见 `OPEN_QUESTIONS.md`；Q-40 建议"建筑净距 + 管理滩宽并列" |
 | **Q-38** | $c_0$ 证据区间是 0.5–4M（2026 Buxton/Avon 反推），8M 偏高 | E4 的 $c_0$ 扫描 | 扫描范围改 $[0,10]$M，8M 作上界 |
 | **Q-39** | `slr_base` 4.55 → NOAA 现行 **4.88**（1978–2023） | 基线/情景起点 | 改 4.88，4.55 作敏感性 |
 | **Q-34** | S2 的 `forced_dy=25` 是潜在还是实际后退 | S2 情景强度 | 论文写明"25 是 potential"，或对该事件关闭饱和 |
@@ -68,7 +69,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 1. 读 `docs/handoff/CODER_SPEC.md`（实现契约、接口、验收测试）。
 2. 按 **C-D4**：先 `zeroflux` 跑 T1（收支闭合）与 T3（零源项），再切 `open` 复验 T1。
 3. 风暴按 §2.4b 的**对数正态 $\Delta y_{\rm pot}$**，不要用 `0.5H` 截断。
-4. **E4 等 Q-33**；E0–E3、E5–E7 与 T1–T8 不受影响；T9 用 USGS 岸线做独立验证。
+4. **E4 前先签 Q-33/Q-40/Q-41/Q-42**（$V_{\max}$ 语义与预算/成本口径）；E0–E3、E5–E7 与 T1–T8 不受影响；T9 优先用现成 `Hatteras_Transects.dbf` 的 LRR 字段。
 
 ## 6. 论文手从哪开始
 
