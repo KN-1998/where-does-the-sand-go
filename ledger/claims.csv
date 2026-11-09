@@ -1,4 +1,4 @@
-﻿id,claim,value,unit,source_type,source_url,access_date,verify_status,used_in,note
+id,claim,value,unit,source_type,source_url,access_date,verify_status,used_in,note
 O-01,Rodanthe Ocean Drive 段 1998-2022 平均年侵蚀率 9-12 ft/yr（约 2.7-3.7 m/yr）,9-12,ft/yr,OBS,https://coastalreview.org/2023/01/dare-moves-toward-a-rodanthe-beach-nourishment-study/,2026-11-09,superseded,rho_e,Coastal Review 2023-01-05；仅取搜索摘要，未逐句核对原文 | 已被 E7 取代/细化
 O-02,Rodanthe 平均年侵蚀率 5-22 ft（约 1.5-6.7 m/yr）,5-22,ft,OBS,https://islandfreepress.org/outer-banks-news/murphy-assures-dare-board-corps-will-do-study-if-funded/,2026-11-09,superseded,rho_e,引述 Pilkey 等著作；Island Free Press 2023-08-02 | 已被 E1/E2 取代/细化
 O-03,NC 2011 长期平均年海滨侵蚀率更新研究；Avon-Rodanthe 段约 16.9 mile 海滨，约 92.6% 处于侵蚀,16.9/92.6,mile/%,OBS,https://www.deq.nc.gov/coastal-management/documents/oceanfront-long-term-average-annual-erosion-rate-and-setbacks-2011/open,2026-11-09,superseded,rho_e(x) 空间分布,DEQ 官方文档；建议编程手下载 PDF 取逐段速率表 | 已被 E4 取代/细化
@@ -16,16 +16,16 @@ O-14,Beaufort NC 相对海平面 3.1 mm/yr（1953-2018）,3.1,mm/yr,OBS,https://
 O-15,NC 海平面上升评估报告：相对海平面速率在北卡北部（Cape Hatteras 以北）更高,null,null,OBS,https://www.deq.nc.gov/documents/pdf/science-panel/2015-nc-slr-assessment-final-report-jan-28-2016/download,2026-11-09,snippet-only,slr_base + D-4 讨论,支持'区域 SLR != 局地后退'的论证
 M-01,H = h_* + B = 10 m（区间 8-12 m）,10,m,MODEL,,2026-11-09,derived,H_dep,由 h_*=8、B=2 导出；1 m 岸线 <=> 10 m^3/m 沙
 M-02,D：CERC 估计 5.5-14e5 m^2/yr；模型采用 3e5（显式保守选择）,3.0e5,m^2/yr,MODEL,,2026-11-09,derived,D_diff,K_c=0.0873 m^0.5/s（由 SPM K=0.39 换算）、H_b=1.0-1.5、H=10；总输沙能力 != 有效扩散率，故取低值；敏感性覆盖 1e5-8e5
-M-03,w_crit = d_b - m_s = 30 - 8 = 20 m,20,m,MODEL,,2026-11-09,derived,w_crit,纯由假设导出，必须标明 ASSUME 来源（A-13）
-M-04,V_max = 1.5e6 m^3（15 年），C_max = 6e7 USD,1.5e6/6e7,m^3/USD,MODEL,,2026-11-09,derived,management,由 O-04 的 300k cy/yr 缩放到 5 km 走廊后取保守值
+M-03,w_crit = d_b - m_s = 28 - 8 = 20 m（d_b 取 28 m 使基准表自洽）,20,m,MODEL,,2026-11-09,derived,w_crit,纯由假设导出，必须标明 ASSUME 来源（A-13）
+M-04,V_max = 2.5e6 m^3（15 年），C_max = 1.2e8 USD（PSDS 引 CSE 2023 的 15 年总成本）,2.5e6/1.2e8,m^3/USD,MODEL,,2026-11-09,derived,management,由 O-04 的 300k cy/yr 缩放到 5 km 走廊后取保守值
 M-05,w_trig = w_crit + 5 = 25 m,25,m,MODEL,,2026-11-09,derived,D8 触发规则,见 DECISIONS D8
 A-01,走廊长度 5000 m、中心 x=0 为热点,5000,m,ASSUME,,2026-11-09,assumption,domain,题面给定的代表性走廊，非政府规划区
 A-02,两侧各留 2000 m 缓冲,2000,m,ASSUME,,2026-11-09,assumption,domain,依据 建议.txt：避免'零通量虚假困沙'
-A-03,热点为高斯形，宽 600 m，幅度 1.5x,1.5,dimensionless,ASSUME,,2026-11-09,assumption,rho_e(x),无逐公里速率表时的替代；Q3 必须替换或做敏感性
+A-03,热点为高斯形，宽 600 m，振幅 1.2x；峰值 rho_e=1.7*(1+1.2)=3.74 m/yr,1.2,dimensionless,ASSUME,,2026-11-09,assumption,rho_e(x),无逐公里速率表时的替代；Q3 必须替换或做敏感性
 A-04,滩肩高度 B = 2.0 m,2.0,m,ASSUME,,2026-11-09,assumption,H_dep,外滩典型值；无本剖面实测
 A-05,特征破碎波入射角 8 deg,8,deg,ASSUME,,2026-11-09,assumption,K_cerc 线性化,cos(2a) 在 0-15 deg 内 0.87-1.00，影响可忽略
 A-06,净沿岸漂移 u = 50 m/yr（区间 0-150）,50,m/yr,ASSUME,,2026-11-09,assumption,u_drift,无输沙率资料下的量级假设；必须做 u=0 对照
-A-07,初始干滩宽度均值 25 m、最窄 16 m,25/16,m,ASSUME,,2026-11-09,assumption,w0,无实测剖面；敏感性覆盖 15-40 m
+A-07,初始干滩宽度：远场 25 m，最窄 16 m，走廊均值 21.8 m（热点场，非均匀 25）,25/16/21.8,m,ASSUME,,2026-11-09,assumption,w0,无实测剖面；敏感性覆盖 15-40 m
 A-08,建筑退距 30 m、安全余量 8 m,30/8,m,ASSUME,,2026-11-09,assumption,w_crit,退距是当地法规量级，非实测
 A-09,单次工程固定成本 800 万美元,8e6,USD,ASSUME,,2026-11-09,assumption,c0,用于制造'多次 vs 一次'权衡；无来源，属设计选择
 A-10,侵蚀性事件到达率 0.4 /yr,0.4,1/yr,ASSUME,,2026-11-09,assumption,lambda_s,仅计造成 >3 m 等效后退的事件；需用风暴年表校验
@@ -56,7 +56,7 @@ W5,NC 直接飓风登陆：1851-2019 平均每 2 年 1 次,0.5,1/yr,OBS,https://
 N1,"Rodanthe 关键侵蚀区长度 14,000 ft",14000,ft,OBS,https://www.darenc.gov/home/showpublisheddocument/12218/638194963727970000,2026-11-09,snippet-only,走廊尺度,PDF 403，二手转述
 N2,该区基础沙量亏空 2.3e6 cy,2.3e6,cy,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 依据,= 1.76e6 m^3
 N3,"该区侵蚀量约 300,000 cy/yr",3.0e5,cy/yr,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 量级,= 2.29e5 m^3/yr；对应 53.7 m^3/m/yr
-N4,总需沙（补亏空+5年侵蚀）约 3.1-3.8e6 cy,3.1-3.8e6,cy,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 主值,= 2.4-2.9e6 m^3
+N4,总需沙 3.8e6 cy = 2.905e6 m3（2.3M cy 亏空 + 5×0.3M cy 侵蚀；CSE 2023 全文核对）,3.8e6,cy,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 主值,= 2.4-2.9e6 m^3
 N5,Rodanthe 补沙初始工程造价约 40 million USD,4.0e7,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,c1 与 Q5,PSDS 引 CSE 2023
 N6,15 年维护总成本约 120 million USD（假设每次撑 5 年）,1.2e8,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,C_max 主值,
 N7,买断 80 宗临海地块约 43 million USD,4.3e7,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,撤退判据,结构距 MHW<300 ft
@@ -67,3 +67,8 @@ N11,USACE 北海洋县 NJ 合同 73.5M USD 补 210 万 cy,35,USD/cy,OBS,https://
 N12,Oak Island NC 33.5M USD 补 110 万 cy,30.5,USD/cy,OBS,https://dredgewire.com/oak-island-nc-33-5-million-dredge-project-with-weeks-marine-runs-into-headwind-need-for-sand/,2026-11-09,snippet-only,c1,= 40 USD/m^3；2025-01-10
 N13,Oak Island 2025-06 授标 40M USD；另有 160 万 cy 计划,4.0e7,USD,OBS,https://stateportpilot.com/news/article_fc940cd3-0ff9-48f5-a5df-347f1b93d0a5.html,2026-11-09,snippet-only,c1 校验,
 M-06,走廊等效均匀侵蚀率 rho_c = 1.7+(3.8-1.7)*sqrt(2pi)*600/5000,2.3,m/yr,MODEL,,2026-11-09,derived,解析基准 rho_e,=2.33；由 E1/E2 与高斯热点积分得到
+X4,自 2020 年以来 Cape Hatteras National Seashore 海滩上倒塌的私有临海房屋 32 栋（原文 2026-11-09 访问）,32,count,OBS,https://www.nps.gov/caha/learn/news/threatened-oceanfront-structures.htm,2026-11-09,verified-fulltext,暴露背景（不作速率证据）,NPS 页面；Rodanthe 为主
+W7,Oregon Inlet 区域年均有效波高 1 m、周期 9 s,1.0/9,"m, s",OBS,https://icce-ojs-tamu.tdl.org/icce/article/download/5567/5241,2026-11-09,verified-fulltext,Hs_mean/Tp_mean；CERC 的 D 估计,"Miller, Dennis & Wutkowski 1996, ICCE"
+W8,Hatteras Island 区域净沿岸输沙 predominantly southward,southward,qualitative,OBS,https://icce-ojs-tamu.tdl.org/icce/article/download/13960/13232,2026-11-09,verified-fulltext,u 的符号；边界泄漏方向,引 Inman & Dolan 1989
+P1,Buxton 2017-2018 补沙工程设计闭合深度 -7.3 m NAVD,-7.3,m NAVD,OBS,https://icce-ojs-tamu.tdl.org/icce/article/download/13960/13232,2026-11-09,verified-fulltext,H=h_*+B 的证据；H 敏感性,与 Nags Head 5.5 m 并列，不唯一
+P2,Nags Head 年际闭合深度约 18 ft = 5.5 m,5.5,m,OBS,http://www.nagsheadnc.gov/DocumentCenter/View/433/Attachment-3---Project-Purpose-and-Design-Basis-PDF,2026-11-09,verified-fulltext,H 的下界,CSE 2007；yearly limit

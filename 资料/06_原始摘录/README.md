@@ -20,7 +20,7 @@
 
 | 目标 | 状态 | 备注 |
 |---|---|---|
-| `darenc.gov/.../Rodanthe Sand Needs Assessment` | **403** | 试过 UA 伪装仍失败；数值改用二手转述，标 `摘要` |
+| `darenc.gov/.../Rodanthe Sand Needs Assessment` | **403** | ✅ 2026-11-09 已通过代理抓取到 CSE 2023 PDF 全文；`00_数据主表.md` N1–N4 已升级为 **全文** |
 | `coastalreview.org` 各文章 | **403**（Cloudflare） | 只能用搜索引擎摘要 |
 | NOAA 官方 sltrends 站页 | JS 渲染，取不到数 | 改用 sealevel.info 的 NOAA 汇总表 |
 

@@ -71,6 +71,22 @@ $$
 - 基准：**Crank–Nicolson**（时间二阶），三对角求解（`scipy.linalg.solve_banded` 或 `scipy.sparse.linalg.spsolve`）。
 - 也可用向后 Euler（一阶，更稳），但 T2 的收敛阶验收要求二阶 ⇒ **建议 CN**。
 - $\Delta t=0.02$ yr（基准）。风暴事件时刻必须**落在步边界**：若下一事件在 $t_k$，令本步 $\Delta t=t_k-t$。
+- **S3 波候**：`Hs_trend=+3%/decade` 通过 $D\propto H_b^{5/2}$ 进入，$D(t)=D_0(1+0.03t/10)^{5/2}$；在 CFL 与面通量里用**瞬时** $D(t)$。不要只改一个标签而不改 $D$。
+
+### 2.4b 风暴事件的抽样与注入（主算例）
+
+主算例**不**使用 $R_k$ 强度参数化，而是直接抽"宽滩潜在后退"：
+
+1. **到达**：齐次 Poisson，$\lambda_s$ 取 `params.yaml`。
+2. **潜在后退**：$\Delta y_{\text{pot}}\sim\mathrm{LogNormal}$，中位 $\Delta y_{\text{ref}}=8$ m，$P_{95}=25$ m ⇒ $\sigma_{\ln}=\ln(25/8)/1.645=0.694$。
+3. **窄滩饱和**：$\Delta y_k=\Delta y_{\text{pot}}\,[1-\exp(-w/w_s)]$，$w_s=20$ m。
+4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w+\Delta y_{\text{cut}})$，$\Delta y_{\text{cut}}=5$ m。**不得用 $0.5H$**：$H=10$ m 时会把 25 m 事件错误截到 5 m。
+5. **注入**：$S_k=H\Delta y_k$ [m²]；$y\leftarrow y-\Delta y_k$；$O\leftarrow O+S_k$。事件时刻按 §2.4 截到步边界。
+6. $R_k/\gamma$ 参数化只作敏感性；若使用，需另给 $R_{\text{ref}}$ 分布，当前 `params.yaml` 未给，**不作为主算**。
+
+> `S2` 的 `forced_dy=25` 是**潜在**后退；实际值会被窄滩因子折减（$w=20$ m 时约 0.63 ⇒ 15.8 m）。若情景要的是"实际 25 m"，需把 forced_dy 设为 $25/\text{因子}$ 或对该事件关闭饱和——这是 `OPEN_QUESTIONS` Q-34，待建模手裁定。
+>
+> **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
 
 ### 2.5 补沙源项 $I$
 
@@ -82,11 +98,13 @@ $$
 
 | 代码 | 实现 |
 |---|---|
-| `open`（默认） | 两端 ghost cell 用外推 $y_{\text{ghost}}=2y_0-y_1$（即 $\partial y/\partial x=0$ 于面），**但**在面通量里显式加回"域外背景通量" $Q_\infty$；同时维护 `outflow_left/right` 台账 |
-| `zeroflux` | ghost cell 镜像 $y_{\text{ghost}}=y_1$；无界外通量 |
-| `dirichlet` | $y_{\text{ghost}}=y_{\text{adj}}(t)$，$y_{\text{adj}}$ 由相邻岸段 $\rho_e$ 外推 |
+| `open`（默认） | 两端 ghost cell 用外推 $y_{\text{ghost}}=2y_0-y_1$（面梯度的扩散通量为 0）；**但面通量仍按 $F=u\,y_{\text{upwind}}$ 计算并施加到边界单元**（$u>0$ 时右端流出、左端流入），同时 `flux_left/right += F*dt` 记入台账。**必须真的从边界单元扣/加沙**，否则它不是开边界，T7 会失败 |
+| `zeroflux` | **直接把面通量置零**：$F_{\text{boundary}}=0$。仅把 ghost 设成镜像 $y_{\text{ghost}}=y_1$ 只零掉了扩散通量，**没有**零掉对流通量；这是 T7 常见 bug |
+| `dirichlet` | $y_{\text{ghost}}=y_{\text{adj}}(t)$，$y_{\text{adj}}$ 由相邻岸段 $\rho_e$ 外推；面通量按上式正常计算 |
 
-> `open` 的实现细节：物理上"开边界"= 允许沙按 $\rho_e$ 与扩散自然流出。**最简可行**：$\partial y/\partial x=0$（无扩散通量）但**记账**：每步把 $u\,y_{\text{edge}}\cdot\Delta t$ 记为界外通量，并**不**从总量里扣（因为它是背景输沙的一部分）。若觉得绕，就退化为"零扩散通量 + 边界处额外按 $\rho_e$ 扣沙"，并在结果里注明。
+> **不要**在面通量里再加 $Q_\infty$：$Q_0$ 的空间梯度已经并入慢性汇 $L_c=\rho_e H$（`MODEL_SPEC` §3.5），再加一次就是双计数。开边界唯一要额外维护的是 `flux_left/right` 台账；T1 的收支式里已经包含它们。
+>
+> **方向自检**：$u>0$（南向）时，左端是流入、右端是流出；若 `zeroflux` 的留存率**低于** `open`，说明边界通量符号写反（T7 会抓）。
 
 ---
 
@@ -143,9 +161,11 @@ dt: 0.02
 placement:                   # 覆盖默认投放（不填则用 strategy 的默认）
   - {t: 0.0, xc: 0.0, len: 5000.0, volume: 1500000.0}
 overrides:                   # 任何 params.yaml 里的键
-  rho_e: 3.0
+  rho_e_scale: 1.30         # 走廊均值目标 3.0 / 基线 2.3；乘基线 rho_e(x)，保留热点
   D_diff: 300000.0
 ```
+
+> **$\rho_e$ 是空间场，不是标量**：情景里只给"走廊均值目标"（如 S2=3.0 m/yr）；实现用 `rho_e_scale = target / 2.3` 乘基线 $\rho_e(x)$，保留热点结构。**不要**用 `rho_e: 3.0` 覆盖整场，否则热点消失、定点投放的对比失真。
 
 ### 4.2 输出目录（**每件必备**）
 
@@ -177,10 +197,10 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | # | 测试 | 做法 | 判据 | 预期数值 |
 |---|---|---|---|---|
 | **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 实测可达 $10^{-12}$ |
-| **T2** | 对 erf 解收敛 | $\lambda_s=0,\rho_e=0,u=0$，初始为宽 $\ell$ 的阶跃；$\Delta x=100/50/25$，$\Delta t\propto\Delta x$ | L2 误差比 $\in[1.8,2.2]$（$dx$ 减半）；且 $dx=50$ 时 $t=1$ yr 相对误差 $<2\times10^{-2}$ | 见下 |
+| **T2** | 对 erf 解收敛 | $\lambda_s=0,\rho_e=0,u=0$，初始为宽 $\ell$ 的阶跃；$\Delta x=100/50/25$，$\Delta t\propto\Delta x$ | **CN：** L2 误差比 $\in[3.5,4.5]$；**向后 Euler：** $\in[1.8,2.2]$（若用 BE 必须在结果里注明）；且 $dx=50$ 时 $t=1$ yr 相对误差 $<2\times10^{-2}$ | 见下 |
 | **T3** | 零源项零通量 | $I=S=0$，零通量边界，$\rho_e=0$ | $y$ 全场变化 $<10^{-12}$ | — |
 | **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_p$、留存率）差异 $<2\%$ | — |
-| **T5** | 无风暴退化 | $\lambda_s=0$ 时，结果与 NONDIM §7 的解析值一致 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
+| **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{crit}=20$；与 NONDIM §7 的解析值对拍 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
 | **T7** | 边界对比 | `zeroflux` vs `open` | 前者留存率**更高**（方向必须对） | 差异应 >0 |
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同（或用 `np.allclose`）+ `fields.npz` md5 相同 | — |
@@ -193,7 +213,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | 50 m | $2.05\times10^{-2}$ | $2.8\times10^{-8}$ |
 | 25 m | $1.04\times10^{-2}$ | $1.4\times10^{-8}$ |
 
-> 原型用的是显式 FTCS（一阶收敛是因为初始条件不连续）。你的 CN + 有限体积若做对，应该是**二阶**（比值 ≈4）。若得到比值 ≈2，先查是不是时间步没有随 $\Delta x$ 同步细化。
+> 原型用的是显式 FTCS（一阶收敛是因为初始条件不连续）。**上表是 FTCS 的 $L_\infty$ 参考，不是 CN 的目标值**；你的 CN + 有限体积若做对，应为二阶：$\Delta t\propto\Delta x^2$ 时 L2 误差比 ≈4，$\Delta t\propto\Delta x$ 时 ≈2。若得到比值 ≈1，先查时间步是否随 $\Delta x$ 同步细化。
 
 ---
 
@@ -201,11 +221,15 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 
 参数：$H=10$ m，$D=3\times10^{5}$ m²/yr，$\rho_e=2.3$ m/yr（DEQ 实测推得的走廊等效值），$\mathcal{V}=10^{6}$ m³，$w_0=18$ m，$w_{\text{crit}}=20$ m。
 
+> **这是解析基准配置，不是主算例的初始场**：它用均匀 $w_0=18$ m 和均匀 $\rho_e=2.3$ m/yr；主算例用热点 $w_0(x)$（远场 25、最小 16）和 $\rho_e(x)$（1.7 + 热点放大）。T5 只在这个基准配置下对拍，不能拿主算例的热点场去比。
+
 | 方案 | $\ell$ | $\Delta y_0$ | 中心 $T_p$ | 保护岸线·年 |
 |---|---|---|---|---|
 | A 匀铺 | 5000 m | 20 m | **6.15 yr** | 26371 m·yr |
 | B 热点 | 1000 m | 100 m | **7.33 yr** | 24917 m·yr |
-| C 5 段 | 500 m | 200 m | **7.36 yr** | 24616 m·yr |
+| C 单段 0.5 km（5 段方案的一段） | 500 m | 200 m | **7.36 yr** | 24616 m·yr |
+
+> **C 行只算了一段 0.5 km**，不是整个 5 段方案。5 段的实际总保护岸线·年必须由求解器按实际间距叠加（扩散区会重叠，不能简单乘 5）。`E1` 必须单独跑 5 段方案。
 
 还有两条闭式：
 - $T_{1/2}=0.2748\,\ell^2/D$（$\ell$=1000 m ⇒ 0.92 yr）
@@ -224,11 +248,17 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | E0 | `--scenario S{1,2,3} --strategy none` | 基线 $w(x,t)$、$E_0$ |
 | E1 | `--scenario S1 --strategy {A,B,C}` | 三方案对照表 + 沙去向堆叠图 |
 | E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | $T_p$ 分位、$E$ 分位 |
-| E3 | 自定义 placement（早/中/晚三组，各 6 次事件，seed 固定） | 时机对照表 |
-| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}` | 三策略同约束对比 + 成本 |
+| E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_p$、min $w$、2042 年 $w$） |
+| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[3,15]$ M\$ 扫描 | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
 | E5 | `sweep.py --oat` + `--sobol` | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}` | 边界敏感性表 |
 | E7 | $\mathcal{V}\in[1e5,3e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
+
+> **CRITICAL（预算约束不绑定）**：当前 $C_{\max}=120$ M USD、$V_{\max}=2.5$ M m³，在 $c_0=8$ M USD 时，$N=1$ 与 $N=3$ 都能买满 $V_{\max}$（$N=1$：$(120-8)/25=4.48>2.5$；$N=3$：$(120-24)/25=3.84>2.5$）。**此时 $c_0^*$ 无定义，E4 是假比较**。跑 E4 前必须选一个：
+> (a) 用 5 km 走廊分摊的 $C_{\max}\approx60$ M USD（推荐；5 km 约为 PSDS 5.7 mi 覆盖面的 54%）；
+> (b) 把 $V_{\max}$ 提到 CSE 需求之上（例如 4 M m³）；
+> (c) 把 $c_0^*$ 重新解释为"时机/风险"权衡，而不是"买沙量"权衡。
+> 见 `OPEN_QUESTIONS` Q-33。**不要**在约束不绑定的情况下报告 $c_0^*$。
 
 ### 7.2 出图规格（论文手直接用）
 
