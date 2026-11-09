@@ -81,9 +81,10 @@ $$
 
 1. **到达**：齐次 Poisson，$\lambda_s$ 取 `params.yaml`。
 2. **潜在后退**：$\Delta y_{\text{pot}}\sim\mathrm{LogNormal}$，中位 $\Delta y_{\text{ref}}=8$ m，$P_{95}=25$ m ⇒ $\sigma_{\ln}=\ln(25/8)/1.645=0.694$。
-3. **窄滩饱和**：$\Delta y_k=\Delta y_{\text{pot}}\,[1-\exp(-w/w_s)]$，$w_s=20$ m。
-4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w+\Delta y_{\text{cut}})$，$\Delta y_{\text{cut}}=5$ m。**不得用 $0.5H$**：$H=10$ m 时会把 25 m 事件错误截到 5 m。
-5. **注入**：$S_k=H\Delta y_k$ [m²]；$y\leftarrow y-\Delta y_k$；$O\leftarrow O+S_k$。事件时刻按 §2.4 截到步边界。
+3. **窄滩饱和**：$w_{\text{eff}}=\max(w,0)$；$f=1-\exp(-w_{\text{eff}}/w_s)$，$w_s=20$ m；$\Delta y_k=\Delta y_{\text{pot}}f$。**必须取 max**：$w<0$ 时旧式给负 $\Delta y$、负 $S$（审查 P0）。
+4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}}+\Delta y_{\text{cut}})$，$\Delta y_{\text{cut}}=5$ m。**不得用 $0.5H$**；也**不要**先取上限再乘因子（与模型式顺序统一为"先因子、后上限"）。
+5. **有效域检查**：若事件前 $w\le0$，标记 `beach_exhausted` 并停止/右删失该 run；**不得**让负宽度继续进入风暴项。干滩耗尽后的沙丘侵蚀不在本模型内（Q-43）。
+6. **注入**：$S_k=H\Delta y_k$ [m²]；$y\leftarrow y-\Delta y_k$；$O\leftarrow O+S_k$。事件时刻按 §2.4 截到步边界。
 6. $R_k/\gamma$ 参数化只作敏感性；若使用，需另给 $R_{\text{ref}}$ 分布，当前 `params.yaml` 未给，**不作为主算**。
 
 > `S2` 的 `forced_dy=25` 是**潜在**后退；实际值会被窄滩因子折减（$w=20$ m 时约 0.63 ⇒ 15.8 m）。若情景要的是"实际 25 m"，需把 forced_dy 设为 $25/\text{因子}$ 或对该事件关闭饱和——这是 `OPEN_QUESTIONS` Q-34，待建模手裁定。
@@ -100,13 +101,15 @@ $$
 
 | 代码 | 实现 |
 |---|---|
-| `open`（默认） | 两端 ghost cell 用外推 $y_{\text{ghost}}=2y_0-y_1$（面梯度的扩散通量为 0）；**但面通量仍按 $F=u\,y_{\text{upwind}}$ 计算并施加到边界单元**（$u>0$ 时右端流出、左端流入），同时 `flux_left/right += F*dt` 记入台账。**必须真的从边界单元扣/加沙**，否则它不是开边界，T7 会失败 |
-| `zeroflux` | **直接把面通量置零**：$F_{\text{boundary}}=0$。仅把 ghost 设成镜像 $y_{\text{ghost}}=y_1$ 只零掉了扩散通量，**没有**零掉对流通量；这是 T7 常见 bug |
-| `dirichlet` | $y_{\text{ghost}}=y_{\text{adj}}(t)$，$y_{\text{adj}}$ 由相邻岸段 $\rho_e$ 外推；面通量按上式正常计算 |
+| `open`（默认） | **扩散**：零梯度 ghost $y_{\text{ghost}}=y_0$（不是 $2y_0-y_1$；后者给梯度 $(y_1-y_0)/\Delta x\neq0$）。**对流**：$u>0$ 时左端入流需要上游状态，取 $y_{\text{ghost}}=y_0$（或情景给定的上游值），右端出流用 $y_N$；$u<0$ 镜像。**边界体积通量**记 `flux += H*F*dt`（m³），不是 $F\,dt$（m²） |
+| `zeroflux` | **直接把总面通量置零**：$F_{\text{boundary}}=0$（扩散+对流都为零）。只设镜像 ghost 只零掉扩散项 |
+| `dirichlet` | 若给定的是**物理边界面值** $y_b$，则 ghost $=2y_b-y_0$（不是 $y_b$）；面通量按上式正常计算 |
 
-> **不要**在面通量里再加 $Q_\infty$：$Q_0$ 的空间梯度已经并入慢性汇 $L_c=\rho_e H$（`MODEL_SPEC` §3.5），再加一次就是双计数。开边界唯一要额外维护的是 `flux_left/right` 台账；T1 的收支式里已经包含它们。
+> **单位（审查 P0）**：$F=u y-Dy_x$ 的单位是 m²/yr；账本存量是 m³。累计边界体积必须是 $H F\Delta t$。接口里只做一次转换，不要在两处各乘一次。
 >
-> **方向自检**：$u>0$（南向）时，左端是流入、右端是流出；若 `zeroflux` 的留存率**低于** `open`，说明边界通量符号写反（T7 会抓）。
+> **不要**在面通量里再加 $Q_\infty$：$Q_0$ 的空间梯度已经并入 $L_c=\rho_e H$，再加一次就是双计数。
+>
+> **T7 不再断言"zeroflux 留存一定更高"**：无净输送、边界未受扰或有入流时两者可相等。改用一个**有已知外流**的算例：初始在域中心放一个凸起、$u>0$、$D>0$，用解析/半解析估计边界流出量，比较 `open` 的 `flux` 台账与估计值；`zeroflux` 只作为"流出为零"的对照。
 
 ---
 
@@ -182,16 +185,22 @@ overrides:                   # 任何 params.yaml 里的键
 ### 4.3 `ledger.csv` 列（**沙量台账，T1 的载体**）
 
 ```
-t, V_inside, O_inside, placed_cum, flux_left_cum, flux_right_cum,
+t, V_central, O_central, V_domain, O_domain,
+placed_cum, flux_inner_left_cum, flux_inner_right_cum,
+flux_outer_left_cum, flux_outer_right_cum,
 offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 ```
 
-- `V_inside` = $\sum_i y_i\Delta x\cdot H$（m³）；`O_inside` = $\sum_i O_i\Delta x$（m³）
-- **口径（必须固定）**：$y$ 是相对 $t=0$ 岸线的位置，$O(0)=0$，所以"初始总量"$=0$；$V_{\text{inside}}$ 是**增量体积**，不是含 $V_0$ 的绝对体积。若实现里保留 $V_0$，则 `V_inside` 必须同步减去 $\int V_0 dx$，两种写法只能选一种。
-- `residual = placed_cum + 0 − (V+O) − flux − offshore − chronic`
-- **每行都要写 `residual_rel`**，T1 就是看它的最大值。分母取 $\max(1\ \mathrm{m^3},\ \lvert\text{placed\_cum}\rvert+\lvert\text{初始总量}\rvert)$，避免 $t=0$ 时除零。
+- **两个控制体，不能混**：中央研究区 $[-2500,2500]$（5 km）与全计算域 $[-4500,4500]$（9 km）。
+  - `V_central` $=H\sum_{|x|\le2500}y_i\Delta x$；`V_domain` $=H\sum_{\text{all}}y_i\Delta x$（均为**增量**，$O(0)=0$）。
+  - `flux_inner_*`：穿过 $x=\pm2500$ 的**体积**通量；`flux_outer_*`：穿过 $x=\pm4500$ 的。
+  - 中央流出的沙可能仍在 2 km 缓冲区，**不能**当成已离开 9 km 域，更不能解释为"下游社区受害"。
+- **单位**：体积通量累计 $=H\cdot F\cdot\Delta t$（m³）；$F$ 是 m²/yr。
+- 全域闭合：`placed = (V+O)_domain + (outer_out) + offshore + chronic`；中央闭合把 `outer_out` 换成 `inner_out`，并把 offshore/chronic 限定在中央。
+- `residual_rel` 分母取 $\max(1\ \mathrm{m^3}, |placed\_cum|)$；T1 看最大值。
+- 账本与验收场用 **float64**；`fields.npz` 的 float32 只用于展示，不能拿来重算收支。
 
-**⚠ 关于 chronic_loss**：它会吃掉背景沙。所以**必须同时跑一条"无补沙基线"**，台账里再给一列 `baseline_chronic_loss_cum`，并在 `results.json` 里用**两跑相减**得到"补沙自身的去向"。别把基线侵蚀算到补沙头上。
+**⚠ 关于 chronic_loss 与两跑相减**：$\rho_e$ 不依赖 $y$，所以基线/补沙两跑的 $\delta L_c=0$。差额收支里**没有"慢性汇吃掉补沙"这一项**；不要再画这个饼图份额。完整总场的收支本来就从初始状态成立，不需要"只在增量场成立"。
 
 ---
 
@@ -200,44 +209,48 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | # | 测试 | 做法 | 判据 | 预期数值 |
 |---|---|---|---|---|
 | **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 实测可达 $10^{-12}$ |
-| **T2** | 对 erf 解收敛 | $\lambda_s=0,\rho_e=0,u=0$，初始为宽 $\ell$ 的阶跃；$\Delta x=100/50/25$，$\Delta t\propto\Delta x$ | **CN：** L2 误差比 $\in[3.5,4.5]$；**向后 Euler：** $\in[1.8,2.2]$（若用 BE 必须在结果里注明）；且 $dx=50$ 时 $t=1$ yr 相对误差 $<2\times10^{-2}$ | 见下 |
-| **T3** | 零源项零通量 | $I=S=0$，零通量边界，$\rho_e=0$ | $y$ 全场变化 $<10^{-12}$ | — |
+| **T2** | 对 erf 解收敛 | **光滑高斯初值**（$\sigma=200$ m）测阶；$\Delta x=100/50/25$，$\Delta t\propto\Delta x^2$；另用阶跃初值测 $L_1$ 与前沿位置 | **CN：** L2 误差比 $\in[3.5,4.5]$；**BE + $\Delta t\propto\Delta x$：** $\in[1.8,2.2]$；**阶跃的 $L_\infty$ 不用于判阶**（间断主导）；另做**非负性检查**（CN 在 $r\gg1$ 可能振荡） | 见下 |
+| **T3** | 零源项/守恒 | (a) 均匀 $y$、$O=0$、$u=0$、零通量 ⇒ 全场不变；(b) 非均匀 $y$、零通量 ⇒ 总量守恒 + 对 erf 解；(c) $O$ 单独指数衰减 | (a) $<10^{-12}$；(b) 质量 $<10^{-10}$；(c) $e^{-(k+\lambda)t}$ | — |
 | **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_p$、留存率）差异 $<2\%$ | — |
-| **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{crit}=20$；与 NONDIM §7 的解析值对拍 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
+| **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{mgmt}=20$；与 NONDIM §7 对拍 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
-| **T7** | 边界对比 | `zeroflux` vs `open` | 前者留存率**更高**（方向必须对） | 差异应 >0 |
-| **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同（或用 `np.allclose`）+ `fields.npz` md5 相同 | — |
-| **T9** | **历史岸线独立验证（Q3，不是代码测试）** | 读 `资料/06_原始摘录/_gis/` 的 14 条 USGS 岸线（1978–2002）；以 baseline 布正交 transect，算 Rodanthe 段 LRR；与模型"无补沙基线"对比 | 同一量级：模型基线速率应落在 **1.5–2.8 m/yr**（USGS 全岛 1.5、Flynn 热点 2.26） | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
+| **T7** | 边界通量 | 初始中心凸起、$u>0,D>0$ 的**已知外流**算例 | `open` 的 `flux_outer` 与半解析估计差 $<10\%$；`zeroflux` 的 `flux=0` | 不比较"留存率高低" |
+| **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
+| **T9** | **历史岸线验证（Q3）** | 优先用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的现成 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；按走廊选 transect | Rodanthe 5 km 窗口的 LRR：**1978–2002 ≈ −3.4 m/yr、1989–2002 ≈ −4.6 m/yr**；模型基线应落在 **2.5–4.5 m/yr** 量级 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 
-| $\Delta x$ | $L_\infty$ 相对误差 | 质量相对变化 |
+| $\Delta x$ | 阶跃 $L_\infty$ 相对误差 | 质量相对变化 |
 |---|---|---|
-| 100 m | $4.02\times10^{-2}$ | $4.8\times10^{-8}$ |
-| 50 m | $2.05\times10^{-2}$ | $2.8\times10^{-8}$ |
-| 25 m | $1.04\times10^{-2}$ | $1.4\times10^{-8}$ |
+| 100 m | $3.73\times10^{-3}$ | $1.5\times10^{-16}$ |
+| 50 m | $4.35\times10^{-3}$ | $0$ |
+| 25 m | $4.62\times10^{-3}$ | $4.4\times10^{-16}$ |
 
-> 原型用的是显式 FTCS（一阶收敛是因为初始条件不连续）。**上表是 FTCS 的 $L_\infty$ 参考，不是 CN 的目标值**；你的 CN + 有限体积若做对，应为二阶：$\Delta t\propto\Delta x^2$ 时 L2 误差比 ≈4，$\Delta t\propto\Delta x$ 时 ≈2。若得到比值 ≈1，先查时间步是否随 $\Delta x$ 同步细化。
+> **阶跃 $L_\infty$ 不收敛是正常的**：间断处的离散误差由初值主导，不能用来判阶（旧表把它读成"一阶"是错的）。
+> 原型另用**光滑高斯初值**测得 $L_2$ 误差比 **3.96 / 3.99**（理论 4）。你的 CN + 有限体积应在光滑初值上给 ≈4；若给 ≈1，先查时间步是否随 $\Delta x$ 同步细化。BE + $\Delta t\propto\Delta x$ 才给 ≈2。
 
 ---
 
 ## 6. 参考对照数值（无风暴、无对流、单次投放）
 
-参数：$H=10$ m，$D=3\times10^{5}$ m²/yr，$\rho_e=2.3$ m/yr（DEQ 实测推得的走廊等效值），$\mathcal{V}=10^{6}$ m³，$w_0=18$ m，$w_{\text{crit}}=20$ m。
+参数：$H=10$ m，$D=3\times10^{5}$ m²/yr，$\rho_e=2.3$ m/yr（DEQ 实测推得的走廊等效值），$\mathcal{V}=10^{6}$ m³，$w_0=18$ m，$w_{\text{mgmt}}=20$ m。
 
 > **这是解析基准配置，不是主算例的初始场**：它用均匀 $w_0=18$ m 和均匀 $\rho_e=2.3$ m/yr；主算例用热点 $w_0(x)$（远场 25、最小 16）和 $\rho_e(x)$（1.7 + 热点放大）。T5 只在这个基准配置下对拍，不能拿主算例的热点场去比。
+>
+> **口径**：下表 $T_p$ 是"滩宽 $w\ge20$ m"的**管理滩宽保护期**，不是建筑净距风险；建筑净距口径见 `MODEL_SPEC` §6.2。
 
-| 方案 | $\ell$ | $\Delta y_0$ | 中心 $T_p$ | 保护岸线·年 |
-|---|---|---|---|---|
-| A 匀铺 | 5000 m | 20 m | **6.15 yr** | 26371 m·yr |
-| B 热点 | 1000 m | 100 m | **7.33 yr** | 24917 m·yr |
-| C 单段 0.5 km（5 段方案的一段） | 500 m | 200 m | **7.36 yr** | 24616 m·yr |
+| 方案 | $\ell$ | $\Delta y_0$ | 中心 $T_p$ | 保护岸线·年 | 避免风险（热点场） |
+|---|---|---|---|---|---|
+| A 匀铺 | 5000 m | 20 m | **6.15 yr** | 26408 m·yr | 28086 m·yr |
+| B 热点 | 1000 m | 100 m | **7.33 yr** | 24836 m·yr | **31320 m·yr** |
+| C 单段 0.5 km（全部沙量集中） | 500 m | 200 m | **7.36 yr** | 24504 m·yr | **31412 m·yr** |
 
-> **C 行只算了一段 0.5 km**，不是整个 5 段方案。5 段的实际总保护岸线·年必须由求解器按实际间距叠加（扩散区会重叠，不能简单乘 5）。`E1` 必须单独跑 5 段方案。
+> **C 行是"把 100 万 m³ 全放在 0.5 km"**，不是五段方案的一段；五段等分每段 20 万 m³（$\Delta y_0=40$ m），必须单独算。
+> **避免风险排序已修正**：B/C 高于 A；旧表把符号算反，已作废。
 
 还有两条闭式：
 - $T_{1/2}=0.2748\,\ell^2/D$（$\ell$=1000 m ⇒ 0.92 yr）
-- 匀铺可行性 $\mathcal{V}_{\text{thr}}=H L(w_{\text{crit}}-w_{\min})$（本例 $2.0\times10^{5}$ m³）
+- 匀铺可行性 $\mathcal{V}_{\text{thr}}=H L(w_{\text{mgmt}}-w_{\min})$（本例 $2.0\times10^{5}$ m³）
 
 > 这些数字全部可由 `modeling/sanity/erf_prototype.py` 复现（跑一次 < 2 s）。**你的求解器在关掉风暴后必须落在这张表 ±10% 内**，否则先查换算（$H$ 用错是最常见原因）。
 
@@ -256,13 +269,10 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[0,10]$ M\$ 扫描（Q-38 建议；未批前可按 $[3,15]$ 跑，但必须同时给 $[0,10]$） | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
 | E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}` | 边界敏感性表 |
-| E7 | $\mathcal{V}\in[1e5,3e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
+| E7 | $\mathcal{V}\in[1e5,5e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
 
-> **CRITICAL（预算约束不绑定）**：当前 $C_{\max}=120$ M USD、$V_{\max}=2.5$ M m³，在 $c_0=8$ M USD 时，$N=1$ 与 $N=3$ 都能买满 $V_{\max}$（$N=1$：$(120-8)/25=4.48>2.5$；$N=3$：$(120-24)/25=3.84>2.5$）。**此时 $c_0^*$ 无定义，E4 是假比较**。跑 E4 前必须选一个：
-> (a) 用 5 km 走廊分摊的 $C_{\max}\approx60$ M USD（推荐；5 km 约为 PSDS 5.7 mi 覆盖面的 54%）；
-> (b) 把 $V_{\max}$ 提到 CSE 需求之上（例如 4 M m³）；
-> (c) 把 $c_0^*$ 重新解释为"时机/风险"权衡，而不是"买沙量"权衡。
-> 见 `OPEN_QUESTIONS` Q-33。**不要**在约束不绑定的情况下报告 $c_0^*$。
+> **Q-33 已定位（2026-11-09）**：旧 $V_{\max}=2.5$M 是 N4 的**5 年**方案，被误标成 15 年总量。改为 $V_{\max}=5.0$M 后，$C_{\max}=120$M、$c_0=8$M、$c_1=25$ 时 $N=1$ 买 $4.48$M、$N=3$ 买 $3.84$M，**两者都受预算约束**，$c_0^*$ 有定义。E4 不需要改 $C_{\max}$。
+> 若实现仍用旧 2.5M，则预算可能不绑定；此时**如实报告"固定成本通道未激活"**，不要宣称比较无效，也不要把 $C_{\max}$ 调到 60M 来制造绑定。
 
 ### 7.2 出图规格（论文手直接用）
 

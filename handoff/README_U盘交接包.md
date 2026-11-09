@@ -16,7 +16,7 @@ where-does-the-sand-go_handoff/
 │   ├─ 00_README_索引.md        ← 先看这个
 │   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 审查
 │   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
-│   ├─ ledger/claims.csv        ← 92 条数字台账（68 OBS / 16 ASSUME / 8 MODEL）
+│   ├─ ledger/claims.csv        ← 98 条数字台账（70 OBS / 19 ASSUME / 9 MODEL）
 │   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
 │   │   └─ 06_原始摘录/         ← _pdf（6 份全文）、_txt（提取文本）、_gis（USGS 岸线）
 │   └─ problem/                 ← 题目 PDF
