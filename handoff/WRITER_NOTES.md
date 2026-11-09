@@ -75,7 +75,8 @@
 2. 三策略在 E0–E4 下的 $E$、$T_p$、成本。
 3. 触发规则伪代码（5 行）+ 只用可观测量的核对表。
 4. 三个撤退判据（性价比 / 保护期 / 物理不可持续）。
-5. 监测指标表 + "何时重新考虑"的一句话。
+5. **沙源约束（新增，N21）**：Rodanthe 本地 borrow area 只有约 3.2M cy（2.45M m³），低于 15 年需求 3.8M cy。写一句："The program may run out of locally available sand before it runs out of money." 这是 Q5 里"何时停止补沙"的第四个、也是物理性最强的判据。
+6. 监测指标表 + "何时重新考虑"的一句话。
 
 ---
 

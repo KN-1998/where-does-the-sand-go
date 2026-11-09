@@ -16,7 +16,7 @@ where-does-the-sand-go_handoff/
 │   ├─ 00_README_索引.md        ← 先看这个
 │   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 审查
 │   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
-│   ├─ ledger/claims.csv        ← 90 条数字台账（66 OBS / 16 ASSUME / 8 MODEL）
+│   ├─ ledger/claims.csv        ← 92 条数字台账（68 OBS / 16 ASSUME / 8 MODEL）
 │   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
 │   │   └─ 06_原始摘录/         ← _pdf（5 份全文）、_txt（提取文本）、_gis（USGS 岸线）
 │   └─ problem/                 ← 题目 PDF
@@ -45,7 +45,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 | 主模型 | ✅ v0.3 双状态（V 活跃剖面 + O 近岸沙坝），D1 已签 |
 | 决策 | ✅ D1–D7 已签；**D8 等 D7 的 $c_0^*$** |
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
-| 台账 | ✅ **90 行**（66 OBS / 8 MODEL / 16 ASSUME） |
+| 台账 | ✅ **92 行**（68 OBS / 8 MODEL / 16 ASSUME） |
 | 解析基准 | ✅ 原型 `modeling/sanity/erf_prototype.py`，$T_p=6.15/7.33/7.36$ yr |
 | 独立验证集 | ✅ USGS 14 条岸线（1978–2002）已存入 `docs/资料/06_原始摘录/_gis/` |
 | 求解器 | ⛔ 未实现（编程手任务） |
