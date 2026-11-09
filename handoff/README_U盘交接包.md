@@ -16,7 +16,7 @@ where-does-the-sand-go_handoff/
 │   ├─ 00_README_索引.md        ← 先看这个
 │   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 审查
 │   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
-│   ├─ ledger/claims.csv        ← 98 条数字台账（70 OBS / 19 ASSUME / 9 MODEL）
+│   ├─ ledger/claims.csv        ← 98 条数字台账（68 OBS / 21 ASSUME / 9 MODEL）
 │   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
 │   │   └─ 06_原始摘录/         ← _pdf（6 份全文）、_txt（提取文本）、_gis（USGS 岸线）
 │   └─ problem/                 ← 题目 PDF
@@ -42,10 +42,10 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 | 项 | 状态 |
 |---|---|
 | 题目拆解 | ✅ `modeling/CHECKLIST.md` |
-| 主模型 | ✅ v0.3 双状态（V 活跃剖面 + O 近岸沙坝），D1 已签 |
-| 决策 | ✅ D1–D7 已签；**D8 等 D7 的 $c_0^*$** |
+| 主模型 | ✅ v0.4 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签 |
+| 决策 | ✅ D1–D7 已签；D8 待签（主算成本结构 $c_0=0$，不再依赖 $c_0^*$） |
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
-| 台账 | ✅ **92 行**（68 OBS / 8 MODEL / 16 ASSUME） |
+| 台账 | ✅ **98 行**（68 OBS / 9 MODEL / 21 ASSUME） |
 | 解析基准 | ✅ 原型 `modeling/sanity/erf_prototype.py`，$T_p=6.15/7.33/7.36$ yr |
 | 独立验证集 | ✅ USGS 14 条岸线（1978–2002）已存入 `docs/资料/06_原始摘录/_gis/` |
 | 求解器 | ⛔ 未实现（编程手任务） |
@@ -55,7 +55,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 
 | # | 事 | 影响 | agent 的建议 |
 |---|---|---|---|
-| **Q-33** | D7 预算不绑定：旧 $V_{\max}=2.5$M 是 5 年量，被误标成 15 年 | E4/Q5 | **已定位**：$V_{\max}$ 改 5.0M 后 $N=1$ 买 4.48M、$N=3$ 买 3.84M，都绑定；**不需要改 $C_{\max}$**。待签字 |
+| **Q-33** | D7 预算不绑定：旧 $V_{\max}$ 三种语义混用 | E4/Q5 | **已定位**：拆为 $V_{15}=5.0$M 与 $V_{m event}=2.9$M；$N=1$ 买 2.9M、$N\ge2$ 买 4.44M；**不需要改 $C_{\max}$**。待签字 |
 | **Q-40–44** | 主风险指标、$V_{\max}$ 语义、成本口径、滩宽耗尽、本地速率 | 全部定量结论 | 见 `OPEN_QUESTIONS.md`；Q-40 建议"建筑净距 + 管理滩宽并列" |
 | **Q-38** | $c_0$ 证据区间是 0.5–4M（2026 Buxton/Avon 反推），8M 偏高 | E4 的 $c_0$ 扫描 | 扫描范围改 $[0,10]$M，8M 作上界 |
 | **Q-39** | `slr_base` 4.55 → NOAA 现行 **4.88**（1978–2023） | 基线/情景起点 | 改 4.88，4.55 作敏感性 |
@@ -69,7 +69,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 1. 读 `docs/handoff/CODER_SPEC.md`（实现契约、接口、验收测试）。
 2. 按 **C-D4**：先 `zeroflux` 跑 T1（收支闭合）与 T3（零源项），再切 `open` 复验 T1。
 3. 风暴按 §2.4b 的**对数正态 $\Delta y_{\rm pot}$**，不要用 `0.5H` 截断。
-4. **E4 前先签 Q-33/Q-40/Q-41/Q-42**（$V_{\max}$ 语义与预算/成本口径）；E0–E3、E5–E7 与 T1–T8 不受影响；T9 优先用现成 `Hatteras_Transects.dbf` 的 LRR 字段。
+4. **E4 前先签 Q-33/Q-40/Q-41/Q-42**（$V_{15}/V_{m event}$、预算与成本口径）；E0–E3、E5–E7 与 T1–T8 不受影响；T9 优先用现成 `Hatteras_Transects.dbf` 的 LRR 字段。
 
 ## 6. 论文手从哪开始
 

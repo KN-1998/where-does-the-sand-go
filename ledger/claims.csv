@@ -9,7 +9,7 @@ O-07,USACE 北海洋县（NJ）2024-10 合同 7350 万美元补 210 万 cy,73.5e
 O-08,Dean 平衡剖面参数 A 与 D50 的经验关系（D50~0.2 mm 对应 A~0.10 m^(1/3)）,0.10,m^(1/3),OBS,,2026-11-09,textbook,A_dean,教科书常值（Dean 1977/1991；Dean & Dalrymple 2002）；论文手需补正式引用
 O-09,外滩海岸侵蚀主要由温带风暴驱动；1942-1967 年记录 857 次产生 >=5.1 ft 波高的风暴,857,events,OBS,https://doi.org/10.18130/v3-s28q-h427,2026-11-09,snippet-only,lambda_s 量级,约 34 次/yr 属'大风浪'口径，不等于'侵蚀性事件'
 O-10,CERC 输沙系数 K=0.39（H_s 口径；H_rms 口径约 0.77）,0.39,dimensionless,OBS,,2026-11-09,textbook,K_cerc,USACE SPM 1984；论文手补引用
-O-11,风暴后海滩恢复时间尺度 0.5-3 yr,0.5-3,yr,OBS,,2026-11-09,need-manual-check,k_rec,常用量级；需要至少一篇具体文献支撑，论文手务必补引文
+O-11,风暴后海滩恢复时间尺度 0.5-3 yr,0.5-3,yr,OBS,,2026-11-09,need-manual-check,k_rec,恢复时间 0.5-3 yr 的文献量级；无 URL、need-manual-check；k=1/1.5 是 ASSUME 派生
 O-12,补沙单位成本 15-35 USD/cy（2020s 美国东岸）,15-35,USD/cy,OBS,,2026-11-09,need-manual-check,c1,由 O-07 与公开项目范围归纳；须补 2-3 个具体项目例证
 O-13,NOAA 潮位站相对海平面趋势表（NC 站）,null,null,OBS,https://tidesandcurrents.noaa.gov/sltrends/sltrends_states.shtml?region=nc,2026-11-09,superseded,slr_base,页面为 JS 渲染，未取到具体 mm/yr；必须人工读 Oregon Inlet(8652587)/Duck(8651370) 数值 | 已被 S1-S3 取代/细化
 O-14,Beaufort NC 相对海平面 3.1 mm/yr（1953-2018）,3.1,mm/yr,OBS,https://ncseagrant.ncsu.edu/coastwatch/land-versus-sea/,2026-11-09,superseded,slr_base,仅作量级参照；Beaufort 与外滩不同站，不可直接替换 | 已被 S3 取代/细化
@@ -58,7 +58,7 @@ N2,该区基础沙量亏空 2.3e6 cy,2.3e6,cy,OBS,https://dredgewire.com/dare-co
 N3,"该区侵蚀量约 300,000 cy/yr",3.0e5,cy/yr,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 量级,= 2.29e5 m^3/yr；对应 53.7 m^3/m/yr
 N4,总需沙 3.8e6 cy = 2.905e6 m3（2.3M cy 亏空 + 5×0.3M cy 侵蚀；CSE 2023 全文核对）,3.8e6,cy,OBS,https://dredgewire.com/dare-committee-recommends-moving-ahead-with-buxton-avon-beach-nourishment/,2026-11-09,snippet-only,V_max 主值,= 2.4-2.9e6 m^3
 N5,Rodanthe 补沙初始工程造价约 40 million USD,4.0e7,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,c1 与 Q5,PSDS 引 CSE 2023
-N6,15 年维护总成本约 120 million USD（假设每次撑 5 年）,1.2e8,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,C_max 主值,
+N6,15 年维护总成本约 120 million USD（假设每次撑 5 年）,1.2e8,USD,ASSUME,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,C_max 主值,PSDS 引 CSE 的 15 年维护估算，不是已批准预算；用作设计上限
 N7,买断 80 宗临海地块约 43 million USD,4.3e7,USD,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,撤退判据,结构距 MHW<300 ft
 N8,买断后可维持 15-25 年可用海滩,15-25,yr,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,撤退判据,
 N9,补沙 15 年成本约为买断的 3 倍,3,x,OBS,https://psds.wcu.edu/projects-and-research/municipalprojects/rodanthe-buyout-study/,2026-11-09,verified-page,Q5 对照,
@@ -91,7 +91,7 @@ P4,由 Nags Head 2011 补沙几何反推 H：218 m3/m / 22.9 m = 9.5 m,9.5,m,MOD
 P5,Nags Head FEMA 参考深度 -19 ft NAVD 约 5.8 m（可测变化深度，非闭合深度）,5.8,m,OBS,https://coastalreview.org/2018/06/nags-head-oks-financing-2019-beach-work/,2026-11-09,verified-page,H 的下界参照,FEMA 口径；CSE 2013 p.57 同
 E13,NC DEQ 2025 更新（CRC 25-34）：全州 218 mi 侵蚀、侵蚀段平均 -4.2 ft/yr；Waves-Rodanthe setback factor 上调 1-1.5,+1~1.5,SBF,OBS,https://www.deq.nc.gov/coastal-management/crc-25-34-powerpoint/download?attachment=,2026-11-09,verified-fulltext,非平稳侵蚀；S3,2025-08-28 简报；SBF 是无量纲倍数，不能换算 m/yr；速率表为图片
 N21,Rodanthe 外海沙源（upper 7 ft）约 3.2e6 cy；Buxton 约 3.6e6 cy,2.45e6,m3,OBS,https://islandfreepress.org/wp-content/uploads/2025/03/DareCounty2013-12-20_UPDATEReport_REDUCED-1.pdf,2026-11-09,verified-fulltext,V_max 的物理上限；Q5 沙源约束,3.2M cy=2.45M m3，略低于 V_max=2.5M；15 年需求 3.8M cy 超过单一 borrow area
-A-17,15 年模拟期 2027-2042（题面给定）,15,yr,OBS,,2026-11-09,problem-statement,T_sim,题面 PDF
+A-17,15 年模拟期 2027-2042（题面给定）,15,yr,ASSUME,,2026-11-09,problem-statement,T_sim,题面设定，不是自然观测
 A-18,管理滩宽阈值 w_mgmt=20 m（设计选择，独立于建筑退距）,20,m,ASSUME,,2026-11-09,assumption,w_crit 语义,不是观测；论文必须标 ASSUME
 A-19,15 年总沙量 5.0e6 m3（由 N4 的 5 年方案外推：2.3M cy 亏空 + 15x0.3M cy ≈ 6.8M cy）,5.0e6,m3,ASSUME,,2026-11-09,assumption,V_15,Q-41/Q-33；旧 V_max=2.5M 是 5 年量
 M-07,走廊平均初始滩宽 21.8 m（由 w0 场积分：25-9*sqrt(2pi)*700/5000）,21.8,m,MODEL,,2026-11-09,derived,w0 场,不是观测

@@ -1,7 +1,8 @@
-﻿# 2027 MCM/ICM · Problem A — *Where Does the Sand Go?*
+﻿# 2027 MCM-Style Mock Problem A — *Where Does the Sand Go?*
 
 > 海岸演化与补沙策略（beach nourishment）建模工作区。
 > Outer Banks · Rodanthe 附近 5 km 走廊 · 2027–2042。
+> **这是独立训练/练习赛题（PDF 标注 TRAINING / PRACTICE），不是已核实的正式 COMAP 题目。**
 
 本仓库是一支三人队 + 建模助理 agent 的**协作工作区**，而不是一份成品论文。
 它把"模型 → 参数 → 情景 → 策略 → 交接口径"拆成互相锁定的文档与台账，
@@ -86,7 +87,7 @@ python erf_prototype.py > results.txt     # 约 1 秒
   `handoff/README_交接说明.md`（交接包说明）
 - `DECISIONS.md` 中 **D1–D7 已签**（2026-11-09）；**D8 依赖 D7 的 $c_0^*$，尚未签**；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
 - ✅ 已通过：erf 解析基准与原型一致；守恒有限体积的质量守恒到机器精度（1e-16）；匀铺可行性判据有闭式解
-- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 **98 行（70 OBS / 9 MODEL / 19 ASSUME）**，其中 2 条 `need-manual-check`、20 条仅搜索摘要待开原文
+- ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 **98 行（68 OBS / 9 MODEL / 21 ASSUME）**，其中 2 条 `need-manual-check`、20 条仅搜索摘要待开原文
 - 红队第 1 轮（口径已修）：**3 Pass（文档层）/ 12 Partial / 0 Fail** —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
 - Round 3 审计（2026-11-09）：修复 `params.yaml` YAML 解析失败、$w_{crit}$ 与 $d_b$ 不一致、$w_0$ 场、风暴上限、`open` 边界等
 - **Round 6（2026-11-09，响应独立审查）**：修正风险几何、负滩宽、原型避免风险、V/O 定义、5/9 km 账本、ghost、$V_{\max}$ 语义；Q-33 已定位为 $V_{\max}=2.5$M（5 年量）误标 15 年，改为 5.0M 后预算自然绑定；新增 Q-40–Q-44。详见 `modeling/REVIEW_RESPONSE.md`
@@ -104,5 +105,4 @@ python erf_prototype.py > results.txt     # 约 1 秒
 
 ## 授权与用途
 
-练习赛工作区，内容仅供队内协作。原始题面归 MCM/COMAP 所有；
-文中引用的公开数据与文献版权归各自发布方，见 `ledger/claims.csv` 中的 `source_url`。
+这是一个**独立数学建模训练/练习赛**工作区：题面正文标注 `TRAINING` / `PRACTICE`，PDF 标题为 *2027 MCM-Style Mock Problem A*，作者字段为 *Independent Mathematical Modeling Training Materials*。**不要把它写成已核实的正式 COMAP 题目，也不要声称题面归 MCM/COMAP 所有**。仓库现为公开仓库，内容可用于学习与讨论；文中引用的公开数据与文献版权归各自发布方，见 `ledger/claims.csv` 中的 `source_url`。

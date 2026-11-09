@@ -66,7 +66,7 @@
 ## 4. 已知坑
 
 - **多段 polyline**：每条岸线有多个 part（35 个左右），直接按点序插值会跨 part 连线；必须按 part 分别处理。
-- **HWL ≠ MHW**：USGS 用的是湿/干线（HWL），比 MHW 略向陆；与 DEQ 的 MHW/lidar 口径不同，系统偏差约几米，不影响速率。
+- **岸线指标不同**：USGS 用湿/干线（HWL）；DEQ **2011 版也用 wet-dry line + endpoint 方法**，但不同更新版可能改用 lidar/MHW。不能笼统写"DEQ 是 MHW/lidar"；也不能假设固定偏移，必须逐版核对方法。系统偏差约几米，对速率影响较小，但要在论文里说明。
 - **不确定度 4.5–4.8 m（不是 1.6 m）**：单条岸线的位置噪声；斜率的独立 OLS 标准误应按
   $$\mathrm{SE}(b)=\frac{\sigma_{\text{position}}}{\sqrt{\sum_i(t_i-\bar t)^2}}$$
   计算，不能简单用 $\sigma/\sqrt{n}/\Delta t$。14 个不等间隔日期、$\sigma=4.6$ m 时，单条 transect 的 SE 约 0.3–0.5 m/yr；空间平均还要考虑相邻 transect 相关，官方报告用了有效独立样本数。
