@@ -4,13 +4,13 @@
 > 你负责英文表达、排版、摘要与信函；**不要改动模型结论**。
 > 数字只能取自 `ledger/claims.csv`；任何数字对不上台账，回来找建模手，不要自己改。
 >
-> 目标：**≤25 页**（含 1 页摘要）；技术信函单独 1 页。
+> 目标：**≤25 页，且摘要 1 页与技术信函 1 页都计入 25 页**。题面没有给信函额外一页的豁免；按"摘要 + 正文 + 信函 ≤25"排版，留 1 页余量。
 
 ---
 
 ## 1. 全文主线（一段话，摘要的骨架）
 
-> 我们用一条一维、双状态的沙量守恒模型刻画 2027–2042 年 Rodanthe 附近 5 km 走廊：**活跃海滩沙量 $V$**（不含沙库 $O$）与**风暴后暂存近岸的沙库 $O$**。沿岸输沙被线性化为扩散（$D$）+ 净漂移（$u$）；长期侵蚀被写成与观测速率一致的慢性沉汇（$\rho_e$）；风暴以泊松到达触发"干滩→沙库"的沙量转移，随后按 $k$ 回滩、按 $\lambda$ 永失。模型**计划**用三件事检验：沙量收支闭合、退化为 erf 解析解时的收敛阶、以及与历史岸线观测的一致性；**这些测试尚未在完整求解器上跑过，论文只能写"设计为"，不能写"已验证"**。可报告的结果是：（i）补沙寿命同时受扩散（$\ell^2/D$）、慢性侵蚀和风暴时机控制，**段长与方量都有影响，不能简单说哪一个更值钱**；（ii）当总沙量低于 $\mathcal{V}_{\text{thr}}=HL(w_{\text{crit}}-w_{\min})$ 时，均匀铺沙不能使全段**立即**达标，定点投放是一种可行方案，但**不是唯一**方案；（iii）风暴**时机**改变风险的分布，而不仅是总量；（iv）一次大补与多次小补的优劣取决于**成本结构与时机**，不预设固定成本主导；我们报告扫描区间内的实际排序，只有检出可靠交叉点才给 $c_0^*$。
+> 我们用一条一维、双状态的沙量守恒模型刻画 2027–2042 年 Rodanthe 附近 5 km 走廊：**活跃海滩沙量 $V$**（不含沙库 $O$）与**风暴后暂存近岸的沙库 $O$**。沿岸输沙被线性化为扩散（$D$）+ 净漂移（$u$）；长期侵蚀被写成与观测速率一致的慢性沉汇（$\rho_e$）；风暴以泊松到达触发"干滩→沙库"的沙量转移，随后按 $k$ 回滩、按 $\lambda$ 永失。模型**计划**用三件事检验：沙量收支闭合、退化为 erf 解析解时的收敛阶、以及与历史岸线观测的一致性；**这些测试尚未在完整求解器上跑过，论文只能写"设计为"，不能写"已验证"**。可报告的结果是：（i）补沙寿命同时受扩散（$\ell^2/D$）、慢性侵蚀和风暴时机控制，**段长与方量都有影响，不能简单说哪一个更值钱**；（ii）当总沙量低于 $\mathcal{V}_{\text{thr}}=HL(w_{\text{mgmt}}-w_{\min})$ 时，均匀铺沙不能使全段**立即**达标，定点投放是一种可行方案，但**不是唯一**方案；（iii）风暴**时机**改变风险的分布，而不仅是总量；（iv）一次大补与多次小补的优劣取决于**成本结构与时机**，不预设固定成本主导；我们报告扫描区间内的实际排序，只有检出可靠交叉点才给 $c_0^*$。
 
 ---
 
@@ -34,7 +34,7 @@
 **要证明什么**：我们能追踪补进去的沙，并且**账能对上**；能说明什么样的宽滩不持久。
 
 **论证链**：
-1. 三种布置（总方量相同）：匀铺 5 km / 热点 1 km / 5 段沙丘。
+1. 三种布置（总方量相同）：匀铺 5 km / 热点 1 km / 5 段定点投放。**注意：模型只有一维岸线/体积，没有沙丘高程、越浪或抗冲刷机制；"5 段"只是投放位置，不是"沙丘更抗冲刷"**。
 2. 沙去向四分：区内留存 / 出区（进入邻近岸段）/ 永久离岸 / 慢性损失。**用"有补沙 − 无补沙"的差分场算**，不许把基线侵蚀算给补沙。
 3. 沙量账本闭合到 $\le10^{-6}$（目标 $10^{-8}$）（表格给出各项与残差）。
 4. **"宽滩不持久"的三个条件**（这是 Q2 的高分点）：
@@ -61,7 +61,7 @@
 **要证明什么**：三个情景 + 时机对照；不确定以**分布**呈现。
 
 **论证链**：
-1. 三个情景的定义（表）；说明**只改一个维度**以便归因。
+1. 三个情景的定义（表）；说明它们是**联合压力包**（多个驱动同时变），不能归因给单一机制；机制归因另做 OAT。
 2. SLR 的进入方式**不是**直接换岸线后退（→ 回应 D-4）：主通道是（a）慢性速率上调；**（b）风暴水位基线是可选通道**——若未实现，必须写明"storm-water-level baseline 未单独建模"，不能只写"SLR 已考虑"。
 3. $T_p$ 的分位数 + $w(x,t)$ 的分位带。
 4. 时机对照：同 6 次事件，早/中/晚三组；结论是"时机改变风险分布"。
@@ -71,11 +71,11 @@
 **要证明什么**：三策略同约束可比；规则只用可观测量；知道何时不该补。
 
 **论证链**：
-1. 预算写成 $\sum(c_0+c_1\mathcal{V}_j)\le C_{\max}$；**不固定 $c_0$，报排序翻转的临界值 $c_0^*$**（D7 裁决）。"若 $c_0=0$，多 vs 少无差别"这句话一定要写；同时写"$c_0^*$ 落在扫描区间之外则排序稳健"。扫描区间按 Q-38 用 **$[0,10]$M**（2026 工程反推 $c_0=0.5$–4M），并同时给旧的 $[3,15]$M 作对照。
+1. 预算写成 $\sum(c_0+c_1\mathcal{V}_j)\le C_{\max}$，且 $0\le\mathcal{V}_j\le V_{\text{event,max}}$、$\sum\mathcal{V}_j\le V_{15,\text{total}}$。**主算成本结构是 all-in $c_1=27$/m³、$c_0=0$**，因此**主算没有 $c_0^*$**；不要硬套交叉点。替代结构（施工 \$11 + $c_0>0$）只作敏感性。**"若 $c_0=0$，多 vs 少无差别"是错的，不能写**；时机本身改变风险。
 2. 三策略在 E0–E4 下的 $E$、$T_p$、成本。
 3. 触发规则伪代码（5 行）+ 只用可观测量的核对表。
 4. 三个撤退判据（性价比 / 保护期 / 物理不可持续）。
-5. **沙源约束（新增，N21）**：Rodanthe 本地 borrow area 只有约 3.2M cy（2.45M m³），低于 15 年需求 3.8M cy。写一句："The program may run out of locally available sand before it runs out of money." 这是 Q5 里"何时停止补沙"的第四个、也是物理性最强的判据。
+5. **沙源约束（N21）**：Rodanthe 本地 borrow area 约 3.2M cy（2.45M m³）；注意 N4 的 3.8M cy 是**5 年**需求，15 年需求约 6.8M cy（5.2M m³）。本地沙源连 5 年方案都不够。写一句："The program may run out of locally available sand before it runs out of money." 并把 $S_{\text{borrow,total}}=2.45$M m³ 作为独立约束；超出时必须外调或标"不可行"。
 6. 监测指标表 + "何时重新考虑"的一句话。
 
 ---
@@ -126,8 +126,8 @@ T_{1/2} = \frac{0.2748\,\ell^2}{D}
 % 保护期（纯扩散）
 T_p = \frac{\ell^2}{16D\bigl[\operatorname{erf}^{-1}(\Delta y_{\mathrm{req}}/\Delta y_0)\bigr]^2}
 
-% 匀铺可行性阈值
-\mathcal{V}_{\mathrm{thr}} = H\,L\,\bigl(w_{\mathrm{crit}}-w_{\min}\bigr)
+% 匀铺可行性阈值（管理滩宽口径）
+\mathcal{V}_{\mathrm{thr}} = H\,L\,\bigl(w_{\mathrm{mgmt}}-w_{\min}\bigr)
 
 % 沙量账本
 \mathcal{V}(t) = \underbrace{\int (V+O)\,dx}_{\text{inside}}
@@ -135,9 +135,14 @@ T_p = \frac{\ell^2}{16D\bigl[\operatorname{erf}^{-1}(\Delta y_{\mathrm{req}}/\De
  + \underbrace{\int_0^t\!\!\iint \lambda O\,dx\,d\tau}_{\text{offshore}}
  + \underbrace{\int_0^t\!\!\iint L_c\,dx\,d\tau}_{\text{chronic}}
 
-% 风险
-w_{\mathrm{crit}}(x) = d_b(x) - m_s,\qquad
-E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
+% 风险：两个指标，不得互相推导
+% (A) 管理滩宽（ASSUME 设计阈值）
+w_{\mathrm{mgmt}} = 20\ \mathrm{m},\qquad
+E_w = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{mgmt}}\}\,dx\,dt
+% (B) 建筑净距（物理风险）
+r(x,t) = d_b + y(x,t),\qquad
+E_b = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{r<m_s\}\,dx\,dt
+% 热点 d_b=28, m_s=8 => y<-20 m 时进入风险
 ```
 
 ---
@@ -173,7 +178,8 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 | $\ell$ | 投放段长 | m |
 | $\mathcal{V}$ | 补沙总方量 | m³ |
 | $T_p$ | 有效保护期 | yr |
-| $w_{\text{crit}}$ | 风险阈值滩宽 | m |
+| $w_{\text{mgmt}}$ | 管理滩宽阈值（独立 ASSUME） | m |
+| $r$ | 建筑净距 $=d_b+y$ | m |
 | $E$ | 风险暴露（长度×时间） | m·yr |
 
 ---
@@ -201,14 +207,15 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 | $w_{0,\text{mean}}$ | 21.8 | m | 15–30 | MODEL |
 | $d_b$ | 28 | m | 20–45 | ASSUME |
 | $m_s$ | 8 | m | 5–12 | ASSUME |
-| $w_{\text{crit}}$ | 20 | m | 12–32 | MODEL/ASSUME |
-| $\mathcal{V}_{\max}$（15 年总量） | $5.0\times10^{6}$ | m³ | 2.5–9.0 ×10⁶ | MODEL |
-| $C_{\max}$ | $1.2\times10^{8}$ | \$ | 0.6–1.8 ×10⁸ | **OBS** |
-| $c_1$ | 25 | \$/m³ | 13–46 | **OBS** |
-| $c_0$ | $8\times10^{6}$ | \$ | 0–10 ×10⁶（Q-38） | ASSUME |
+| $w_{\text{mgmt}}$（管理滩宽阈值） | 20 | m | 12–32 | ASSUME |
+| $V_{15,\text{total}}$（15 年总量） | $5.0\times10^{6}$ | m³ | 2.5–9.0 ×10⁶ | ASSUME/MODEL |
+| $V_{\text{event,max}}$（单次工程） | $2.9\times10^{6}$ | m³ | 1.5–3.5 ×10⁶ | MODEL（CSE 3.8M cy） |
+| $C_{\max}$（15 年维护估算） | $1.2\times10^{8}$ | \$ | 0.4–2.0 ×10⁸ | **OBS-ESTIMATE** |
+| $c_1$（all-in） | 27 | \$/m³ | 20–35 | **OBS** |
+| $c_0$（仅敏感性） | 0 | \$ | 0–10 ×10⁶ | ASSUME |
 | $T_{\min}$ | 3 | yr | 2–5 | ASSUME |
 
-> **$C_{\max}$ 注意事项（2026-11-09 更正）**：$\mathcal{V}_{\max}=5.0\times10^6$ 是 **15 年总量**（N4 的 3.8M cy 是 5 年量）。以 $C_{\max}=1.2\times10^8$、$c_0=8\times10^6$、$c_1=25$ 计，$N=1$ 买 4.48M、$N=3$ 买 3.84M，**两者都受预算约束**，$c_0^*$ 有定义。**不要**再把 $C_{\max}$ 改成 60M；旧文基于 $V_{\max}=2.5$M（5 年量）的算术已作废。
+> **$C_{\max}$ 注意事项（2026-11-09 更正）**：$V_{15,\text{total}}=5.0$M 是 15 年总量，$V_{\text{event,max}}=2.9$M 是单次 5 年工程。以 $C_{\max}=1.2\times10^8$、$c_1=27$、$c_0=0$ 计，$N=1$ 买 2.9M（单次上限）、$N\ge2$ 买 4.44M（预算）。**不要**把 $C_{\max}$ 改成 60M；主算没有 $c_0^*$。
 
 > 表注必须写："OBS = based on public data (see references and access dates); MODEL = derived from a stated physical relation; ASSUME = a labelled modelling choice with a sensitivity range."
 
@@ -240,7 +247,7 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 3. **区域 SLR 不等于局地后退**：
    > "Regional sea-level trends are not converted into local shoreline retreat; they enter only through the chronic sink and the storm water-level baseline."
 4. **初始滩宽与建筑退距是假设**：
-   > "Initial beach widths and structure setbacks are labelled assumptions; the conclusions are therefore stated in terms of the dimensionless ratios $\Delta y_0/(w_{\text{crit}}-w_0)$ and $\mathcal{V}/\mathcal{V}_{\text{thr}}$, which are invariant to those choices."
+   > "Initial beach widths and structure setbacks are labelled assumptions; the conclusions are therefore stated in terms of the dimensionless ratios $\Delta y_0/\max(w_{\text{mgmt}}-w_0,1\,\mathrm{m})$ and $\mathcal{V}/\mathcal{V}_{\text{thr}}$, which are invariant to those choices."
 5. **风暴频率与单事件幅度不可分**：
    > "With annual shoreline data these two parameters are identifiable only through their product."
 6. **补沙沙质同质假设**。
@@ -302,6 +309,23 @@ E = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{w<w_{\mathrm{crit}}\}\,dx\,dt
 
 > 超页时按此顺序砍：附录细节 → F6/F8 的次要子图 → E5 的 Sobol（保 OAT）。
 > **不要砍**：沙量账本表、五条 distinctions 的对应、$T_p$ 的分位。
+
+---
+
+## 11.5 当前能报 / 不能报（2026-11-10）
+
+**可以写**：
+- 模型结构、假设、方程、参数区间、敏感性设计；
+- 解析原型的 $T_p=6.15/7.33/7.36$ yr 与避免风险 28086/31320/31412 m·yr，但必须标"**管理滩宽口径、解析假设、非完整模型**"；
+- 三个指标排序不同（中心保护期 B/C 长、保护岸线·年 A 略高、避免风险 B/C 高），不能写"某方案总体最优"；
+- 数据完整性、参数来源、USGS transect 本地速率（−3.43/−4.58）作为诊断。
+
+**不能写**：
+- "完整模型已验证""T1–T9 已通过""E0–E7 已完成"；
+- 建筑净距口径的 $T_p$、$E$、A/B/C 排序（**尚未重算**）；
+- 耗尽后的 15 年累计风险（吸收态刚定义，未实现）；
+- "第一场风暴决定大半收益""某策略恒优""物理撤退判据已触发"；
+- 把 $E$ 的降低说成房屋倒塌概率或美元收益（$E$ 是长度加权，不是资产加权）。
 
 ---
 

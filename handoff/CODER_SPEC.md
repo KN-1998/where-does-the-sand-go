@@ -1,11 +1,11 @@
 # CODER_SPEC.md — 交给编程手的实现规格（阶段 4 交接）
 
-> **给编程手**：这份文件是合同。你只需要实现它，**不需要**重新决定模型含义。
+> **给编程手**：这是**实现规格**，不是模型合同。**模型含义以 `modeling/MODEL_SPEC.md` 为唯一合同**；本文只说明怎么实现。若本文与 `MODEL_SPEC` 冲突，以 `MODEL_SPEC` 为准，并在 `OPEN_QUESTIONS.md` 记录。
 > 有疑问 → 写进 `OPEN_QUESTIONS.md`，不要自己改模型。有 bug → 修；有规格缺口 → 问。
 >
-> 配套：`modeling/MODEL_SPEC.md`（方程来源）、`modeling/NONDIM.md`（解析基准与对拍数值）、
+> 配套：`modeling/MODEL_SPEC.md`（**模型合同**）、`modeling/NONDIM.md`（解析基准与对拍数值）、
 > `modeling/params.yaml`（参数）、`modeling/SCENARIOS_STRATEGIES.md`（情景与策略）。
-> 版本：v0.3（2026-11-09）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
+> 版本：v0.4（2026-11-09 审查后）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
 
 ---
 
@@ -70,8 +70,9 @@ $$
 
 ### 2.4 时间推进
 
-- 基准：**Crank–Nicolson**（时间二阶），三对角求解（`scipy.linalg.solve_banded` 或 `scipy.sparse.linalg.spsolve`）。
-- 也可用向后 Euler（一阶，更稳），但 T2 的收敛阶验收要求二阶 ⇒ **建议 CN**。
+- **生产格式冻结为向后 Euler（BE）+ 守恒有限体积**：一阶时间、无条件稳定、单调性较好。三对角求解（`scipy.linalg.solve_banded` 或 `scipy.sparse.linalg.spsolve`）。
+- CN 仅作**可选对照**（时间二阶），且必须另测非负性；基准 $r=9.6$ 时 CN 可能振荡出负值。不要用 CN 作为主算。
+- T2 判据按格式区分：BE + $\Delta t\propto\Delta x$ ⇒ 比值 1.8–2.2；CN + $\Delta t\propto\Delta x^2$ ⇒ 3.5–4.5。
 - $\Delta t=0.02$ yr（基准）。风暴事件时刻必须**落在步边界**：若下一事件在 $t_k$，令本步 $\Delta t=t_k-t$。
 - **S3 波候**：`Hs_trend=+3%/decade` 通过 $D\propto H_b^{5/2}$ 进入，$D(t)=D_0(1+0.03t/10)^{5/2}$；在 CFL 与面通量里用**瞬时** $D(t)$。不要只改一个标签而不改 $D$。
 
@@ -81,13 +82,14 @@ $$
 
 1. **到达**：齐次 Poisson，$\lambda_s$ 取 `params.yaml`。
 2. **潜在后退**：$\Delta y_{\text{pot}}\sim\mathrm{LogNormal}$，中位 $\Delta y_{\text{ref}}=8$ m，$P_{95}=25$ m ⇒ $\sigma_{\ln}=\ln(25/8)/1.645=0.694$。
-3. **窄滩饱和**：$w_{\text{eff}}=\max(w,0)$；$f=1-\exp(-w_{\text{eff}}/w_s)$，$w_s=20$ m；$\Delta y_k=\Delta y_{\text{pot}}f$。**必须取 max**：$w<0$ 时旧式给负 $\Delta y$、负 $S$（审查 P0）。
-4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}}+\Delta y_{\text{cut}})$，$\Delta y_{\text{cut}}=5$ m。**不得用 $0.5H$**；也**不要**先取上限再乘因子（与模型式顺序统一为"先因子、后上限"）。
-5. **有效域检查**：若事件前 $w\le0$，标记 `beach_exhausted` 并停止/右删失该 run；**不得**让负宽度继续进入风暴项。干滩耗尽后的沙丘侵蚀不在本模型内（Q-43）。
-6. **注入**：$S_k=H\Delta y_k$ [m²]；$y\leftarrow y-\Delta y_k$；$O\leftarrow O+S_k$。事件时刻按 §2.4 截到步边界。
-6. $R_k/\gamma$ 参数化只作敏感性；若使用，需另给 $R_{\text{ref}}$ 分布，当前 `params.yaml` 未给，**不作为主算**。
+3. **窄滩饱和**：$w_{\text{eff}}=\max(w,0)$；$f=1-\exp(-w_{\text{eff}}/w_s)$，$w_s=20$ m；$\Delta y_k=\Delta y_{\text{pot}}f$。**必须取 max**。
+4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}})$。**不能用 $w_{\text{eff}}+\Delta y_{\text{cut}}$**（会让 $w$ 跨过 0）；`dy_cut` 废弃。先因子、后上限。
+5. **空间足迹**：$S_k(x)=H\Delta y_k\,\phi_k(x)$。主算 $\phi_k=1$ 覆盖整个 9 km 域（区域风暴）；敏感性用 $\phi_k=\exp[-(x-x_k)^2/(2\sigma_e^2)]$，$\sigma_e=2$ km，$x_k\sim U(-L_b,L_b)$。`events.csv` 记 $x_k$、$\sigma_e$、中央/全域注入体积。**不得只给标量 $\Delta y$ 而不给足迹**。
+6. **注入**：$y\leftarrow y-\Delta y_k\phi_k$；$O\leftarrow O+H\Delta y_k\phi_k$；$S_k\ge0$。事件时刻按 §2.4 截到步边界。
+7. **耗尽（吸收态）**：任何单元到 $w=0$ 即 `beach_exhausted`；此后该单元风险恒为 1、状态冻结、不再补沙，但 **$E$ 继续积分到 15 年**。$T_p$ 对耗尽样本右删失（报告"15 年内未恢复"的比例），不能当无穷大。
+8. $R_k/\gamma$ 参数化只作敏感性；当前 `params.yaml` 未给 $R_{\text{ref}}$，**不作为主算**。
 
-> `S2` 的 `forced_dy=25` 是**潜在**后退；实际值会被窄滩因子折减（$w=20$ m 时约 0.63 ⇒ 15.8 m）。若情景要的是"实际 25 m"，需把 forced_dy 设为 $25/\text{因子}$ 或对该事件关闭饱和——这是 `OPEN_QUESTIONS` Q-34，待建模手裁定。
+> **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w)$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w$ 太窄以致 $25>w$，取 $w$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
 >
 > **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
 
@@ -179,7 +181,7 @@ overrides:                   # 任何 params.yaml 里的键
 | `results.json` | 标量结果：$T_p$ 分位、$E$、留存率、成本、参数快照 | — |
 | `fields.npz` | `y[nt,nx]` [m]、`O[nt,nx]` [m²]、`w[nt,nx]` [m]、`x[nx]` [m]、`t[nt]` [yr] | float32（体积考虑） |
 | `ledger.csv` | 逐时间步的沙量台账（见 §4.3） | — |
-| `events.csv` | 每次风暴：$t_k$、$R_k$、$\Delta y_k$、$S_k$ 场汇总 | — |
+| `events.csv` | 每次风暴：$t_k$、$\Delta y_{\rm pot}$、$\Delta y_k$、$x_k$、$\sigma_e$、中央 5 km/全域 9 km 的注入体积（m³）、耗尽单元数 | — |
 | `meta.json` | 代码 md5、params md5、Git commit、seed、运行耗时 | — |
 
 ### 4.3 `ledger.csv` 列（**沙量台账，T1 的载体**）
@@ -208,15 +210,15 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 
 | # | 测试 | 做法 | 判据 | 预期数值 |
 |---|---|---|---|---|
-| **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 实测可达 $10^{-12}$ |
-| **T2** | 对 erf 解收敛 | **光滑高斯初值**（$\sigma=200$ m）测阶；$\Delta x=100/50/25$，$\Delta t\propto\Delta x^2$；另用阶跃初值测 $L_1$ 与前沿位置 | **CN：** L2 误差比 $\in[3.5,4.5]$；**BE + $\Delta t\propto\Delta x$：** $\in[1.8,2.2]$；**阶跃的 $L_\infty$ 不用于判阶**（间断主导）；另做**非负性检查**（CN 在 $r\gg1$ 可能振荡） | 见下 |
+| **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 目标 $10^{-12}$，double 可达 $10^{-16}$ |
+| **T2** | 对 erf 解收敛 | **光滑高斯初值**（$\sigma=200$ m）；主格式 **BE + $\Delta t\propto\Delta x$**；CN 可选，用 $\Delta t\propto\Delta x^2$；另用阶跃初值测 $L_1$/前沿 | **BE：** L2 比值 $\in[1.8,2.2]$；**CN（可选）：** $\in[3.5,4.5]$；阶跃的 $L_\infty$ 不判阶；另做**非负性检查** | 见下 |
 | **T3** | 零源项/守恒 | (a) 均匀 $y$、$O=0$、$u=0$、零通量 ⇒ 全场不变；(b) 非均匀 $y$、零通量 ⇒ 总量守恒 + 对 erf 解；(c) $O$ 单独指数衰减 | (a) $<10^{-12}$；(b) 质量 $<10^{-10}$；(c) $e^{-(k+\lambda)t}$ | — |
 | **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_p$、留存率）差异 $<2\%$ | — |
 | **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{mgmt}=20$；与 NONDIM §7 对拍 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
 | **T7** | 边界通量 | 初始中心凸起、$u>0,D>0$ 的**已知外流**算例 | `open` 的 `flux_outer` 与半解析估计差 $<10\%$；`zeroflux` 的 `flux=0` | 不比较"留存率高低" |
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
-| **T9** | **历史岸线验证（Q3）** | 优先用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的现成 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；按走廊选 transect | Rodanthe 5 km 窗口的 LRR：**1978–2002 ≈ −3.4 m/yr、1989–2002 ≈ −4.6 m/yr**；模型基线应落在 **2.5–4.5 m/yr** 量级 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
+| **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 
@@ -268,17 +270,23 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_p$、min $w$、2042 年 $w$） |
 | E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[0,10]$ M\$ 扫描（Q-38 建议；未批前可按 $[3,15]$ 跑，但必须同时给 $[0,10]$） | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
 | E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
-| E6 | `--bc {open,zeroflux,dirichlet}` | 边界敏感性表 |
+| E6 | `--bc {open,zeroflux,dirichlet}`；另做 **域大小敏感性**：$L_b=4.5$ km vs $7$ km（中央 5 km 指标差异 >5% 则报告） | 边界/缓冲敏感性表 |
 | E7 | $\mathcal{V}\in[1e5,5e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
 
-> **Q-33 已定位（2026-11-09）**：旧 $V_{\max}=2.5$M 是 N4 的**5 年**方案，被误标成 15 年总量。改为 $V_{\max}=5.0$M 后，$C_{\max}=120$M、$c_0=8$M、$c_1=25$ 时 $N=1$ 买 $4.48$M、$N=3$ 买 $3.84$M，**两者都受预算约束**，$c_0^*$ 有定义。E4 不需要改 $C_{\max}$。
-> 若实现仍用旧 2.5M，则预算可能不绑定；此时**如实报告"固定成本通道未激活"**，不要宣称比较无效，也不要把 $C_{\max}$ 调到 60M 来制造绑定。
+> **Q-33 已解决（2026-11-09）**：符号拆成 $V_{15,\text{total}}=5.0$M（15 年总量）与 $V_{\text{event,max}}=2.9$M（单次 5 年工程）。$C_{\max}=120$M、$c_1=27$、$c_0=0$ 时：
+> - $N=1$：$\min(5,2.9,4.44)=2.9$M（单次上限绑定）
+> - $N=2$：$\min(5,5.8,4.44)=4.44$M（预算绑定）
+> - $N=3$：$\min(5,8.7,4.44)=4.44$M（预算绑定）
+>
+> 主算 $c_0=0$ 时，N≥2 的可买总量相同（4.44M），差别只在**时机**；这正是"固定成本不是唯一机制"的体现。
+>
+> **不需要改 $C_{\max}$**。$c_0>0$ 只作替代成本结构的敏感性；主算没有 $c_0^*$。
 
 ### 7.2 出图规格（论文手直接用）
 
 | 图 | 内容 | 必须标注 |
 |---|---|---|
-| F1 | $w(x,t)$ 时空图（热图或 3D 面） | 坐标轴单位、$w_{\text{crit}}$ 等值线、时间标签 |
+| F1 | $w(x,t)$ 时空图（热图或 3D 面） | 坐标轴单位、$w_{\text{mgmt}}$ 等值线、时间标签 |
 | F2 | $w(t)$ 在 3 个代表位置（热点中心、边缘、区外） | 观测/模型/假设 三标签 |
 | F3 | 沙去向堆叠图（留存/出区/离岸/慢性）随 $t$ | 百分比 + 绝对量 |
 | F4 | $T_p$ 直方图（1000 次 MC） | 中位 + $P_{10}/P_{90}$ |
