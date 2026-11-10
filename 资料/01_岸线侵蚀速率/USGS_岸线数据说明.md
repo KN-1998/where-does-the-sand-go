@@ -2,7 +2,7 @@
 
 > 来源：USGS Open-File Report 2015-1002，*Quantification of Shoreline Change Along Hatteras Island, North Carolina—Oregon Inlet to Cape Hatteras, 1978–2002, and Associated Vector Shoreline Data*。
 > 下载：`资料/06_原始摘录/_pdf/usgs_shorelines.zip`（1.4 MB），解压到 `资料/06_原始摘录/_gis/`。
-> 用途：**Q3 的独立验证集**（VAL-1）；不是 $\rho_e$ 的标定数据。
+> 用途：**Q3 的跨资料一致性检查（cross-source consistency check）**，不是 $\rho_e$ 的标定数据，**也不是严格的 independent validation / out-of-sample forecast**——原始影像、日期与处理链无法证明独立。
 
 ---
 

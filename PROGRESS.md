@@ -302,3 +302,29 @@
 | 引用同步 | README / PROGRESS / params / 计划与审查文档中的路径全部更新 |
 
 **未动**：`资料/`（50 MB 原始 PDF、提取文本、GIS）原样保留；`ledger/claims.csv` 内容未改。
+
+## Round 10（2026-11-10）：整改建议 A1–C4 落地（合同 v0.6）
+
+**输入**：外部《整改建议_20261110》（A1–A7 模型合同、B1–B3 证据与验证、C1–C4 文档与打包）。
+**原则**：能当场裁决的按"最可辩护方案"落成合同，并写明理由与替代口径；需要建模手个人拍板的（如策略排序结论）留给结果。
+
+| 编号 | 问题 | 处置 | 落点 |
+|---|---|---|---|
+| **A1** | 风险指标/空间聚合口径不定；初始热点 16 m < 20 m 导致 $T_{\text{first,fail}}=0$ | 定义长度加权失败比例 $f_c(t)$；$T_{\text{first,fail}}$ 改为**首次 $f_c\ge0.5$**；$T_{\text{any}}$ 降为诊断；删失规则逐条写死；**Q-40 裁决主指标 $E_b$** | `MODEL_SPEC` §6.3、D5 |
+| **A2** | 允许 $w_{\text{eff}}=\max(w,0)$ 但 $V$ 可变负 | 采纳"**下限 + 退岸计数器 $R_c$**"：$y\ge-w_0$，触底后的亏空记入 $R_c$；补沙可抬升、$R_c$ 不回退；台账加项 | `MODEL_SPEC` §3.6、D9、`CODER_SPEC` §2.4c |
+| **A3** | $V_0$ 与 $w_0$ 关系不明 | **$V_0\equiv$ 常数、$w_0$ 为独立风险几何场**（$V_{0,x}=0$ 不制造虚假输沙）；$V_0=Hw_0$ 仅敏感性 | `MODEL_SPEC` §2.3.1、D10 |
+| **A4** | $\rho_e$ 与显式风暴双计数 | 定义 $\rho^{\text{storm}}=\lambda_s E[\Delta y]\lambda/(k+\lambda)=0.417$，**主算用 $\rho^{\text{bg}}=1.283$**；L0 基线为裁决实验 | `MODEL_SPEC` §3.7、D11、`VALIDATION_PLAN` §1.5 |
+| **A5** | 触发规则初始矛盾（t=0 必触发） | 改为 **t=0 只评不动工** + **相对增量 $\Delta f\ge0.10$** + 建筑硬触发 + 冷却（含许可/施工时滞与监测误差 $\sigma_m=3$ m） | `SCENARIOS_STRATEGIES` §4.1、D8 |
+| **A6** | 两种成本结构未冻结 | 独立键 `c1=27`（all_in，$c_0=0$）与 `c1_marginal=11`；$c_0^*$ 只在边际结构下输出 | `params.yaml`、D12、`CODER_SPEC` §2.5b |
+| **A7** | 沙源"潜在储量"当成"可用供给" | 主算 $a_{\text{borrow}}=1.0$、现实情景 0.8；许可/施工时滞进主算；A/B/C 用**实际可投方量**并报剩余供给 | D12、`SCENARIOS_STRATEGIES` §3 |
+| **B1** | 把跨资料检查写成"独立验证" | `资料/01`、`资料/00` 统一改为 *cross-source consistency check* | 两份资料文件 |
+| **B2** | 5 个参数证据等级虚高 | 新增 §2.10 等级表（O-11/O-12/N4/W1/S4）与"应当这样写"对照 | `PARAM_EVIDENCE` §2.10 |
+| **B3** | 主算/替代口径未并列 | 新增 §5.1：$D$ 必须并列 $4.1\times10^5$ 与 $8\times10^5$；$\rho_e$ 并列 1.7；S3 标签不得归因 | `WRITER_NOTES` §5.1 |
+| **C1** | 版本号不一致（yaml 0.2 vs 文档 v0.5） | 统一 **v0.6 / 2026-11-10** | `params.yaml`、`MODEL_SPEC`、`CODER_SPEC`、交接文档 |
+| **C2** | 旧 Q 状态混着 ⏳ | 新增状态索引 §H：`resolved / open / historical` 逐条落点 | `OPEN_QUESTIONS` §H |
+| **C3** | 打包说明用 `docs/...` 路径；README 未说明 clone 缺什么 | 加路径映射说明；README 增"克隆后你拿不到什么"表 | `meta/packaging`、`README` |
+| **C4** | 交接包需重新生成 | 新增 `tools/make_package.py`（git archive + bundle + SHA256），产物在 `dist/`（不入库） | `dist/`、`tools/` |
+
+**验证**：YAML 可解析；`evidence_id` 全部命中台账；台账 105 行 / 10 列 / 无重复 ID；原型重跑通过。
+
+**仍未做**：T1–T12、E0–E7 依然一个都没跑；本轮只改合同与文档，**没有产生任何数值结论**。

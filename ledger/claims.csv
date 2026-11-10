@@ -102,3 +102,5 @@ A-23,触发评估缓冲取 5 m（高于管理阈值即开始评估）,5,m,ASSUME
 M-07,走廊平均初始滩宽 21.8 m（由 w0 场积分：25-9*sqrt(2pi)*700/5000）,21.8,m,MODEL,,2026-11-09,derived,w0 场,不是观测
 M-09,破碎波高 Hb=0.9 m（由 Hs=1.0 m 与浅化/破碎估算）,0.9,m,MODEL,,2026-11-09,derived,Hb,W9 外海 1.26 m 不是 Hb
 E14,USGS 现成 transect LRR（Rodanthe 5 km 窗口，n=101）：1978-2002 均值 -3.43、1989-2002 均值 -4.58 m/yr,-3.43/-4.58,m/yr,OBS,https://pubs.usgs.gov/of/2015/1002/downloads/ofr2015-1002.zip,2026-11-09,verified-fulltext,rho_e 本地对照；Q-44,"Hatteras_Transects.dbf 的 LRR 字段，UTM northing 3,937,500-3,942,500，DAS≈20.8 km；预计算值，非重建"
+A-24,触发规则的监测与聚合参数（sigma_m=3 m、delta_f=0.10、f_thr=0.5、冷却 1 yr）,3/0.10/0.5/1.0,m/-/-/yr,ASSUME,,2026-11-10,assumption,D8 触发规则 / MODEL_SPEC §6.3,无实测监测精度；按 RTK-GPS 剖面典型 1-5 m 取值，敏感性覆盖 1.5-5 m
+M-10,去双计数的背景侵蚀率 rho_bg = rho_obs - lambda_s*E[dy]*lambda/(k+lambda),1.283,m/yr,MODEL,,2026-11-10,derived,主算 rho_e,=1.7-0.417；见 MODEL_SPEC §3.7 / DECISIONS D11

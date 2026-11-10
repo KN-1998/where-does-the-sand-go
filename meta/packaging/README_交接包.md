@@ -41,13 +41,15 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 
 > bundle 是**全量**的（`--all`），不依赖 GitHub 也能完整恢复。
 > 若只想看文档，直接读 `docs/`，不需要 git。
+>
+> **路径约定（C3 修正）**：本文所有 `docs/...` 路径都指 **U 盘交付包内的 `docs/` 副本**；在 GitHub 仓库里请**去掉 `docs/` 前缀**（`docs/资料/x` → `资料/x`，`docs/handoff/x` → `handoff/x`，`docs/ledger/x` → `ledger/x`）。
 
 ## 3. 当前状态（截至 2026-11-10）
 
 | 项 | 状态 |
 |---|---|
 | 题目拆解 | ✅ `modeling/CHECKLIST.md` |
-| 主模型 | ✅ v0.5 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签；耗尽态不冻结 |
+| 主模型 | ✅ v0.6 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签；耗尽态不冻结 |
 | 决策 | ✅ D1–D7 已签；D8 待签（主算成本结构 $c_0=0$，不再依赖 $c_0^*$） |
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
 | 台账 | ✅ **103 行**（69 OBS / 9 MODEL / 25 ASSUME） |

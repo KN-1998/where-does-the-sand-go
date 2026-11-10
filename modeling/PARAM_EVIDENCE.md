@@ -124,6 +124,25 @@
 
 ---
 
+---
+
+## 2.10 证据等级不足的参数（B2，2026-11-10 整改）
+
+以下 5 处**不能**写成"已核实的局地观测"。论文参数表必须保留其真实等级：
+
+| ID | 参数/数值 | 真实等级 | 能不能这样写 | 应当这样写 |
+|---|---|---|---|---|
+| `O-11` | 恢复时间 $0.5$–$3$ yr | `ASSUME`（文献量级，无本地时间序列） | ❌ "观测到恢复时间" | "adopted literature range; no local post-storm series" |
+| `O-12` | 补沙单位成本范围 | `OBS` 但为**跨项目归纳**，非本地合同 | ❌ "本项目成本为…" | "range derived from comparable US East Coast projects" |
+| `N4` | $3.8$M cy 需求锚点 | **摘要级来源**（原文 403），由 3 条二手转述交叉支持 | ❌ "CSE 报告给出 3.8M cy" | "reported by secondary sources as of order 3–4 M cy" |
+| `W1` | 平均波高 $\approx1$ m | **摘要级**（未取原始浮标统计） | ❌ "实测年均 $H_s$" | "reported average $H_s\approx1$ m (abstract-level)" |
+| `S4` | Duck 1978–2023 $4.88$ mm/yr | **二手转引**（NOAA 站页为 JS 渲染，数值取自汇总表） | ❌ "NOAA 本站原始计算" | "NOAA CO-OPS trend as tabulated by a third-party mirror; station 8651370" |
+
+**处理原则**：
+1. 这 5 项都**必须做敏感性**（区间见 `params.yaml`），不能只给单值；
+2. 论文正文可以出现这些数，但**旁边就要跟等级标签**；
+3. 若论文手能拿到原文（尤其 `N4` 的 Dare County PDF），升级为 `OBS` 后要回来改台账与参数表。
+
 ## 3. 可辨识性总表（Q3 核心产出）
 
 | 参数对 | 是否可分 | 靠什么分辨 | 分不开时的处置 |

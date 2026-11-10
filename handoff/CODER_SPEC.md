@@ -5,7 +5,7 @@
 >
 > 配套：`modeling/MODEL_SPEC.md`（**模型合同**）、`modeling/NONDIM.md`（解析基准与对拍数值）、
 > `modeling/params.yaml`（参数）、`modeling/SCENARIOS_STRATEGIES.md`（情景与策略）。
-> 版本：v0.5（2026-11-10 第三轮审查后）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
+> 版本：v0.6（2026-11-10 整改 R1：A1–A7 冻结）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
 
 ---
 
@@ -49,6 +49,9 @@ $$
 - 更新：$\dfrac{dy_i}{dt}=-\dfrac{F_{i+1/2}-F_{i-1/2}}{\Delta x}+\text{sources}_i$
 
 > ✅ 这样写**天然守恒**：$\sum_i dy_i/dt\cdot\Delta x=-(F_{N}-F_{0})$，边界通量就是唯一的泄漏项。
+
+> **$V_0$ 取常数（A3/D10）**：主算 $V_0(x)\equiv V_{\text{ref}}$，故 $V_{0,x}=0$，面通量里**不要**再加 $V_0$ 的梯度项。
+> 敏感性方案 $V_0=H\,w_0$ 才需要 $F \mathrel{+}= -D\,H\,w_{0,x}$；两种口径用同一个开关，不得混跑。
 
 ### 2.3 $O$ 的子步精确解（**别用显式，会不稳**）
 
@@ -118,11 +121,46 @@ while t < T:
 >
 > **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
 
+### 2.4c 非负性裁剪与退岸计数器（A2/D9，**必须实现**）
+
+每个时间步的源汇更新之后、进入下一步之前：
+
+```python
+y_min = -w0(x)                       # 逐单元下限
+excess = (y_min - y)                 # >0 表示越界
+mask = excess > 0
+R_c[mask] += excess[mask] * H        # 退岸计数器，单位 m^2，单调不减
+y[mask] = y_min[mask]                # 裁剪
+```
+
+- `R_c` **只增不减**；补沙抬升 $y$ 之后**不回退** $R_c$；
+- `ledger.csv` 增加一列 `R_c_cum`（区内 $\int R_c\,dx$，m³），并把它加进守恒式右端；
+- `exhausted_mask = (y - y_min < 1e-12)`，只在 `results.json` 与诊断里用；
+- **`y`、`V` 在 `exhausted` 单元不得作为物理量输出**：`fields.npz` 里这些格点要打一个 `exhausted[nt,nx]` 布尔掩膜，后处理一律先掩膜再用；
+- 风险指示**不删失**：`risk_w = (w_eff < w_mgmt)`、`risk_b = (r < m_s)` 在耗尽后恒为 1，继续累计。
+
 ### 2.5 补沙源项 $I$
 
 瞬时投放：在 $t_s$ 那一步把 $\Delta y=\mathcal{V}/(H\ell_s)$ 加到 $|x-x_c|\le\ell_s/2$ 的单元上（**按单元与投放区重叠长度加权，保证总量精确**）。
 
 > ⚠ 常见 bug：用 `x_c ± l/2` 直接 `np.where` 会把边界单元整格计入，导致总方量误差 1–2%，T1 直接不过。
+
+### 2.5b 成本模型（A6/D12，两种结构**分开**算）
+
+$$
+\text{cost}_{\text{all\_in}}=\sum_{j:\ \mathcal V_j>0} c_1\,\mathcal V_j
+\qquad c_1=27\ \text{USD/m}^3,\ c_0=0
+$$
+
+$$
+\text{cost}_{\text{marginal}}=\sum_{j:\ \mathcal V_j>0}\bigl(c_0+c_{1}^{\text{marg}}\,\mathcal V_j\bigr)
+\qquad c_1^{\text{marg}}=11\ \text{USD/m}^3,\ c_0\in[0,10]\ \text{M}
+$$
+
+- **实际投放量为 0 的工程不收 $c_0$**（`if V_j <= 0: continue`）；
+- `external` 供沙情景另加 $c_{\text{transport}}=3$ USD/m³，**只加到 $c_1$ 上**：$\text{cost}\mathrel{+}=\sum c_{\text{transport}}\mathcal V_j$；
+- 两种结构的输出目录必须不同（`results/E4_all_in/...`、`results/E4_marginal/...`），**不得**把两条成本曲线画在同一张图上；
+- $c_0^*$ **只在 `marginal_plus_fixed` 下输出**；`all_in` 下 `c0_star` 字段写 `null`，不要伪造。
 
 **每次投放的可行量（必须按顺序取 min，且记账）**：
 
@@ -263,6 +301,8 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
+| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min y \ge y_{\min}-10^{-9}$；(b) $R_c$ 单调不减；(c) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(d) `exhausted` 单元数与手算一致（热点约 5 年） | — |
+| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.214\pm0.002$、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 

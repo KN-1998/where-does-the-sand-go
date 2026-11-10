@@ -114,3 +114,38 @@ $$\mathcal{V}_{\text{tot}}(N)=\min\Bigl\{V_{15,\text{total}},\ N V_{\text{event,
 | F12 | 数据主表 X1/X2 说 10/21 栋倒塌，NPS 现为 **32** 栋（2020 以来） | 已更新数据主表；台账新增 X4=32 |
 
 ## G. 裁决记录（建模手签字后填这里）
+
+---
+
+## H. 状态索引（C2，2026-11-10）
+
+> 三档：`resolved`（当前合同已采用，见指向）｜`open`（仍需建模手裁决）｜`historical`（旧口径，仅留轨迹，**不要再用**）。
+> 本索引与上面的原表并存：原表保留提问时的建议，**状态以本表为准**。
+
+| 编号 | 状态 | 落点 |
+|---|---|---|
+| Q-01 | `resolved` | D1 已签（2026-11-09） |
+| Q-02 | `resolved` | D2 已签 + 附条件 C-D2（同时报 CERC 估计与采用值） |
+| Q-03 | `resolved` | D3 已签 |
+| Q-04 | `resolved` | D4 已签 + C-D4（先 zeroflux 过 T1/T3 再切 open） |
+| Q-05 | `resolved` | D5 已签 + C-D5；聚合规则见 `MODEL_SPEC` §6.3 |
+| Q-06 | `resolved` | D6 已签（A/B/C 三种） |
+| Q-07 | `historical` | 旧"D7 是否引入 $c_0=8$M"作废；现行见 D7（all-in、$c_0=0$）与 D12 |
+| Q-08 | `resolved` | D8 规则按 A5 改写（$\Delta f$ 触发 + 建筑硬触发 + 冷却），见 `SCENARIOS_STRATEGIES` §4.1 |
+| Q-09 | `resolved` | `params.yaml` v0.6 已冻结（2026-11-10） |
+| Q-33 | `resolved` | $V_{15}$/$V_{\text{event}}$/$S_{\text{borrow}}$ 三符号拆分 |
+| Q-34 | `open` | `forced_dy_semantics: actual` 已写入 params；代码实现后需复核 |
+| Q-35 | `resolved` | 保留 $H=10$ m，敏感性 8–12（Nags Head 几何反推 9.5 支持） |
+| Q-36 | `resolved` | 保留 $D=3\times10^{5}$ 主算；**B3 强制并列 4.1e5 与 8e5** |
+| Q-37 | `resolved` | D11 / `MODEL_SPEC` §3.7：主算用 $\rho^{\text{bg}}=1.283$，L0 基线裁决 |
+| Q-38 | `resolved` | $c_0$ 扫描范围 $[0,10]$M（D12） |
+| Q-39 | `resolved` | `slr_base=4.88`（S4），4.55 作旧值敏感性 |
+| Q-40 | `resolved` | 主指标 $E_b$、次指标 $T_{\text{safe,cum}}^{b}$（`MODEL_SPEC` §6.3 / D5） |
+| Q-41 | `resolved` | $V_{15}=5.0$M、$V_{\text{event}}=2.9$M |
+| Q-42 | `resolved` | 主算 all-in $c_1=27,c_0=0$；替代结构 $c_1^{\text{marg}}=11+c_0$（D12） |
+| Q-43 | `resolved` | D9 / `MODEL_SPEC` §3.6：$y\ge-w_0$ + 退岸计数器 $R_c$，补齐台账项 |
+| Q-44 | `resolved` | D11：transect 3.43–4.58 是**热点单点**，与走廊均值 2.3 不同口径，论文并列 |
+| Q-10/Q-11 | `resolved` | 数据主表 E 系列 / S1–S4（含 2025 DEQ、NOAA 4.88） |
+| Q-12/Q-13/Q-14 | `resolved` | USGS OFR 2015-1002 shapefile 已入库；$H$ 有几何反推证据 |
+
+**仍未闭合（真正的 open）**：求解器 T1–T12、E0–E7、以及 Q-34 的代码实现复核。

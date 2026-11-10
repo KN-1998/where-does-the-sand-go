@@ -4,8 +4,9 @@
 # calibrate: true = 参与标定；false = 固定为先验值；"sens" = 仅做敏感性
 # evidence_id 对应 ledger/claims.csv 的 id
 meta:
-  version: "0.2"
-  date: "2026-11-09"
+  version: "0.6"
+  date: "2026-11-10"
+  contract: "MODEL_SPEC v0.6 + CODER_SPEC v0.6（整改 R1：A1–A7 冻结）"
   units: "SI (m, m^2, m^3, yr, s)"
   author: "modeling-agent"
 
@@ -36,7 +37,8 @@ waves:
 transport:
   D_diff: {symbol: "D", name: "岸线扩散系数", unit: "m^2/yr", value: 300000.0, range: [100000.0, 800000.0], source_type: MODEL, evidence_id: M-02, calibrate: false, note: "CERC 在 Hb=0.8-1.2 时给 3.0-8.4e5（alpha=8 度）；Hb=0.9 中心值 4.1e5。采用 3e5 位于区间下沿：理由为有效扩散率 < 总输沙能力；注意这使 T_p 偏乐观，敏感性必须覆盖到 8e5（T_p 约减半）"}
   u_drift: {symbol: "u", name: "净沿岸漂移速度", unit: m/yr, value: 50.0, range: [0.0, 150.0], source_type: ASSUME, evidence_id: A-06, calibrate: true, note: "弱可辨识；与 D 通过'重心位移 vs 二阶矩增长'分离"}
-  rho_e:  {symbol: "rho_e", name: "长期平均岸线侵蚀率（背景/区域）", unit: m/yr, value: 1.7, range: [1.2, 2.1], source_type: OBS, evidence_id: E2, calibrate: "固定先验（不拟合）", note: "DEQ 2011/2019 段平均 5.3-6.0 ft/yr = 1.62-1.83 m/yr；见 资料/00_数据主表.md §A"}
+  rho_e:  {symbol: "rho_e", name: "长期平均岸线侵蚀率（背景，已去风暴双计数）", unit: m/yr, value: 1.283, range: [1.0, 1.8], source_type: MODEL, evidence_id: M-10, calibrate: "固定先验（不拟合）", derived_from: ["rho_e_obs","lambda_s","dy_ref","k_rec","lam_off"], note: "rho_bg = rho_obs - rho_storm = 1.7 - 0.417（MODEL_SPEC §3.7 / D11）；方程里用这个值"}
+  rho_e_obs: {symbol: "rho_obs", name: "观测长期速率（仅用于 L0 基线与验证）", unit: m/yr, value: 1.7, range: [1.62, 1.83], source_type: OBS, evidence_id: E2, calibrate: false, note: "DEQ 段平均 5.3-6.0 ft/yr；热点峰值 3.8-4.0（E1/E5）。只作 L0 一致性核对，不进方程"}
   rho_e_hotspot_amp: {symbol: "a_h", name: "热点侵蚀率放大倍数", unit: dimensionless, value: 1.2, range: [0.5, 2.0], source_type: OBS, evidence_id: E1, calibrate: true, note: "峰值 = rho_0(1+a_h) = 1.7*2.2 = 3.74 m/yr（12.3 ft/yr），落在 DEQ 12.5-13 ft/yr 带内；解析式 a_h=(3.8-1.7)/1.7=1.24 为未取整值。rho_e(x)=rho_0[1+a_h exp(-x^2/2sigma_h^2)]"}
   sigma_h: {symbol: "sigma_h", name: "热点高斯宽度", unit: m, value: 600.0, range: [300.0, 1200.0], source_type: ASSUME, evidence_id: A-03, calibrate: false, note: "A-03 的高斯热点定义；DEQ 只给分段与极值，无连续剖面"}
   rho_e_corridor_mean: {symbol: "rho_c", name: "走廊等效均匀侵蚀率（解析基准用）", unit: m/yr, value: 2.3, range: [1.7, 3.0], source_type: MODEL, evidence_id: M-06, calibrate: false, derived_from: ["rho_e","a_h","sigma_h"], note: "1.7+(3.8-1.7)*sqrt(2pi)*600/5000 ≈ 2.33"}
@@ -73,9 +75,14 @@ management:
   cost_model: {symbol: "cost_mode", name: "成本模型开关", unit: dimensionless, value: "all_in", options: ["all_in", "marginal_plus_fixed"], source_type: ASSUME, evidence_id: A-09, note: "主算 all_in: c1=27, c0=0；marginal_plus_fixed: c1~11 + c0 in [0,10]M，仅敏感性"}
   trigger_delta: {symbol: "delta_trig", name: "触发缓冲（高于阈值多少开始评估）", unit: m, value: 5.0, range: [2.0, 10.0], source_type: ASSUME, evidence_id: A-23, calibrate: false}
   c0:     {symbol: "c_0", name: "单次工程固定成本（仅敏感性）", unit: "USD", value: 0.0, range: [0.0, 10000000.0], source_type: ASSUME, evidence_id: A-09, calibrate: false, note: "主算 c0=0：c1 已是 all-in，再加 c0 会重复计入动员/设计（Q-42）。c0>0 只作替代成本结构的敏感性；2026 两工程反推 0.5-4M 也支持 c0 很小"}
-  c1:     {symbol: "c_1", name: "单位方量全成本（all-in）", unit: "USD/m^3", value: 27.0, range: [20.0, 35.0], source_type: OBS, evidence_id: N17, calibrate: false, note: "2026 Buxton 27.6、Avon 26.8 USD/m3（含调遣/设计/融资/监测/环境）；2011-2019 施工单价仅 10-12 USD/m3，不可与 all-in 混用（N14-N18）"}
+  c1:     {symbol: "c_1", name: "单位方量全成本（all-in，主算）", unit: "USD/m^3", value: 27.0, range: [20.0, 35.0], source_type: OBS, evidence_id: N17, calibrate: false, note: "2026 Buxton 27.6、Avon 26.8 USD/m3（含调遣/设计/融资/监测/环境）；仅用于 cost_model=all_in"}
+  c1_marginal: {symbol: "c1_marg", name: "单位方量施工边际成本（替代结构）", unit: "USD/m^3", value: 11.0, range: [10.0, 12.0], source_type: OBS, evidence_id: N14, calibrate: false, note: "2011-2019 施工单价 10-12 USD/m3；仅与 c0 搭配用于 cost_model=marginal_plus_fixed（A6/D12）"}
   C_max:  {symbol: "C_max", name: "15 年总预算上限（估算，不是已批准预算）", unit: "USD", value: 120000000.0, range: [40000000.0, 200000000.0], source_type: ASSUME, evidence_id: N6, calibrate: false, note: "PSDS 引 CSE：120M 是按每次撑 5 年算的 15 年维护估算（3x40M），不是已批准预算。预算不是最紧约束：本地沙主算 N 次总量都受 S_borrow_total=2.45M 约束；外调沙情景 N=1 受 2.9M 单次上限、N>=2 受预算 4.0M（c1_eff=30）（Q-33/Q-41）"}
-  w_trig: {symbol: "w_trig", name: "触发评估的管理滩宽阈值", unit: m, value: 25.0, source_type: MODEL, evidence_id: M-05, calibrate: false, derived_from: ["w_mgmt","trigger_delta"], note: "w_mgmt+5；建筑风险另有 r<m_s+5 的硬触发"}
+  f_thr:  {symbol: "f_thr", name: "T_first_fail 的空间聚合阈值（失败岸线占比）", unit: dimensionless, value: 0.5, range: [0.3, 0.7], source_type: ASSUME, evidence_id: A-24, calibrate: false, note: "MODEL_SPEC §6.3：f_c(t)>=f_thr 才算整体失守；避开初始热点 w0=16<20 造成的 T=0 退化"}
+  delta_f_trig: {symbol: "delta_f", name: "触发所需的失败占比增量", unit: dimensionless, value: 0.10, range: [0.05, 0.20], source_type: ASSUME, evidence_id: A-24, calibrate: false, note: "相对上次投放（或 t=0）的增量；取代旧的绝对阈值 min w < 25 m（A5）"}
+  sigma_m: {symbol: "sigma_m", name: "滩宽监测误差标准差", unit: m, value: 3.0, range: [1.5, 5.0], source_type: ASSUME, evidence_id: A-24, calibrate: false, note: "季度采样；触发判断用带噪测量 w_hat=w+N(0,sigma_m^2)"}
+  cooldown_extra: {symbol: "t_cd", name: "触发冷却附加时滞", unit: yr, value: 1.0, range: [0.5, 2.0], source_type: ASSUME, evidence_id: A-24, calibrate: false, note: "冷却 = tau_permit + tau_build + t_cd"}
+  w_trig: {symbol: "w_trig", name: "【已废止】绝对阈值触发（仅兼容保留）", unit: m, value: 25.0, source_type: MODEL, evidence_id: M-05, calibrate: false, note: "2026-11-10 起不再用于触发（初始热点 16 m 会使 t=0 必触发）；改为 delta_f_trig + 建筑硬触发"}
   T_min:  {symbol: "T_min", name: "可接受的最短保护期（低于则考虑撤退）", unit: yr, value: 3.0, range: [2.0, 5.0], source_type: ASSUME, evidence_id: A-15, calibrate: false}
 
 climate_scenarios:
