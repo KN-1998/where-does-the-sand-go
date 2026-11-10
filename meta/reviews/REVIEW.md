@@ -1,6 +1,6 @@
 # REVIEW.md — 红队审查（阶段 7，自查版）
 
-> 规则（AGENT_BRIEF §6）：逐条 **Pass / Fail / Partial**，并附**证据位置**。
+> 规则（`meta/planning/AGENT_BRIEF_MODELER.md` §6）：逐条 **Pass / Fail / Partial**，并附**证据位置**。
 > 本文件在**求解器运行之前**做了一次；每次出结果后必须重做一遍。
 > 判定口径：`Pass` 需要有文档或数字证据；`Partial` 表示设计已覆盖但缺数值证据；`Fail` 表示明确没做到。
 

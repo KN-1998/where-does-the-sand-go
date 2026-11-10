@@ -24,10 +24,19 @@
 ```
 .
 ├── README.md                      ← 本文件（仓库入口）
-├── 00_README_索引.md               ← 工作区目录索引与铁律
-├── AGENT_BRIEF_MODELER.md         ← 建模助理的行为边界与阶段门禁
-├── MASTER_PLAN_MCM2027A.md        ← 全局统筹：权责、时间线、里程碑、风险
-├── 建议.txt                        ← 外部建议（原始输入，不改动）
+├── PROGRESS.md                    ← 进度台账（每轮开场必读）
+├── OPEN_QUESTIONS.md              ← 待建模手拍板 / 待他人回答的问题
+│
+├── meta/                          ← 【项目元数据】计划、审查、打包
+│   ├── planning/
+│   │   ├── AGENT_BRIEF_MODELER.md ← 建模助理行为边界与阶段门禁
+│   │   ├── MASTER_PLAN_MCM2027A.md ← 全局统筹：权责、时间线、里程碑
+│   │   └── 建议.txt                ← 外部建议（原始输入，不改动）
+│   ├── reviews/
+│   │   ├── REVIEW.md              ← 红队审查（逐条 Pass/Partial/Fail）
+│   │   └── REVIEW_RESPONSE.md     ← 对独立审查报告的逐条处置
+│   └── packaging/
+│       └── README_交接包.md       ← U 盘/zip 交接包的打包说明
 │
 ├── problem/                       ← 原始题面 PDF（只读）
 ├── modeling/                      ← 【建模手 + agent】全部建模文档
@@ -43,25 +52,32 @@
 │       ├── erf_prototype.py       ← erf 解对拍、保护期闭式解、投放宽度扫描
 │       └── results.txt            ← 上述脚本的可复算输出
 │
-├── 资料/                          ← 【资料库】真实数据 + 原始 PDF + 提取文本
-│   └── 00_数据主表.md             ← 每个数字的出处（先看这个）
 ├── handoff/                       ← 【交接包】给编程手与论文手的契约文档
+│   ├── README_交接说明.md          ← 交接包说明：给谁、怎么用、边界在哪
+│   ├── CODER_SPEC.md              ← → 编程手（离散 / IO / 验收 / 实验）
+│   └── WRITER_NOTES.md            ← → 论文手（论证线 / 公式 / 图表规格）
+│
+├── 资料/                          ← 【资料库】真实数据 + 原始 PDF + 提取文本（只读）
+│   └── 00_数据主表.md             ← 每个数字的出处（先看这个）
 ├── ledger/claims.csv              ← 声明台账：每个数字的来源类型与出处
 ├── data/raw/                      ← 原始数据（只读，附 SOURCES.md）
 └── data/processed/                ← 清洗后数据
 ```
 
+> 文中路径除特别说明外均**相对仓库根目录**。`资料/`、`problem/`、`data/raw/` 是只读区，整理时不得改动。
+
 需要编程手交付的 `src/`、`tests/`、`experiments/`、`figures/`，以及论文手的 `report/`、`letter/`，
-按 `MASTER_PLAN_MCM2027A.md` 第 2 节的约定在对应阶段新建。
+按 `meta/planning/MASTER_PLAN_MCM2027A.md` 第 2 节的约定在对应阶段新建。
 
 ---
 
-## 三条铁律
+## 四条铁律
 
 1. **数字进论文前必须先进 `ledger/claims.csv`。** 没有台账的数字 = 编的。
 2. **每条数据标来源类型**：`OBS`（观测，附 URL 与访问日期）/ `MODEL`（模型导出）/ `ASSUME`（假设，必须写理由与范围）。
 3. **量纲纪律**：岸线位置 `y` [m]、滩宽 `w` [m]、沙量 `V` [m³/m] 不可互换；
    换算必须显式写出 `H = h_* + B` 这个中间量（取 `H = 10 m` 时，岸线每前进 1 m ⟺ 每米岸线 10 m³ 沙）。
+4. **门禁不过不进下一阶段**：M2（求解器收支闭合与收敛测试）未通过前，不跑 Q2 之后的实验、不写结果结论。
 
 ---
 
@@ -79,20 +95,38 @@ python erf_prototype.py > results.txt     # 约 1 秒
 
 ---
 
-## 当前状态（2026-11-09）
+## 已能用的三个结论（解析/设计层面，非完整模型结果）
+
+1. **补沙寿命 $\propto \ell^2/D$**：$T_{1/2}=0.2748\,\ell^2/D$；1 km 投放、$D=3\times10^5$ m²/yr 时约 0.92 yr。
+2. **匀铺可行性阈值** $\mathcal{V}_{\text{thr}}=HL\,(w_{\text{mgmt}}-w_{\min})$；低于它，匀铺不能使全段立即达标（不代表定点方案一定可行，更不是"唯一"）。
+3. **即使没有单次固定成本，时机仍改变风险**；不预设"一次大补"或"多次小补"恒优，报告扫描区间的实际排序（见 `modeling/DECISIONS.md` D7）。
+
+---
+
+## 当前状态（2026-11-10）
 
 - 阶段 0–4 文档已出：`CHECKLIST.md`、`MODEL_SPEC.md`、`NONDIM.md`、`DECISIONS.md`、`params.yaml`、
-  `PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`SCENARIOS_STRATEGIES.md`、`REVIEW.md`
+  `PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`SCENARIOS_STRATEGIES.md`、`meta/reviews/REVIEW.md`
 - **交接包已完成**：`handoff/CODER_SPEC.md`（→ 编程手）、`handoff/WRITER_NOTES.md`（→ 论文手）、
   `handoff/README_交接说明.md`（交接包说明）
 - `DECISIONS.md` 中 **D1–D7 已签**（2026-11-09）；**D8 待签，但不依赖 $c_0^*$**（主算 `all_in` 下无 $c_0^*$）；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
 - ✅ 已通过：erf 解析基准与原型一致；守恒有限体积的质量守恒到机器精度（1e-16）；匀铺可行性判据有闭式解
 - ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 **103 行（69 OBS / 9 MODEL / 25 ASSUME）**，其中 2 条 `need-manual-check`、20 条仅搜索摘要、1 条二手转引（S4）
-- 红队第 1 轮（口径已修）：**3 Pass（文档层）/ 12 Partial / 0 Fail** —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `modeling/REVIEW.md`）
+- 红队第 1 轮（口径已修）：**3 Pass（文档层）/ 12 Partial / 0 Fail** —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `meta/reviews/REVIEW.md`）
 - Round 3 审计（2026-11-09）：修复 `params.yaml` YAML 解析失败、$w_{crit}$ 与 $d_b$ 不一致、$w_0$ 场、风暴上限、`open` 边界等
-- **Round 6（2026-11-09，响应独立审查）**：修正风险几何、负滩宽、原型避免风险、V/O 定义、5/9 km 账本、ghost、$V_{\max}$ 语义；Q-33 已定位为 $V_{\max}=2.5$M（5 年量）误标 15 年，改为 5.0M 后预算自然绑定；新增 Q-40–Q-44。详见 `modeling/REVIEW_RESPONSE.md`
+- **Round 6（2026-11-09，响应独立审查）**：修正风险几何、负滩宽、原型避免风险、V/O 定义、5/9 km 账本、ghost、$V_{\max}$ 语义；Q-33 已定位为 $V_{\max}=2.5$M（5 年量）误标 15 年，改为 5.0M 后预算自然绑定；新增 Q-40–Q-44。详见 `meta/reviews/REVIEW_RESPONSE.md`
 - **Round 7（2026-11-10，第二轮独立审查）**：MODEL_SPEC 定为唯一合同；`Δy≤w_eff`；$V_{15}/V_{event}/S_{borrow}$ 三约束；all-in 成本主算；风暴足迹 `phi_k`；`events.csv` 字段
 - **Round 8（2026-11-10，第三轮独立审查）**：耗尽态改为**不冻结**；`risk_w/risk_b` 分开；补沙源/时滞/运输参数；成本模型开关；事件推进伪代码 + T10；$V=V_0+Hy$、$Q=\tilde Q_0-DV_x$；SLR 标为情景端点；台账 103 行
+
+---
+
+## 下一步
+
+1. 建模手签 **Q-40（主风险口径）/ Q-44（本地 LRR）/ D8（触发规则）**；其余见 `OPEN_QUESTIONS.md`。
+2. 编程手按 `handoff/CODER_SPEC.md` 实现求解器：先 BE + 零通量 + T1/T3，再加风暴/沙库/开边界，最后过 T1–T10。
+3. 论文手按 `handoff/WRITER_NOTES.md` 搭骨架；**完整模型跑通前只写方法与假设，不写结果结论**。
+
+进度以 `PROGRESS.md` 为准。
 
 ---
 

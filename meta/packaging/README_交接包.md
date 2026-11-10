@@ -3,7 +3,7 @@
 > 备份时间：2026-11-10（Round 8 第三轮审查整改后刷新）
 > 基准仓库：https://github.com/KN-1998/where-does-the-sand-go
 > 本地工作副本：`D:\where-does-the-sand-go`
-> 当前提交：见 `git/COMMIT.txt`（本次备份的 HEAD；Round 5 完成）
+> 当前提交：见 `git/COMMIT.txt`（构建时 HEAD）
 
 ---
 
@@ -11,14 +11,19 @@
 
 ```
 where-does-the-sand-go_handoff/
-├─ README_交接说明.md          ← 本文件
+├─ README_交接说明.md          ← 包入口（repo 的 handoff/README_交接说明.md 副本）
+├─ SHA256SUMS.txt              ← 全包逐文件校验
 ├─ docs/                        ← 工作副本的完整文档（不含 .git）
-│   ├─ 00_README_索引.md        ← 先看这个
-│   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 审查
-│   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
+│   ├─ README.md                ← 先看这个（仓库总入口）
+│   ├─ PROGRESS.md              ← 进度
+│   ├─ OPEN_QUESTIONS.md        ← 待决问题
+│   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 模型文档
+│   ├─ handoff/                 ← CODER_SPEC（编程手）/ WRITER_NOTES（论文手）
+│   ├─ meta/planning/           ← AGENT_BRIEF / MASTER_PLAN / 建议.txt
+│   ├─ meta/reviews/            ← REVIEW / REVIEW_RESPONSE
+│   ├─ meta/packaging/          ← 本文件
 │   ├─ ledger/claims.csv        ← 103 条数字台账（69 OBS / 25 ASSUME / 9 MODEL）
-│   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
-│   │   └─ 06_原始摘录/         ← _pdf（6 份全文）、_txt（提取文本）、_gis（USGS 岸线）
+│   ├─ 资料/                    ← 数据主表、摘录、原始 PDF 与 GIS（只读）
 │   └─ problem/                 ← 题目 PDF
 └─ git/
     ├─ where-does-the-sand-go.bundle   ← 完整 git 历史（含 main）
@@ -47,7 +52,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
 | 台账 | ✅ **103 行**（69 OBS / 9 MODEL / 25 ASSUME） |
 | 解析基准 | ✅ 原型 `modeling/sanity/erf_prototype.py`，$T_p=6.15/7.33/7.36$ yr |
-| 独立验证集 | ✅ USGS 14 条岸线（1978–2002）已存入 `docs/资料/06_原始摘录/_gis/` |
+| 跨资料一致性数据 | ✅ USGS 14 条岸线（1978–2002）已存入 `docs/资料/06_原始摘录/_gis/`（用于一致性检查，**不是独立验证集**） |
 | 求解器 | ⛔ 未实现（编程手任务） |
 | 论文 | ⛔ 未开始（论文手可先写 §1–§3） |
 
@@ -60,7 +65,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 | **Q-41** | $V_{\max}$ 语义 | E4 | ✅ 已拆为 $V_{15}$ / $V_{\text{event}}$ |
 | **Q-42** | 成本模型 | 策略排序 | ✅ 主算 all-in $c_1=27,c_0=0$；替代结构仅敏感性 |
 | **Q-43** | 滩宽耗尽 | 风险指标 | ✅ 不冻结：`w_eff=max(w,0)`，连续过程继续 |
-| **Q-44** | 本地 transect LRR（−3.43/−4.58）高于 $\rho_c=2.3$ | 全部 $T_p$ | 主算保留 2.3，敏感性覆盖 3.5–4.6；**待建模手决定** |
+| **Q-44** | 本地 transect LRR（−3.43/−4.58）高于 $\rho_c=2.3$ | 全部时长指标 | 主算保留 2.3，敏感性覆盖 3.5–4.6；**待建模手决定** |
 | **Q-34** | S2 `forced_dy=25` | S2 强度 | ✅ 已定义：实际后退 25 m（代码反解潜在值） |
 | **Q-35** | $H=10$ vs Buxton 9.3 | 绝对米数 | 证据支持保留 10；待签字 |
 | **Q-36** | $D=3\times10^5$ 偏乐观 8–12% | 绝对值 | 保留 3e5 主算，论文并列 4.1e5 / 8e5 |

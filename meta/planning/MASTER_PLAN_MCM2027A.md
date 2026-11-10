@@ -49,8 +49,12 @@ problem/                  题目PDF（只读）
 modeling/                 [建模手+agent] 全部建模文档
   CHECKLIST.md  MODEL_SPEC.md  NONDIM.md  DECISIONS.md
   params.yaml  PARAM_EVIDENCE.md  VALIDATION_PLAN.md
-  SCENARIOS_STRATEGIES.md  CODER_SPEC.md  WRITER_NOTES.md  REVIEW.md
-  sanity/                 参考原型（≤150行/个）
+  SCENARIOS_STRATEGIES.md  sanity/（参考原型，≤150行/个）
+handoff/                  CODER_SPEC.md  WRITER_NOTES.md  README_交接说明.md
+meta/planning/            AGENT_BRIEF_MODELER.md  MASTER_PLAN_MCM2027A.md  建议.txt
+meta/reviews/             REVIEW.md  REVIEW_RESPONSE.md
+meta/packaging/           README_交接包.md
+资料/                      数据主表、摘录与原始 PDF（只读，不得改动）
 data/raw/  data/processed/   [编程手管理，附 SOURCES.md]
 src/  tests/  experiments/   [编程手]
 figures/  tables/            [编程手生成，禁止手改]
@@ -74,7 +78,7 @@ PROGRESS.md  OPEN_QUESTIONS.md  MASTER_PLAN.md   [共同维护，建模手最终
 | **T+32–48h**<br>标定与补沙 | `SCENARIOS_STRATEGIES.md`；**D8（触发规则形式）**；`CODER_SPEC.md` 定稿 | 标定/验证划分、敏感性与可辨识性；Q2 补沙对照实验 | Q1/Q2 章节骨架，图占位 | **M3**：Q1–Q3 结果出齐；"宽滩不持久"相图出炉 |
 | **T+48–68h**<br>情景与策略 | 解读 Q2–Q3 结果；审核蒙特卡洛设计 | Q4 三情景 + 风暴时机对照蒙特卡洛；Q5 三策略与触发规则优化 | Q3–Q5 章节草稿；摘要初稿 | **M4**：Q4–Q5 结果出齐，所有数字带区间 |
 | **T+68–80h**<br>成稿 | `WRITER_NOTES.md` 定稿；逐章审查建模正确性；agent 红队审查 | 补图；复现性检查（干净环境 `make all`） | 全文整合；摘要；技术信函 | **M5**：全文初稿完成（≤25页） |
-| **T+80–92h**<br>修订 | 处理 `REVIEW.md` 全部问题；台账与报告逐数核对 | 修图、修 bug | 修改、压页数、统一术语与单位 | **M6**：红队清单全 Pass |
+| **T+80–92h**<br>修订 | 处理 `meta/reviews/REVIEW.md` 全部问题；台账与报告逐数核对 | 修图、修 bug | 修改、压页数、统一术语与单位 | **M6**：红队清单全 Pass |
 | **T+92–96h**<br>封稿 | 最终签字 | 提交代码/数据包（若要求） | 编译、检查页数、PDF 与信函上传 | **M7**：提交；留 ≥2h 缓冲 |
 
 **铁律：** M2 求解器验收未过，不得开始 Q2 之后的实验；M3 未过，不得写结果章节。

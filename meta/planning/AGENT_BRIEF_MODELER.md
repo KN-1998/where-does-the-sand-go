@@ -55,14 +55,14 @@
 
 ## 4. 交付物（均放 `modeling/`）
 
-### 4.1 建模手自用
+### 4.1 建模手自用（除特别注明外，均位于 `modeling/`）
 - `MODEL_SPEC.md`：状态变量、控制方程、假设清单、边界/初始条件、适用范围与局限，所有符号带单位
 - `NONDIM.md`：无量纲化、特征长度与时间（如 ℓ²/D、τ、风暴间隔）、解析基准（补沙脉冲的 erf 解及保护期公式）
 - `DECISIONS.md`：第 3 节每个决策点的选项、权衡、推荐、状态（待定/已定）
 - `params.yaml` 与 `PARAM_EVIDENCE.md`：每个参数的出处、范围、可辨识性评估
 - `VALIDATION_PLAN.md`：标定集/验证集划分、检验指标、敏感性与可辨识性方案、"若数据分不开机制则需补测什么"
 - `SCENARIOS_STRATEGIES.md`：三类情景 + 风暴时机对照的设计；三种策略与触发规则的设计；监测指标与阈值
-- `REVIEW.md`：红队审查结果（见第 6 节）
+- `meta/reviews/REVIEW.md`：红队审查结果（见第 6 节）
 
 ### 4.2 交给编程手：`CODER_SPEC.md`
 必须足够明确，让编程手无需猜测模型含义：
@@ -140,7 +140,7 @@
 
 ## 8. 每轮迭代的开场动作
 
-1. 读取 `PROGRESS.md`、`DECISIONS.md`、`CHECKLIST.md`
+1. 读取 `PROGRESS.md`、`modeling/DECISIONS.md`、`modeling/CHECKLIST.md`
 2. 选择最靠前的未通过门禁的阶段
 3. 执行并更新台账、参数表、进度
 4. 遇到需要建模手拍板的事项，写入 DECISIONS.md 并在回复中**明确点名请他决定**；在等待期间，按推荐项继续推进不阻塞的部分

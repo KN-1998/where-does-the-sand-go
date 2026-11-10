@@ -18,7 +18,7 @@
 | 阶段 4 交接 | M4 | ✅ **文档齐**（**等建模手签字**） | `handoff/CODER_SPEC.md`、`handoff/WRITER_NOTES.md`、`handoff/README_交接说明.md` |
 | 阶段 5 结果解读 | — | ⬜ 未开始（等编程手） | — |
 | 阶段 6 成文交接 | — | ⬜ 未开始 | — |
-| 阶段 7 红队 | — | 🟡 **第 1 轮完成**（9 Partial，0 Pass，0 Fail） | `modeling/REVIEW.md` |
+| 阶段 7 红队 | — | 🟡 **第 1 轮完成**（9 Partial，0 Pass，0 Fail） | `meta/reviews/REVIEW.md` |
 
 ### 本轮产出的关键结论（可直接用）
 
@@ -202,7 +202,7 @@
 
 ## Round 6（2026-11-09，agent）：独立审查响应
 
-> 收到外部审查报告（58 个 0xFF 交接文件、风险几何、负滩宽、原型避免风险、c0=0、V/O 重叠、边界单位、T2/T3、参数 ID、N4 口径等）。逐条核对见 `modeling/REVIEW_RESPONSE.md`。
+> 收到外部审查报告（58 个 0xFF 交接文件、风险几何、负滩宽、原型避免风险、c0=0、V/O 重叠、边界单位、T2/T3、参数 ID、N4 口径等）。逐条核对见 `meta/reviews/REVIEW_RESPONSE.md`。
 
 ### 已修（P0）
 
@@ -284,3 +284,21 @@
 **独立复审（2026-11-10）**：子代理逐条复核第三轮 P0/P1，全部通过；复审指出的 P2（OAT 计数、`h_star` 证据类型、`T_p` 残留、时长量计数）已修。`VALIDATION_PLAN` 的 OAT/Sobol 输出已全部改为 `T_first_fail/T_safe_cum/E_w/E_b`。
 
 **仍未做**：T1–T10 未跑；E0–E7 未跑；不冻结口径下的 $T_{\text{first,fail}}$、$T_{\text{safe,cum}}$、$E_w/E_b$ 无任何数值；本地/外调与两种成本结构下的策略排序没有结果。
+
+---
+
+## Round 9（2026-11-10）：文件整理与瘦身
+
+**原则**：只整理文档与目录；`资料/`、`problem/`、`data/raw/` 的内容一律不动；移动全部用 `git mv` 保留历史。
+
+| 动作 | 结果 |
+|---|---|
+| 根目录入口合并 | 删除 `00_README_索引.md`，其铁律/状态/下一步并入 `README.md`；根目录只留 README / PROGRESS / OPEN_QUESTIONS |
+| 计划类归档 | `AGENT_BRIEF_MODELER.md`、`MASTER_PLAN_MCM2027A.md`、`建议.txt` → `meta/planning/` |
+| 审查类归档 | `REVIEW.md`、`REVIEW_RESPONSE.md` → `meta/reviews/` |
+| 打包说明归档 | `handoff/README_U盘交接包.md` → `meta/packaging/README_交接包.md` |
+| 交接目录瘦身 | `handoff/` 只保留 `README_交接说明.md`、`CODER_SPEC.md`、`WRITER_NOTES.md` |
+| 清理占位 | 删除 `handoff/.gitkeep`、`data/raw/.gitkeep`（目录已有内容）与 `__pycache__` |
+| 引用同步 | README / PROGRESS / params / 计划与审查文档中的路径全部更新 |
+
+**未动**：`资料/`（50 MB 原始 PDF、提取文本、GIS）原样保留；`ledger/claims.csv` 内容未改。

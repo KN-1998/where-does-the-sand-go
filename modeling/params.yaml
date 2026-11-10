@@ -11,7 +11,7 @@ meta:
 
 domain:
   L_corridor: {value: 5000.0, unit: m, source_type: ASSUME, evidence_id: A-01, note: "题面给定的代表性 5 km 走廊（竞赛假设，非政府规划区）"}
-  L_buffer:   {value: 2000.0, unit: m, source_type: ASSUME, evidence_id: A-02, note: "两侧各留 2 km 缓冲，计算域共 9 km；理由见 建议.txt"}
+  L_buffer:   {value: 2000.0, unit: m, source_type: ASSUME, evidence_id: A-02, note: "两侧各留 2 km 缓冲，计算域共 9 km；理由见 meta/planning/建议.txt"}
   x_h:       {symbol: "x_h", name: "侵蚀热点中心位置", unit: m, value: 0.0, source_type: ASSUME, evidence_id: A-03, note: "热点中心置于走廊中央 x=0；真实位置待数据确认"}
   T_sim:      {value: 15.0,   unit: yr, source_type: ASSUME,  evidence_id: A-17, note: "2027–2042（题面设定，不是自然观测）"}
 
