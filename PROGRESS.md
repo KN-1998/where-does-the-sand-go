@@ -13,7 +13,7 @@
 |---|---|---|---|
 | 阶段 0 读题 | M0 | ✅ **通过**（47 条检查项覆盖题面） | `modeling/CHECKLIST.md` |
 | 阶段 1 模型骨架 | M1 | 🟡 **部分通过**（文档齐、解析基准与原型一致；**D1–D6 未签字**） | `MODEL_SPEC.md`、`NONDIM.md`、`DECISIONS.md`、`sanity/erf_prototype.py` + `results.txt` |
-| 阶段 2 数据与参数 | M2 | 🟡 **部分通过**（参数登记与台账齐；**4 条 `need-manual-check` + 9 条仅摘要待核**；求解器未实现） | `params.yaml`、`PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`ledger/claims.csv` |
+| 阶段 2 数据与参数 | M2 | 🟡 **部分通过**（参数登记与台账齐；**2 条 `need-manual-check` + 20 条仅摘要 + 1 条二手转引待核**；求解器未实现） | `params.yaml`、`PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`ledger/claims.csv` |
 | 阶段 3 情景与策略 | M3 | 🟡 **部分通过**（设计完整；**无结果**） | `SCENARIOS_STRATEGIES.md` |
 | 阶段 4 交接 | M4 | ✅ **文档齐**（**等建模手签字**） | `handoff/CODER_SPEC.md`、`handoff/WRITER_NOTES.md`、`handoff/README_交接说明.md` |
 | 阶段 5 结果解读 | — | ⬜ 未开始（等编程手） | — |
@@ -69,10 +69,10 @@
 |---|---|
 | D1–D6 签字 | ✅ 已定；附带 C-D2（同时报 CERC 估计与采用值）、C-D4（先 zeroflux 过 T1/T3 再切 open 复验）、C-D5（结论必须同时用无量纲比值表述） |
 | D7 改写 | ✅ 改为**报临界值 $c_0^*$**，不固定 $c_0$；已落进 `DECISIONS.md` 与 `SCENARIOS_STRATEGIES.md` §3 |
-| D8 | ⏳ 标注"依赖 D7 的 $c_0^*$ 落地" |
+| D8 | ⏳ 待签；2026-11-10 起**不依赖 $c_0^*$**（主算 all-in $c_0=0$） |
 | `REVIEW.md` 口径 | ✅ 改为 **3 Pass（文档层）/ 12 Partial / 0 Fail**，并定义两档 Pass |
 | **资料库** | ✅ 新建 `资料/`，7 个子目录；**6 份政府/学术 PDF 全文下载**；`00_数据主表.md` 收 40+ 条带出处数字 |
-| 参数升级 | ✅ `rho_e` 3.0→**1.7**（背景）/ 热点 **3.8**；`slr_base` 4.3→**4.55**（Duck Pier 实测）；`Hs_mean` 1.3→**1.0**；`V_max` 1.5M→**2.5M m³**；`C_max` 60M→**120M USD**；`c1` 33→**25 \$/m³** |（历史记录；Round 6 已改为 $V_{15}=5.0$M、$V_{m event}=2.9$M、$c_1=27$、$c_0=0$）
+| 参数升级 | ✅ `rho_e` 3.0→**1.7**（背景）/ 热点 **3.8**；`slr_base` 4.3→**4.55**（Duck Pier 实测）；`Hs_mean` 1.3→**1.0**；`V_max` 1.5M→2.5M m³；`C_max` 60M→**120M USD**；`c1` 33→25 \$/m³。（历史记录；Round 6 后以 $V_{15}=5.0$M、$V_{\text{event}}=2.9$M、$c_1=27$、$c_0=0$ 为准） |
 | 台账 | ✅ `claims.csv` 36 → **68 行**（46 OBS / 16 ASSUME / 6 MODEL）；**6 条全文核对 + 10 条页面核对** |
 | 原型重跑 | ✅ 用 $\rho_e=2.3$（走廊等效）重算，参考表已同步到 `NONDIM` §7 与 `CODER_SPEC` §6 |
 
@@ -209,7 +209,7 @@
 | # | 问题 | 处置 |
 |---|---|---|
 | R1 | 风险几何 $w_{crit}=d_b-m_s$ 漏 $w_0$ | 拆成管理滩宽 $w_{mgmt}=20$（ASSUME）与建筑净距 $r=d_b+y<m_s$；旧表改名"滩宽保护期" |
-| R2 | 负滩宽进风暴项 | $w_{eff}=max(w,0)$，$\Delta y\ge0$，$w\le0$ 停/删失 |
+| R2 | 负滩宽进风暴项 | $w_{eff}=max(w,0)$，$\Delta y\ge0$；**第三轮改为不冻结**（$w$ 可为负，风暴注入为零） |
 | R3 | 原型避免风险符号/基线 | 修正并重算：28086/31320/31412，排序反转 |
 | R4 | V/O 定义重叠 | V 排除 O，V+O 才是总量 |
 | R5 | 5/9 km 账本、$H F\Delta t$、ghost | 已改 `CODER_SPEC` |
@@ -220,7 +220,7 @@
 - **Q-33 解决**：N4 的 3.8M cy 是 5 年量；$V_{\max}$ 改为 15 年总量 5.0M m³ 后，$N=1,3$ 都受预算约束，**不需要把 $C_{\max}$ 调 60M**。
 - **E14 新证据**：Rodanthe 5 km transect LRR = −3.43/−4.58 m/yr，高于 $\rho_c=2.3$；新增 Q-44。
 - **成本**：$c_1=25$ all-in 与大 $c_0$ 重复；2026 两工程支持 $c_0\approx0$（Q-42）。
-- **参数 ID**：修正 lambda_s/dy_ref/d_b/c0/slr 等错配；新增 A-17/A-18/M-07/M-09/E14；台账 92→98 行（70 OBS/19 ASSUME/9 MODEL）。
+- **参数 ID**：修正 lambda_s/dy_ref/d_b/c0/slr 等错配；新增 A-17/A-18/M-07/M-09/E14；台账 92→98 行（68 OBS/21 ASSUME/9 MODEL）。**第三轮后再加 O-16/A-20/A-21/A-22/A-23，当前 103 行（69 OBS/25 ASSUME/9 MODEL）。**
 
 ### 仍未做
 
@@ -239,8 +239,8 @@
 | # | 问题 | 处置 |
 |---|---|---|
 | 1 | 边界 ghost 矛盾 | `MODEL_SPEC` §4 统一为 `ghost=y0`；Dirichlet `2yb-y0`；零总通量 `F=0`；MODEL_SPEC 声明为唯一合同 |
-| 2 | 风暴上限跨零 | `Δy ≤ w_eff`，`dy_cut` 废弃；$w$ 不再为负 |
-| 3 | 耗尽后停止/删失与 E 矛盾 | 改**吸收态**：风险恒 1、状态冻结、E 继续到 15 年；T_p 右删失 |
+| 2 | 风暴上限跨零 | `Δy ≤ w_eff`，`dy_cut` 废弃；`w_eff=max(w,0)`，$w$ 可为负（第三轮） |
+| 3 | 耗尽后停止/删失与 E 矛盾 | ~~吸收态~~ → **第三轮改为不冻结**：风暴注入为 0，连续过程与补沙继续；`risk_w/risk_b` 分开 |
 | 4 | $V_{\max}$ 三种语义 | 拆 `V15_total=5.0M`、`V_event_max=2.9M`；新增 `S_borrow_total=2.45M` |
 | 5 | $c_1/c_0$ 重复 | 主算 all-in `c1=27`、`c0=0`；替代结构仅敏感性 |
 | 6 | 风暴足迹未定义 | 新增 `phi_k(x)`：主算全域均匀，敏感性高斯 $\sigma_e=2$ km；events.csv 记录 |
@@ -261,3 +261,24 @@
 ### 仍未做
 
 - 完整求解器、T1–T9、E0–E7；建筑净距口径的 Tp/E；两种沙源情景的 A/B/C 结果。
+
+---
+
+## Round 8（2026-11-10）：第三轮独立审查整改
+
+**范围**：第三轮 P0-1～P0-5、P1-1～P1-5，以及文档残留。
+
+| 项 | 处置 | 文件 |
+|---|---|---|
+| 不冻结耗尽态 | `w_eff=max(w_raw,0)`；风暴注入为 0 时连续过程/补沙继续；`risk_w/risk_b` 分开；`beach_exhausted` 仅诊断 | `MODEL_SPEC` §3.4/§6、`CODER_SPEC` §2.4b-7 |
+| 沙源与可行性 | 新增 `S_borrow_total=2.45M`、`supply_scenario`、`supply_availability`、`permit_delay`、`transport_cost_add`；A/B/C 本地/外调可行量写进表 | `params.yaml`、`SCENARIOS_STRATEGIES` §3、`CODER_SPEC` §2.5、台账 A-20/A-21 |
+| 成本模型分离 | 新增 `cost_model: all_in/marginal_plus_fixed`；主算不扫 `c0`，`c0*` 只属替代结构 | `params.yaml`、`CODER_SPEC` E4、`VALIDATION_PLAN` §4 |
+| 事件推进 | 明确"截步→连续步(S=0)→跳变一次→排下一次"；新增 T10（边界/步中/终点各只注入一次） | `CODER_SPEC` §2.4b、T10 |
+| V/Q 自洽 | $y$ 定义为异常，$V=V_0+Hy$，$Q=\tilde Q_0-DV_x$，$\tilde Q_0=Q_0+DV_{0,x}$ | `MODEL_SPEC` §2.3/§3.2、`WRITER_NOTES` |
+| SLR 口径 | `slr_2027/2042` 标为情景端点标签；S3 的 $\beta=2/15$ 由端点设定 | `params.yaml`、`SCENARIOS_STRATEGIES` §1.1 |
+| 参数与证据 | 补 `sigma_e/trigger_delta/s_sed/p_por/gamma_b/tau_build`；N4/O-11/W1/S4 状态改诚实 | `params.yaml`、`PARAM_EVIDENCE` §2.9、`ledger/claims.csv` |
+| 台账 | 103 行（69 OBS/25 ASSUME/9 MODEL） | `ledger/claims.csv` |
+
+**验证**：YAML 可解析；所有 `evidence_id` 均能在台账找到；CSV 全 10 列、无重复 ID；无 Tab 污染；原型重跑通过（A/B/C：6.15/7.33/7.36 yr；避免风险 28086/31320/31412）。
+
+**仍未做**：T1–T10 未跑；E0–E7 未跑；不冻结口径下的 $T_{\text{first,fail}}$、$T_{\text{safe,cum}}$、$E_w/E_b$ 无任何数值；本地/外调与两种成本结构下的策略排序没有结果。
