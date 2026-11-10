@@ -221,7 +221,7 @@ overrides:                   # 任何 params.yaml 里的键
 
 | 文件 | 内容 | 形状/单位 |
 |---|---|---|
-| `results.json` | 标量结果：四个时长指标（`T_first_fail_w/b`、`T_safe_cum_w/b`、`T_recovery`）、$E_w/E_b$、留存率、成本、参数快照。**不得再输出含糊的 `T_p` 字段**；解析基准的 $T_p$ 只能出现在 validation 报告里 | — |
+| `results.json` | 标量结果：五个时长量（`T_first_fail_w/b`、`T_safe_cum_w/b`、`T_recovery`）、$E_w/E_b$、留存率、成本、参数快照。**不得再输出含糊的 `T_p` 字段**；解析基准的 $T_p$ 只能出现在 validation 报告里 | — |
 | `fields.npz` | `y[nt,nx]` [m]、`O[nt,nx]` [m²]、`w[nt,nx]` [m]、`x[nx]` [m]、`t[nt]` [yr] | float32（体积考虑） |
 | `ledger.csv` | 逐时间步的沙量台账（见 §4.3） | — |
 | `events.csv` | 每次风暴：$t_k$、$\Delta y_{\rm pot}$、$\Delta y_k$、$x_k$、$\sigma_e$、中央 5 km/全域 9 km 的注入体积（m³）、耗尽单元数 | — |

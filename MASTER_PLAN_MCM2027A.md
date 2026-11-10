@@ -1,7 +1,7 @@
 # MASTER_PLAN：2027 MCM/ICM Practice Problem A "Where Does the Sand Go?" 全局统筹
 
 > 本文件是团队的**唯一总控**：谁做什么、先后顺序、交接接口、决策节点、验收标准、风险与应对。
-> 配套文件：`AGENT_BRIEF_MODELER.md`（本题建模助理）、`SYSTEM_PROMPT_MODELER_AGENT.md`（通用系统提示词）。
+> 配套文件：`AGENT_BRIEF_MODELER.md`（本题建模助理）；通用系统提示词存放在 agent 配置中，不随仓库分发。
 > 时间轴按 96 小时（4 天）写成相对时间 T+h，实际比赛时长不同则按比例缩放，顺序与依赖关系不变。
 
 ---

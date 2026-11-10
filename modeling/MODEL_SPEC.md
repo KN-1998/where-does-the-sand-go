@@ -275,7 +275,7 @@ A：$\Delta y_0=20$ m；B：$\Delta y_0=100$ m；C：$\Delta y_0\approx40$–50 
 ### 6.1 指标 A：管理滩宽（设计阈值，ASSUME）
 
 $w_{\text{mgmt}}=20$ m 是一个**管理/设计阈值**（"滩宽低于 20 m 即进入关注"），不是从建筑退距推出来的。
-单元指示：$\text{risk}_w=\mathbf 1\{w(x,t)<w_{\text{mgmt}}\}$，$w=w_0+y$。
+单元指示：$\text{risk}_w=\mathbf 1\{w_{\text{eff}}(x,t)<w_{\text{mgmt}}\}$，$w_{\text{eff}}=\max(w_0+y,0)$；当 $w\ge0$ 时与 $\mathbf 1\{w<w_{\text{mgmt}}\}$ 相同。
 
 > **$T_p$ 的唯一含义**：本文件保留 $T_p$ 仅指"无风暴、单调侵蚀解析解下 $w$ 首次跌破 $w_{\text{mgmt}}$ 的时间"，等价于 $T_{\text{first,fail}}^{w}$ 的解析极限；它**不是**波浪周期（波浪周期一律写 $T_{\text{peak}}$），**不是**建筑风险，也**不等于**累计安全时间。旧基准表 $T_p=6.15/7.33/7.36$ yr 就是**这个口径**（$w\ge20$ m 的时间），可以保留，但论文必须叫它"beach-width protection period"，不能叫"building risk"；蒙特卡洛结果必须改用 $T_{\text{first,fail}}^{w}$ 的分布，不得只报一个 $T_p$。
 
