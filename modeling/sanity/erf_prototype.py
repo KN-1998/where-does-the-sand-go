@@ -57,7 +57,7 @@ def centers(L, n):
 
 def protected_years(ell, v_tot=V_TOT, D=D, rho=RHO, w0=WC0, wcrit=WCRIT,
                     tmax=15.0, n=500, nt=150):
-    """1{w>=wcrit} 的面积-时间积分 [m·yr]，用单元中心 + 时间中点"""
+    """1{w>=w_mgmt} 的面积-时间积分 [m·yr]，用单元中心 + 时间中点"""
     dy0 = v_tot / (H * ell)
     x, dx = centers(L_CORR, n)
     dt, tot = tmax / nt, 0.0
@@ -137,7 +137,7 @@ def main():
                   f"  T_p(rho=2.3)={Tp(ell,dy0,WCRIT-w0,D,RHO):6.2f}")
     print(f"    dy_req=-5, ell=5000, dy0=20, rho=2.3 -> T_p={Tp(5000,20,-5,D,RHO):.3f} yr（旧版返回 inf）")
 
-    print("="*72); print("[4] 投放宽度扫描（V=1e6, w0=18, w_crit=20）")
+    print("="*72); print("[4] 投放宽度扫描（V=1e6, w0=18, w_mgmt=20）")
     rows = [(ell, *protected_years(ell)) for ell in np.linspace(400, 6000, 29)]
     pmax = max(r[1] for r in rows)
     print(f"    {'ell(m)':>8}{'dy0(m)':>9}{'保护岸线·年':>14}{'效率':>9}")
@@ -157,7 +157,7 @@ def main():
 
     print("="*72)
     v_thr = H*L_CORR*(WCRIT - (W_FAR - DIP))
-    print(f"[6] V_thr = H*L*(w_crit-w_min) = {v_thr:.0f} m^3")
+    print(f"[6] V_thr = H*L*(w_mgmt-w_min) = {v_thr:.0f} m^3")
     print(f"    V={V_TOT:.0f} >= V_thr={v_thr:.0f} -> 匀铺可行（本例）")
     print("    若 V<V_thr，匀铺后仍有岸段低于阈值 -> 需集中投放（NONDIM §4）")
 

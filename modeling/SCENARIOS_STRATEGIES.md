@@ -32,7 +32,7 @@
 **错误做法**：$4$ mm/yr × 15 yr = 60 mm，直接把岸线后退 0.06 m —— 荒谬地小。
 **正确做法（本模型口径）**：SLR **不直接**变成岸线位置，而是通过两条通道：
 
-1. **慢性侵蚀速率的上调**：$\rho_e(t)=\rho_e(0)+\beta\,t$，$\beta$ 由情景设定（不是由 SLR 换算）。理由：观测到的"长期速率"已经把 SLR 的历史贡献打包了；情景里给速率一个上升趋势，是**情景假设**，不是物理推导。
+1. **慢性侵蚀速率的上调**：$\rho_e(t)=\rho_{e,0}+\beta\,t$，S3 取 $\rho_{e,0}=3.0$、$\rho_e(15)=5.0$ m/yr ⇒ $\beta=2.0/15=0.133$ m/yr²。$\beta$ 由情景端点设定（`params.yaml` 的 `S3_repeat.rho_e=[3.0,5.0]`），**不是由 SLR 换算**。理由：观测到的"长期速率"已经把 SLR 的历史贡献打包了；情景里给速率一个上升趋势，是**情景假设**，不是物理推导。
 2. **（可选）风暴基线抬升**：若实现 $R_k/\gamma$ 强度路径，可令 $R_k(t)=R_k+R_{\text{SLR}}(t)$，使 $\Delta y_k$ 略增。**主算用对数正态 $\Delta y_{\text{pot}}$，SLR 主要通过通道 (1) $\rho_e(t)$ 进入**；若不做通道 (2)，必须在论文里明确写"storm-water-level baseline 未单独建模"，不能含糊。
 
 > **S3 的 SLR 4→8 mm/yr 与 $\rho_e$ 3→5 m/yr 是两组独立假设，没有定量映射。** 不能写成"因为 SLR 从 4 升到 8，所以后退从 3 升到 5"；也不能把两者叠加后声称是 SLR 的物理贡献。情景只是条件推演。
@@ -79,27 +79,31 @@
 $$
 \sum_j(c_0+c_1\mathcal{V}_j)\le C_{\max},\quad
 0\le\mathcal{V}_j\le V_{\text{event,max}},\quad
-\sum_j\mathcal{V}_j\le V_{15,\text{total}}
+\sum_j\mathcal{V}_j\le V_{15,\text{total}},\quad
+\sum_j\mathcal{V}_j\le S_{\text{borrow,total}}
 $$
 $$
 \Longrightarrow\
-\mathcal{V}_{\text{tot}}(N)=\min\Bigl\{V_{15,\text{total}},\ N\,V_{\text{event,max}},\ \frac{C_{\max}-N c_0}{c_1}\Bigr\}
+\mathcal{V}_{\text{tot}}(N)=\min\Bigl\{V_{15,\text{total}},\ N\,V_{\text{event,max}},\ S_{\text{borrow,total}},\ \frac{C_{\max}-N c_0}{c_1^{\text{eff}}}\Bigr\}
 $$
 
 **主算成本口径**：$c_1=27$ \$/m³（all-in）、$c_0=0$、$C_{\max}=1.2\times10^{8}$ USD（15 年维护估算，不是已批准预算）、$V_{15,\text{total}}=5.0\times10^{6}$ m³、$V_{\text{event,max}}=2.9\times10^{6}$ m³。
 替代结构（施工 $c_1\approx11$ + $c_0>0$）只作敏感性。
+预算式用**有效单价** $c_1^{\text{eff}}$：本地沙 all-in 取 27；外调沙加运输 $c_{\text{transport}}=3$ ⇒ $c_1^{\text{eff}}=30$ ⇒ 预算上限 $120/30=4.0$M m³（不是 4.44M）。
 
-**本地沙源约束（新增，N21）**：本地 borrow area 约 $S_{\text{borrow,total}}=2.45\times10^{6}$ m³（3.2M cy，且只是"潜在储量"、未含补充勘探与许可）。因此再加
-$$\sum_j\mathcal{V}_j\le S_{\text{borrow,total}}\quad\text{（本地沙情景）}.$$
-主算用**本地沙**：$2.45$M 比 $V_{15,\text{total}}=5.0$M 更紧，**沙源先于预算见底**。另设**外调沙情景**：$S_{\text{borrow,total}}$ 放宽到 $V_{15,\text{total}}$，成本按 $c_1$ 计、另加运输不确定性。报告时必须说明用的是哪一种。
+**沙源约束（N21 / A-20）**：本地 borrow area 潜在储量 3.2M cy ≈ $S_{\text{borrow,total}}=2.45\times10^{6}$ m³。主算直接取该潜在储量为上限；另做**可用率敏感性** $a_{\text{borrow}}=0.8$（勘探/许可/开采损失，ASSUME），即实际可投放降到 1.96M m³。因此
+$$\sum_j\mathcal{V}_j\le S_{\text{borrow,total}}=2.45\times10^{6}\ \text{m}^3\quad\text{（本地沙主算）}.$$
+主算用**本地沙**：2.45M 比 $V_{15,\text{total}}=5.0$M 更紧，**沙源先于预算见底**。另设**外调沙情景**：沙源上限放宽到 $V_{15,\text{total}}$，成本按 $c_1+c_{\text{transport}}$ 计。报告时必须说明用的是哪一种。
 
 | | **A 一次性大工程** | **B 少量多次** | **C 空间定点** |
 |---|---|---|---|
-| 实施 | 2027 年一次投 $\min(V_{\text{event,max}},\text{可买量})$，匀铺 5 km | 每 ~5 年投 $V_{15,\text{total}}/3$（且每次 $\le V_{\text{event,max}}$），匀铺 5 km | 每当触发，投给单位成本减险最大的 1–2 km，每次 $\le V_{\text{event,max}}$ |
+| 实施 | 2027 年一次投 $\min(V_{\text{event,max}},\,S_{\text{borrow}})$，匀铺 5 km | 每 ~5 年投 $\mathcal{V}_{\text{tot}}(3)/3$，匀铺 5 km；共 3 次 | 每当触发，投给单位成本减险最大的 1–2 km，每次 $\le V_{\text{event,max}}$，累计 $\le\mathcal{V}_{\text{tot}}(N)$ |
 | 固定成本次数 | 1 × $c_0$ | 3 × $c_0$ | 2–4 × $c_0$ |
+| **本地沙可行量** | $\min(2.9,\,2.45)=2.45$M | $2.45/3=0.82$M × 3 | 累计 ≤2.45M |
+| **外调沙可行量** | $\min(2.9,\,4.0)=2.9$M | $4.0/3=1.33$M × 3 | 累计 ≤4.0M |
 | 主算成本 | $c_0=0$，成本 $\propto$ 方量 | 同左 | 同左 |
 | 优点 | 初期保护最强；单次规模效应 | 与侵蚀节奏同步；末期仍有沙 | 直击热点；热点达标最快 |
-| 缺点 | 单次上限 2.9M，15 年总量用不完；后期空窗 | 每次幅度小（扩散损失相对大） | 非热点段持续恶化；"顾此失彼" |
+| 缺点 | 本地沙下 15 年总量只用 49%；后期空窗 | 本地沙下每次幅度小（扩散损失相对大） | 非热点段持续恶化；"顾此失彼" |
 | 预判胜出条件 | 风险集中在近期、单次规模有效 | 侵蚀持续、时机重要 | 风险高度集中（热点窄且深） |
 
 > **主算不设 $c_0^*$**：$c_0=0$ 时固定成本通道关闭；$c_0^*$ 只在替代成本结构里有意义。**不要预设必须有翻转点**。
@@ -108,7 +112,7 @@ $$\sum_j\mathcal{V}_j\le S_{\text{borrow,total}}\quad\text{（本地沙情景）
 >
 > **外部对照**：PSDS 的"补沙 \$120M vs 买断 \$43M"是条件性项目/资产估算，不是 $E$ 曲线的验收标准。
 >
-> **Q-33 已解决**：$N=1$ 受 $V_{\text{event,max}}=2.9$M 约束；$N=3$ 的总量 3.84M 受预算约束。不需要把 $C_{\max}$ 调到 60M。
+> **Q-33 已解决**：本地沙主算下 $N$ 次总量一律受 $S_{\text{borrow}}=2.45$M 约束；外调沙情景下 $N=1$ 受 $V_{\text{event,max}}=2.9$M 约束、$N\ge2$ 受预算 4.0M 约束（外调沙 $c_1^{\text{eff}}=27+3=30$）。两种情景都不需要把 $C_{\max}$ 调到 60M。
 
 ---
 

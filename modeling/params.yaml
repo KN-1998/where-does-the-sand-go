@@ -18,17 +18,20 @@ domain:
 geometry:
   h_star: {symbol: "h_*", name: "闭合深度", unit: m, value: 8.0, range: [6.0, 10.0], source_type: MODEL, evidence_id: M-01, calibrate: sens, note: "中等能量障壁岛典型 6–10 m"}
   B_berm: {symbol: "B",   name: "滩肩高度", unit: m, value: 2.0, range: [1.5, 2.5], source_type: ASSUME, evidence_id: A-04, calibrate: sens, note: "外滩典型滩肩 1.5–2.5 m"}
-  H_dep:  {symbol: "H",   name: "岸线-体积换算深度 h_*+B", unit: m, value: 10.0, range: [8.0, 12.0], source_type: MODEL, evidence_id: M-01, calibrate: false, note: "由 h_star + B_berm 导出；1 m 岸线 <=> 10 m^3/m 沙"}
+  H_dep:  {symbol: "H",   name: "岸线-体积换算深度 h_*+B", unit: m, value: 10.0, range: [8.0, 12.0], source_type: MODEL, evidence_id: M-01, calibrate: false, derived_from: ["h_star","B_berm"], note: "由 h_star + B_berm 导出；1 m 岸线 <=> 10 m^3/m 沙"}
   A_dean: {symbol: "A",   name: "Dean 平衡剖面参数", unit: "m^(1/3)", value: 0.10, range: [0.08, 0.12], source_type: OBS, evidence_id: O-08, calibrate: false, note: "对应 D50 ~0.2 mm 的中砂"}
   D50:    {symbol: "D_50", name: "中值粒径", unit: mm, value: 0.20, range: [0.15, 0.30], source_type: OBS, evidence_id: O-08, calibrate: false, note: "外滩砂质海滩典型值"}
 
 waves:
   Hs_mean: {symbol: "H_s", name: "平均有效波高", unit: m, value: 1.0, range: [0.8, 1.3], source_type: OBS, evidence_id: W1, calibrate: false, note: "外滩约 1 m（MDPI 2024）；FRF Duck 年均 0.9 m；原 1.3 m 偏高"}
-  Tp_mean: {symbol: "T_p", name: "平均谱峰周期", unit: s, value: 8.5, range: [7.0, 10.0], source_type: OBS, evidence_id: W7, calibrate: false, note: "W7 给 Oregon Inlet 区域约 9 s；8.5 为同一量级的设计值"}
+  T_peak_mean: {symbol: "T_peak", name: "平均谱峰周期", unit: s, value: 8.5, range: [7.0, 10.0], source_type: OBS, evidence_id: W7, calibrate: false, note: "W7 给 Oregon Inlet 区域约 9 s；8.5 为同一量级的设计值。改名为避免与保护期 T_p 冲突"}
   Hb:      {symbol: "H_b", name: "破碎波高（用于 D 的估算）", unit: m, value: 0.9, range: [0.8, 1.2], source_type: MODEL, evidence_id: M-09, calibrate: false, note: "由 H_s=1.0 m 与浅化/破碎估算；W9 的外海 1.26 m 不是 Hb"}
   K_SPM:   {symbol: "K_SPM", name: "CERC/SPM 无量纲输沙系数", unit: dimensionless, value: 0.39, range: [0.2, 0.8], source_type: OBS, evidence_id: O-10, calibrate: false, note: "SPM 口径（H_s 时为 0.39；H_rms 时约 0.77）。注意与量纲化的 K_c 区分"}
   K_c:     {symbol: "K_c", name: "量纲化 CERC 系数（=K_SPM/[16(s-1)(1-p)]*sqrt(g/gamma_b)）", unit: "m^0.5/s", value: 0.0873, range: [0.04, 0.18], source_type: MODEL, evidence_id: M-02, calibrate: false, note: "由 K_SPM=0.39、s=2.65、p=0.4、gamma_b=0.78 换算；D=2*K_c*Hb^2.5*cos(2a)/H*3.156e7"}
   alpha_b: {symbol: "alpha_b", name: "特征破碎波入射角", unit: deg, value: 8.0, range: [0.0, 15.0], source_type: ASSUME, evidence_id: A-05, calibrate: false, note: "线性化用；cos(2a) 在 0-15 deg 内变化很小"}
+  s_sed:   {symbol: "s", name: "泥沙相对密度（rho_s/rho_w）", unit: dimensionless, value: 2.65, range: [2.6, 2.7], source_type: OBS, evidence_id: O-16, calibrate: false}
+  p_por:   {symbol: "p", name: "沉积物孔隙率", unit: dimensionless, value: 0.4, range: [0.35, 0.45], source_type: OBS, evidence_id: O-16, calibrate: false}
+  gamma_b: {symbol: "gamma_b", name: "破碎波高/水深比", unit: dimensionless, value: 0.78, range: [0.7, 0.9], source_type: OBS, evidence_id: O-16, calibrate: false}
 
 transport:
   D_diff: {symbol: "D", name: "岸线扩散系数", unit: "m^2/yr", value: 300000.0, range: [100000.0, 800000.0], source_type: MODEL, evidence_id: M-02, calibrate: false, note: "CERC 在 Hb=0.8-1.2 时给 3.0-8.4e5（alpha=8 度）；Hb=0.9 中心值 4.1e5。采用 3e5 位于区间下沿：理由为有效扩散率 < 总输沙能力；注意这使 T_p 偏乐观，敏感性必须覆盖到 8e5（T_p 约减半）"}
@@ -36,7 +39,7 @@ transport:
   rho_e:  {symbol: "rho_e", name: "长期平均岸线侵蚀率（背景/区域）", unit: m/yr, value: 1.7, range: [1.2, 2.1], source_type: OBS, evidence_id: E2, calibrate: "先验", note: "DEQ 2011/2019 段平均 5.3-6.0 ft/yr = 1.62-1.83 m/yr；见 资料/00_数据主表.md §A"}
   rho_e_hotspot_amp: {symbol: "a_h", name: "热点侵蚀率放大倍数", unit: dimensionless, value: 1.2, range: [0.5, 2.0], source_type: OBS, evidence_id: E1, calibrate: true, note: "峰值 = rho_0(1+a_h) = 1.7*2.2 = 3.74 m/yr（12.3 ft/yr），落在 DEQ 12.5-13 ft/yr 带内；解析式 a_h=(3.8-1.7)/1.7=1.24 为未取整值。rho_e(x)=rho_0[1+a_h exp(-x^2/2sigma_h^2)]"}
   sigma_h: {symbol: "sigma_h", name: "热点高斯宽度", unit: m, value: 600.0, range: [300.0, 1200.0], source_type: ASSUME, evidence_id: A-03, calibrate: false, note: "A-03 的高斯热点定义；DEQ 只给分段与极值，无连续剖面"}
-  rho_e_corridor_mean: {symbol: "rho_c", name: "走廊等效均匀侵蚀率（解析基准用）", unit: m/yr, value: 2.3, range: [1.7, 3.0], source_type: MODEL, evidence_id: M-06, calibrate: false, note: "1.7+(3.8-1.7)*sqrt(2pi)*600/5000 ≈ 2.33"}
+  rho_e_corridor_mean: {symbol: "rho_c", name: "走廊等效均匀侵蚀率（解析基准用）", unit: m/yr, value: 2.3, range: [1.7, 3.0], source_type: MODEL, evidence_id: M-06, calibrate: false, derived_from: ["rho_e","a_h","sigma_h"], note: "1.7+(3.8-1.7)*sqrt(2pi)*600/5000 ≈ 2.33"}
 
 storm:
   lambda_s: {symbol: "lambda_s", name: "侵蚀性事件到达率", unit: "1/yr", value: 0.4, range: [0.2, 1.5], source_type: ASSUME, evidence_id: A-10, calibrate: true, note: "仅计造成 >3 m 等效后退的事件；风暴浪(>=1.5m)约 30/yr、NC 飓风登陆约 0.5/yr，两者都不是此口径"}
@@ -47,29 +50,38 @@ storm:
   w_sat:    {symbol: "w_s", name: "侵蚀饱和滩宽尺度", unit: m, value: 20.0, range: [10.0, 40.0], source_type: ASSUME, evidence_id: A-12, calibrate: false, note: "S_k 中 [1-exp(-w/w_s)] 因子"}
   k_rec:    {symbol: "k", name: "沙坝回滩恢复率", unit: "1/yr", value: 0.667, range: [0.33, 2.0], source_type: ASSUME, evidence_id: O-11, calibrate: true, note: "对应恢复时间 0.5-3 yr"}
   lam_off:  {symbol: "lambda", name: "近岸沙库永久离岸损失率", unit: "1/yr", value: 0.1, range: [0.02, 0.3], source_type: ASSUME, evidence_id: A-13, calibrate: true, note: "对应 10 yr 损失时间；Kitty Hawk 3.3 年留存 79-87.5% 反推 lambda_eff=0.04-0.07（N19），取 0.1 偏保守"}
+  sigma_e: {symbol: "sigma_e", name: "风暴沿岸足迹高斯宽度（敏感性）", unit: m, value: 2000.0, range: [500.0, 5000.0], source_type: ASSUME, evidence_id: A-22, calibrate: false, note: "主算足迹为全域均匀；高斯足迹仅作敏感性"}
 
 beach_state:
   w0_far:  {symbol: "w_far", name: "初始干滩宽度（热点外远场值）", unit: m, value: 25.0, range: [20.0, 40.0], source_type: ASSUME, evidence_id: A-07, calibrate: false, note: "热点外远场值；走廊均值约 21.8 m，热点最小 16 m；无实测剖面，必须做敏感性"}
-  w0_corridor_mean: {symbol: "w_c", name: "初始干滩宽度（走廊均值）", unit: m, value: 21.8, range: [15.0, 30.0], source_type: MODEL, evidence_id: M-07, calibrate: false, note: "25-9*sqrt(2pi)*700/5000≈21.8 m"}
+  w0_corridor_mean: {symbol: "w_c", name: "初始干滩宽度（走廊均值）", unit: m, value: 21.8, range: [15.0, 30.0], source_type: MODEL, evidence_id: M-07, calibrate: false, derived_from: ["w0_far","w0_min","sigma_w"], note: "25-9*sqrt(2pi)*700/5000≈21.8 m"}
   sigma_w: {symbol: "sigma_w", name: "滩宽热点高斯宽度", unit: m, value: 700.0, range: [400.0, 1200.0], source_type: ASSUME, evidence_id: A-07, calibrate: false, note: "w0(x)=w_far-(w_far-w_min)exp(-x^2/2sigma_w^2)"}
   w0_min:  {symbol: "w_min", name: "初始干滩宽度（最窄处）", unit: m, value: 16.0, range: [8.0, 22.0], source_type: ASSUME, evidence_id: A-07, calibrate: false}
-  d_bldg:  {symbol: "d_b", name: "建筑退距（距 2027 基准 MHW 线）", unit: m, value: 28.0, range: [20.0, 45.0], source_type: ASSUME, evidence_id: A-08, calibrate: false, note: "A-08；不再用它反推 w_crit。建筑净距 r=d_b+y；无逐栋数据，须做敏感性"}
+  d_bldg:  {symbol: "d_b", name: "建筑退距（距 2027 基准 MHW 线）", unit: m, value: 28.0, range: [20.0, 45.0], source_type: ASSUME, evidence_id: A-08, calibrate: false, note: "A-08；不再用它反推 w_mgmt。建筑净距 r=d_b+y；无逐栋数据，须做敏感性"}
   m_safe:  {symbol: "m_s", name: "安全余量（爬高+不确定性）", unit: m, value: 8.0, range: [5.0, 12.0], source_type: ASSUME, evidence_id: A-08, calibrate: false}
-  w_crit:  {symbol: "w_crit", name: "管理滩宽阈值 w_mgmt（设计选择，非建筑退距推导；key 名保留 w_crit）", unit: m, value: 20.0, range: [12.0, 32.0], source_type: ASSUME, evidence_id: A-18, calibrate: false, note: "仅用于 w>=20 m 的管理指标；建筑风险用 r=d_b+y<m_s，见 MODEL_SPEC 6.2"}
+  w_mgmt:  {symbol: "w_mgmt", name: "管理滩宽阈值（设计选择，非建筑退距推导）", unit: m, value: 20.0, range: [12.0, 32.0], source_type: ASSUME, evidence_id: A-18, calibrate: false, note: "仅用于 w>=20 m 的管理指标；建筑风险用 r=d_b+y<m_s，见 MODEL_SPEC 6.2"}
 
 management:
   V15_total: {symbol: "V15_total", name: "15 年总沙量", unit: "m^3", value: 5000000.0, range: [2500000.0, 9000000.0], source_type: ASSUME, evidence_id: A-19, calibrate: "敏感性", note: "N4 的 3.8M cy 是“2.3M cy 亏空 + 5 年 x 0.3M cy/yr”（5 年方案）；15 年总量 = 2.3 + 15 x 0.3 = 6.8M cy ≈ 5.2M m3，取 5.0M（Q-41）"}
   V_event_max: {symbol: "V_event_max", name: "单次工程沙量上限", unit: "m^3", value: 2900000.0, range: [1500000.0, 3500000.0], source_type: MODEL, evidence_id: N4, calibrate: "敏感性", note: "CSE 2023 的 3.8M cy=2.9M m3 是一次 5 年工程；单次投放不得超过此量"}
+  S_borrow_total: {symbol: "S_borrow_total", name: "本地可采沙源上限", unit: "m^3", value: 2450000.0, range: [1500000.0, 3200000.0], source_type: ASSUME, evidence_id: A-20, calibrate: "敏感性", note: "N21 的 3.2M cy 潜在储量换算值；主算直接用此上限，可用率 0.8（约 1.96M m3）仅作敏感性"}
+  supply_scenario: {symbol: "supply", name: "供沙情景开关", unit: dimensionless, value: "local", options: ["local", "external"], source_type: ASSUME, evidence_id: A-20, note: "local: Sum V <= S_borrow_total*availability; external: 放宽到 V15_total，另计运输成本"}
+  supply_availability: {symbol: "a_borrow", name: "沙源可用率（勘探/许可/开采损失，仅敏感性）", unit: dimensionless, value: 1.0, range: [0.5, 1.0], source_type: ASSUME, evidence_id: A-20, calibrate: false, note: "主算 1.0；敏感性点 0.8"}
+  permit_delay: {symbol: "tau_permit", name: "许可/勘探延迟", unit: yr, value: 1.0, range: [0.5, 2.0], source_type: ASSUME, evidence_id: A-21, calibrate: false}
+  transport_cost_add: {symbol: "c_transport", name: "外调沙附加运输成本", unit: "USD/m^3", value: 3.0, range: [0.0, 10.0], source_type: ASSUME, evidence_id: A-21, calibrate: false}
+  tau_build: {symbol: "tau_build", name: "批准到施工的时滞", unit: yr, value: 0.75, range: [0.5, 1.0], source_type: ASSUME, evidence_id: A-21, calibrate: false}
+  cost_model: {symbol: "cost_mode", name: "成本模型开关", unit: dimensionless, value: "all_in", options: ["all_in", "marginal_plus_fixed"], source_type: ASSUME, evidence_id: A-09, note: "主算 all_in: c1=27, c0=0；marginal_plus_fixed: c1~11 + c0 in [0,10]M，仅敏感性"}
+  trigger_delta: {symbol: "delta_trig", name: "触发缓冲（高于阈值多少开始评估）", unit: m, value: 5.0, range: [2.0, 10.0], source_type: ASSUME, evidence_id: A-23, calibrate: false}
   c0:     {symbol: "c_0", name: "单次工程固定成本（仅敏感性）", unit: "USD", value: 0.0, range: [0.0, 10000000.0], source_type: ASSUME, evidence_id: A-09, calibrate: false, note: "主算 c0=0：c1 已是 all-in，再加 c0 会重复计入动员/设计（Q-42）。c0>0 只作替代成本结构的敏感性；2026 两工程反推 0.5-4M 也支持 c0 很小"}
   c1:     {symbol: "c_1", name: "单位方量全成本（all-in）", unit: "USD/m^3", value: 27.0, range: [20.0, 35.0], source_type: OBS, evidence_id: N17, calibrate: false, note: "2026 Buxton 27.6、Avon 26.8 USD/m3（含调遣/设计/融资/监测/环境）；2011-2019 施工单价仅 10-12 USD/m3，不可与 all-in 混用（N14-N18）"}
-  C_max:  {symbol: "C_max", name: "15 年总预算上限（估算，不是已批准预算）", unit: "USD", value: 120000000.0, range: [40000000.0, 200000000.0], source_type: ASSUME, evidence_id: N6, calibrate: false, note: "PSDS 引 CSE：120M 是按每次撑 5 年算的 15 年维护估算（3x40M），不是已批准预算。预算式用 V15_total=5.0M 与 V_event_max=2.9M：N=1 买 2.9M、N>=2 买 4.44M，预算对 N>=2 绑定（Q-33/Q-41）"}
-  w_trig: {symbol: "w_trig", name: "触发评估的管理滩宽阈值", unit: m, value: 25.0, source_type: MODEL, evidence_id: M-05, calibrate: false, note: "w_mgmt+5；建筑风险另有 r<m_s+5 的硬触发"}
+  C_max:  {symbol: "C_max", name: "15 年总预算上限（估算，不是已批准预算）", unit: "USD", value: 120000000.0, range: [40000000.0, 200000000.0], source_type: ASSUME, evidence_id: N6, calibrate: false, note: "PSDS 引 CSE：120M 是按每次撑 5 年算的 15 年维护估算（3x40M），不是已批准预算。预算不是最紧约束：本地沙主算 N 次总量都受 S_borrow_total=2.45M 约束；外调沙情景 N=1 受 2.9M 单次上限、N>=2 受预算 4.0M（c1_eff=30）（Q-33/Q-41）"}
+  w_trig: {symbol: "w_trig", name: "触发评估的管理滩宽阈值", unit: m, value: 25.0, source_type: MODEL, evidence_id: M-05, calibrate: false, derived_from: ["w_mgmt","trigger_delta"], note: "w_mgmt+5；建筑风险另有 r<m_s+5 的硬触发"}
   T_min:  {symbol: "T_min", name: "可接受的最短保护期（低于则考虑撤退）", unit: yr, value: 3.0, range: [2.0, 5.0], source_type: ASSUME, evidence_id: A-15, calibrate: false}
 
 climate_scenarios:
   slr_base: {symbol: "R_SLR", name: "相对海平面上升速率（基准）", unit: "mm/yr", value: 4.88, range: [3.4, 5.5], source_type: OBS, evidence_id: S4, calibrate: false, note: "NOAA 现行 Duck 1978-2023 = 4.88+-0.56 mm/yr（S4）；旧值 4.55（1978-2016，S1）只作敏感性。Oregon Inlet 4.17；Beaufort 2.99；不得直接换算为岸线后退"}
-  slr_2027: {symbol: "R_SLR,2027", name: "S3 情景初期速率", unit: "mm/yr", value: 4.0, source_type: ASSUME, evidence_id: A-14, calibrate: false}
-  slr_2042: {symbol: "R_SLR,2042", name: "S3 情景末期速率", unit: "mm/yr", value: 8.0, source_type: ASSUME, evidence_id: A-14, calibrate: false}
+  slr_2027: {symbol: "R_SLR,2027", name: "S3 情景初期速率标签", unit: "mm/yr", value: 4.0, source_type: ASSUME, evidence_id: A-14, calibrate: false, note: "仅用于 S3 情景线性插值 rho_e_scale(t)，不是模型动态计算的 SLR；不进入任何状态方程"}
+  slr_2042: {symbol: "R_SLR,2042", name: "S3 情景末期速率标签", unit: "mm/yr", value: 8.0, source_type: ASSUME, evidence_id: A-14, calibrate: false, note: "同 slr_2027；4->8 mm/yr 是情景假设，与 rho_e 3->5 的映射是独立假设，无定量换算"}
   Hs_trend: {symbol: "dHs/dt", name: "S3 情景波高趋势", unit: "%/decade", value: 3.0, range: [0.0, 6.0], source_type: ASSUME, evidence_id: A-14, calibrate: false}
 
 scenarios:
