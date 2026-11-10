@@ -96,8 +96,8 @@ t = 0;  next_event = sample_first_arrival()      # Poisson, 单位 yr
 while t < T:
     t_stop = min(t + dt_max, next_event, T)      # 步长截到事件时刻
     h      = t_stop - t
-    # (1) 连续步：BE 解 [t, t_stop)，源项只有 -Lc；I=0、S=0
-    solve_BE(h)                                  # 扩散 + 漂移 + Lc + 边界
+    # (1) 连续步：BE 解 [t, t_stop)，源项为 -Lc + kO/H；I=0、S=0
+    solve_BE(h)                                  # 扩散 + 漂移 + Lc + kO 恢复 + 边界
     t = t_stop
     # (2) 跳变：仅当 t 到达事件时刻，注入一次
     if abs(t - next_event) < 1e-9:
@@ -114,7 +114,7 @@ while t < T:
 - 若事件恰好落在 $t=T$（模拟终点），仍须注入并记账；不得因循环结束而丢弃。
 - 连续步中的 $L_c$、$O$ 恢复/损失用**跳变后**的 $O$ 进入下一步（§2.4a 的 $(O^n+S)e^{-a\Delta t}$ 即等价写法）。
 
-> **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w)$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w$ 太窄以致 $25>w$，取 $w$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
+> **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w_{\text{eff}})$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w_{\text{eff}}$ 太窄以致 $25>w_{\text{eff}}$，取 $w_{\text{eff}}$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
 >
 > **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
 
@@ -256,8 +256,8 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 目标 $10^{-12}$，double 可达 $10^{-16}$ |
 | **T2** | 对 erf 解收敛 | **光滑高斯初值**（$\sigma=200$ m）；主格式 **BE + $\Delta t\propto\Delta x$**；CN 可选，用 $\Delta t\propto\Delta x^2$；另用阶跃初值测 $L_1$/前沿 | **BE：** L2 比值 $\in[1.8,2.2]$；**CN（可选）：** $\in[3.5,4.5]$；阶跃的 $L_\infty$ 不判阶；另做**非负性检查** | 见下 |
 | **T3** | 零源项/守恒 | (a) 均匀 $y$、$O=0$、$u=0$、零通量 ⇒ 全场不变；(b) 非均匀 $y$、零通量 ⇒ 总量守恒 + 对 erf 解；(c) $O$ 单独指数衰减 | (a) $<10^{-12}$；(b) 质量 $<10^{-10}$；(c) $e^{-(k+\lambda)t}$ | — |
-| **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_p$、留存率）差异 $<2\%$ | — |
-| **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{mgmt}=20$；与 NONDIM §7 对拍 | $T_p$ 相对误差 $<10\%$ | 见 §6 |
+| **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_{\text{first,fail}}^{w}$、留存率）差异 $<2\%$ | — |
+| **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{mgmt}=20$；与 NONDIM §7 对拍 | **解析 $T_p$**（仅 validation）相对误差 $<10\%$ | 见 §6 |
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
 | **T7** | 边界通量 | 初始中心凸起、$u>0,D>0$ 的**已知外流**算例 | `open` 的 `flux_outer` 与半解析估计差 $<10\%$；`zeroflux` 的 `flux=0` | 不比较"留存率高低" |
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
@@ -283,7 +283,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 
 > **这是解析基准配置，不是主算例的初始场**：它用均匀 $w_0=18$ m 和均匀 $\rho_e=2.3$ m/yr；主算例用热点 $w_0(x)$（远场 25、最小 16）和 $\rho_e(x)$（1.7 + 热点放大）。T5 只在这个基准配置下对拍，不能拿主算例的热点场去比。
 >
-> **口径**：下表 $T_p$ 是"滩宽 $w\ge20$ m"的**管理滩宽保护期**，不是建筑净距风险；建筑净距口径见 `MODEL_SPEC` §6.2。
+> **口径**：下表 $T_p$ 是**无风暴解析基准**下"滩宽 $w\ge20$ m"的时间，仅用于 T5 对拍，不是 MC 输出字段，也不是建筑净距风险；建筑净距口径见 `MODEL_SPEC` §6.2。
 
 | 方案 | $\ell$ | $\Delta y_0$ | 中心 $T_p$ | 保护岸线·年 | 避免风险（热点场） |
 |---|---|---|---|---|---|
@@ -296,7 +296,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 
 还有两条闭式：
 - $T_{1/2}=0.2748\,\ell^2/D$（$\ell$=1000 m ⇒ 0.92 yr）
-- 匀铺可行性 $\mathcal{V}_{\text{thr}}=H L(w_{\text{mgmt}}-w_{\min})$（本例 $2.0\times10^{5}$ m³）
+- 匀铺可行性 $\mathcal{V}_{\text{thr}}=H L(w_{\text{mgmt}}-w_{\min})$：**T5 基准配置** $w_{\min}=18$ m ⇒ $\mathcal{V}_{\text{thr}}=1.0\times10^{5}$ m³；**主算热点** $w_{\min}=16$ m ⇒ $2.0\times10^{5}$ m³。两者不要混用。
 
 > 这些数字全部可由 `modeling/sanity/erf_prototype.py` 复现（跑一次 < 2 s）。**你的求解器在关掉风暴后必须落在这张表 ±10% 内**，否则先查换算（$H$ 用错是最常见原因）。
 
@@ -310,8 +310,8 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 |---|---|---|
 | E0 | `--scenario S{1,2,3} --strategy none` | 基线 $w(x,t)$、$E_0$ |
 | E1 | `--scenario S1 --strategy {A,B,C}` | 三方案对照表 + 沙去向堆叠图 |
-| E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | $T_p$ 分位、$E$ 分位 |
-| E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_p$、min $w$、2042 年 $w$） |
+| E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | 四个时长指标分位、$E_w/E_b$ 分位 |
+| E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_{\text{first,fail}}^{w}$、min $w$、2042 年 $w$） |
 | E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive} --supply {local,external} --cost-model {all_in,marginal_plus_fixed}`。**主算 `all_in`（$c_1=27,c_0=0$）**；$c_0\in[0,10]$ M\$ 扫描**只在 `marginal_plus_fixed` 下做**，不得与 `all_in` 混算 | 三策略同约束对比 + 成本；`marginal_plus_fixed` 才输出 $c_0^*$ 交叉点 |
 | E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}`；另做 **域大小敏感性**：$L_b=4.5$ km vs $7$ km（中央 5 km 指标差异 >5% 则报告） | 边界/缓冲敏感性表 |
@@ -331,12 +331,12 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 |---|---|---|
 | F1 | $w(x,t)$ 时空图（热图或 3D 面） | 坐标轴单位、$w_{\text{mgmt}}$ 等值线、时间标签 |
 | F2 | $w(t)$ 在 3 个代表位置（热点中心、边缘、区外） | 观测/模型/假设 三标签 |
-| F3 | 沙去向堆叠图（留存/出区/离岸/慢性）随 $t$ | 百分比 + 绝对量 |
-| F4 | $T_p$ 直方图（1000 次 MC） | 中位 + $P_{10}/P_{90}$ |
-| F5 | 三方案对比条形图（$T_p$ + 保护岸线·年） | 同一纵轴口径 |
+| F3 | 沙去向堆叠图（留存/出区/离岸，**仅三块**）随 $t$；慢性损失只在总场收支图中单列，不得与补沙差分混画 | 百分比 + 绝对量 |
+| F4 | $T_{\text{first,fail}}^{w}$ 与 $T_{\text{first,fail}}^{b}$ 直方图（1000 次 MC） | 中位 + $P_{10}/P_{90}$ |
+| F5 | 三方案对比条形图（$T_{\text{safe,cum}}^{w}$ + 保护岸线·年） | 同一纵轴口径 |
 | F6 | tornado 图（OAT） | 参数名 + 基准值 |
 | F7 | $\mathcal{V}$–$w_{\min}$ 相图 | $\mathcal{V}_{\text{thr}}$ 分界线 |
-| F8 | 三策略 $E$ vs $c_0$ 曲线（排序稳定性） | 交叉点标注 |
+| F8 | 三策略 $E$ vs $c_0$ 曲线（**仅 `marginal_plus_fixed`**；`all_in` 不画此轴） | 交叉点标注 |
 
 > **黑白可辨**：线型 + 标记区分，不只靠颜色（美赛常黑白打印）。
 
@@ -353,13 +353,13 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | 风暴后 $w$ 反弹超过初始 | $O$ 的回滩没扣 $\lambda$ | 对 T6 |
 | `zeroflux` 留存率居然低于 `open` | 边界 ghost cell 符号写反 | 手算一个 3 格例子 |
 | MC 跑不完 | 每次重复都重新读文件/重建网格 | 进程池 + 只传 seed |
-| 保护期 $T_p$ 是 `inf` | 阈值从未被穿越（$\Delta y_0$ 太大或 $\rho_e=0$） | 加保护：超过 `t_end` 记为 `>=15`，**不要**记 inf |
+| 时长 $T_{\text{first,fail}}$ 是 `inf` | 阈值从未被穿越（$\Delta y_0$ 太大或 $\rho_e=0$） | 加保护：超过 `t_end` 记为 `>=15`，**不要**记 inf |
 
 ---
 
 ## 9. 交付给建模手的东西
 
-1. `tests/` 全部通过的截图/日志（T1–T8，逐条）；
+1. `tests/` 全部通过的截图/日志（T1–T10，逐条）；
 2. `results/` 下 E0–E7 的目录树 + 每目录的 `results.json` 与 `meta.json`；
 3. 一张**总表**：每个实验 → 关键指标 → 分位区间；
 4. `figures/` 下 F1–F8 的 PNG（300 dpi）+ 生成脚本；
@@ -381,4 +381,4 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | 出图 F1–F8 | 3 h |
 | **合计** | **约 20–25 h** |
 
-> 如果时间不够：**砍 E5 的 Sobol，保 OAT；砍 F1 的 3D，保热图**。不要砍 T1–T8 —— 那是"可信"的唯一凭证。
+> 如果时间不够：**砍 E5 的 Sobol，保 OAT；砍 F1 的 3D，保热图**。不要砍 T1–T10 —— 那是"可信"的唯一凭证。

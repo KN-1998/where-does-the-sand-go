@@ -18,7 +18,7 @@ O-16,CERC/SPM 标准常数：泥沙相对密度 s=2.65、孔隙率 p=0.40、破�
 M-01,H = h_* + B = 10 m（区间 8-12 m）,10,m,MODEL,,2026-11-09,derived,H_dep,由 h_*=8、B=2 导出；1 m 岸线 <=> 10 m^3/m 沙
 M-02,D：CERC 在 H_b=0.8-1.2 m 时给 3.0-8.4e5 m^2/yr（中心 4.1e5）；模型采用 3e5（区间下沿）,3.0e5,m^2/yr,MODEL,,2026-11-09,derived,D_diff,K_c=0.0873 m^0.5/s（由 K_SPM=0.39 换算）、alpha=8 deg、H=10；有效扩散率 < 总输沙能力；D 越小 T_p 越长，取 3e5 相对中心 4.1e5 使 T_p 偏乐观 8-12%、相对上界 8e5 偏长 24-30%；敏感性覆盖 1e5-8e5
 M-03,管理滩宽阈值 w_mgmt=20 m（设计选择；不是 d_b-m_s）,20,m,ASSUME,,2026-11-09,assumption,管理指标 w>=w_mgmt,旧式 w_crit=d_b-m_s 漏掉 w0 且方向反；建筑风险另用 r=d_b+y<m_s
-M-04,V_max=2.5e6 m3 是单次工程上限（N4 的 3.8M cy 是“亏空+5 年”，不是 15 年）；C_max=1.2e8 USD 是 15 年维护估算，不是已批准预算,2.5e6/1.2e8,m3/USD,MODEL,,2026-11-09,derived,management,Q-41 建议 15 年总量 V_15=5.0e6；Q-33 的“不绑定”依赖把 V_max 当 15 年总量
+M-04,V15_total=5.0e6 m3（15 年总量）、V_event_max=2.9e6 m3（单次 5 年工程）、S_borrow_total=2.45e6 m3（本地沙源）；C_max=1.2e8 USD 是 15 年维护估算，不是已批准预算,5.0e6/2.9e6/2.45e6/1.2e8,"m3,m3,m3,USD",MODEL,,2026-11-09,derived,management,旧的单一 V_max=2.5e6 已废除；Q-33/Q-41 的三约束口径
 M-05,管理触发阈值 w_trig=w_mgmt+5=25 m,25,m,MODEL,,2026-11-09,derived,自适应触发,建筑风险另有 r<m_s+5 的硬触发；两者并列
 A-01,走廊长度 5000 m、中心 x=0 为热点,5000,m,ASSUME,,2026-11-09,assumption,domain,题面给定的代表性走廊，非政府规划区
 A-02,两侧各留 2000 m 缓冲,2000,m,ASSUME,,2026-11-09,assumption,domain,依据 建议.txt：避免'零通量虚假困沙'
@@ -28,7 +28,7 @@ A-05,特征破碎波入射角 8 deg,8,deg,ASSUME,,2026-11-09,assumption,K_cerc �
 A-06,净沿岸漂移 u = 50 m/yr（区间 0-150）,50,m/yr,ASSUME,,2026-11-09,assumption,u_drift,无输沙率资料下的量级假设；必须做 u=0 对照
 A-07,初始干滩宽度：远场 25 m，最窄 16 m，走廊均值 21.8 m（热点场，非均匀 25）,25/16/21.8,m,ASSUME,,2026-11-09,assumption,w0,无实测剖面；敏感性覆盖 15-40 m
 A-08,建筑退距 d_b=28 m、安全余量 m_s=8 m（距 2027 基准 MHW；ASSUME）,28/8,m,ASSUME,,2026-11-09,assumption,建筑净距 r=d_b+y,旧文写 30 m 且用它反推 w_crit；已废除该推导。无逐栋退距数据
-A-09,单次工程固定成本 800 万美元,8e6,USD,ASSUME,,2026-11-09,assumption,c0,用于制造'多次 vs 一次'权衡；无来源，属设计选择
+A-09,单次固定成本 c0：主算 0（all-in c1 已含动员/设计）；替代结构 0-10M USD；旧 8M 仅作历史上界,0,USD,ASSUME,,2026-11-09,assumption,c0,主算 c0=0（Q-42）；2026 Buxton/Avon all-in 单价 27.6/26.8 支持 c0 很小；8M 已废弃
 A-10,侵蚀性事件到达率 0.4 /yr,0.4,1/yr,ASSUME,,2026-11-09,assumption,lambda_s,仅计造成 >3 m 等效后退的事件；需用风暴年表校验
 A-11,单事件等效后退中位 8 m、P95 25 m,8/25,m,ASSUME,,2026-11-09,assumption,dy_ref,量级来自风暴后岸线变化文献；须补具体出处
 A-12,强度-侵蚀指数 gamma=1.5，饱和尺度 w_s=20 m,1.5/20,dimensionless/m,ASSUME,,2026-11-09,assumption,D3,结构性假设；做 gamma=1 与 2 的敏感性
@@ -91,9 +91,9 @@ X5,年度倒塌：2024 Rodanthe 7 栋；2025 Rodanthe 1 + Buxton 8；2026-02 Bux
 P4,由 Nags Head 2011 补沙几何反推 H：218 m3/m / 22.9 m = 9.5 m,9.5,m,MODEL,https://coastalscience.com/projects/nags-head/,2026-11-09,derived,H=10 的独立支持；Q-35,4.6e6 cy/10 mi=218 m3/m；实测加宽 75 ft；H_eff=9.5
 P5,Nags Head FEMA 参考深度 -19 ft NAVD 约 5.8 m（可测变化深度，非闭合深度）,5.8,m,OBS,https://coastalreview.org/2018/06/nags-head-oks-financing-2019-beach-work/,2026-11-09,verified-page,H 的下界参照,FEMA 口径；CSE 2013 p.57 同
 E13,NC DEQ 2025 更新（CRC 25-34）：全州 218 mi 侵蚀、侵蚀段平均 -4.2 ft/yr；Waves-Rodanthe setback factor 上调 1-1.5,+1~1.5,SBF,OBS,https://www.deq.nc.gov/coastal-management/crc-25-34-powerpoint/download?attachment=,2026-11-09,verified-fulltext,非平稳侵蚀；S3,2025-08-28 简报；SBF 是无量纲倍数，不能换算 m/yr；速率表为图片
-N21,Rodanthe 外海沙源（upper 7 ft）约 3.2e6 cy；Buxton 约 3.6e6 cy,2.45e6,m3,OBS,https://islandfreepress.org/wp-content/uploads/2025/03/DareCounty2013-12-20_UPDATEReport_REDUCED-1.pdf,2026-11-09,verified-fulltext,V_max 的物理上限；Q5 沙源约束,3.2M cy=2.45M m3，略低于 V_max=2.5M；15 年需求 3.8M cy 超过单一 borrow area
+N21,Rodanthe 外海沙源（upper 7 ft）约 3.2e6 cy；Buxton 约 3.6e6 cy,2.45e6,m3,OBS,https://islandfreepress.org/wp-content/uploads/2025/03/DareCounty2013-12-20_UPDATEReport_REDUCED-1.pdf,2026-11-09,verified-fulltext,S_borrow_total；Q5 沙源约束,3.2M cy=2.45M m3 是本地潜在储量；15 年需求 6.8M cy（5.2M m3）远超单一 borrow area；3.8M cy 是 5 年量，不是 15 年
 A-17,15 年模拟期 2027-2042（题面给定）,15,yr,ASSUME,,2026-11-09,problem-statement,T_sim,题面设定，不是自然观测
-A-18,管理滩宽阈值 w_mgmt=20 m（设计选择，独立于建筑退距）,20,m,ASSUME,,2026-11-09,assumption,w_crit 语义,不是观测；论文必须标 ASSUME
+A-18,管理滩宽阈值 w_mgmt=20 m（设计选择，独立于建筑退距）,20,m,ASSUME,,2026-11-09,assumption,w_mgmt,不是观测；论文必须标 ASSUME
 A-19,15 年总沙量 5.0e6 m3（由 N4 的 5 年方案外推：2.3M cy 亏空 + 15x0.3M cy ≈ 6.8M cy）,5.0e6,m3,ASSUME,,2026-11-09,assumption,V_15,Q-41/Q-33；旧 V_max=2.5M 是 5 年量
 A-20,本地可采沙源总量取 3.2M cy 的换算值 2.45e6 m3；可用率 0.8 后约 1.96e6 m3,2.45e6,m3,ASSUME,,2026-11-09,assumption,S_borrow_total,N21 为潜在储量；0.8 是勘探/许可/开采损失假设，非观测
 A-21,许可延迟 1.0 yr、批准到施工 0.75 yr、外调沙附加运输 3 $/m3,1.0/0.75/3,"yr,yr,USD/m3",ASSUME,,2026-11-09,assumption,permit/build/transport,无本地数据；按同类工程量级假设，敏感性 0.5-2 yr、0-10 $/m3
