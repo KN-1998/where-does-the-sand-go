@@ -69,6 +69,15 @@ $$
 
 **守恒校验**：$\Delta O+\Delta V_{\text{rec}}+\text{loss}=S$。这三行是 T1 能过 $10^{-12}$ 的关键，**不要**用 Euler 离散 $O$。
 
+> **P0-3：$O\to V$ 的恢复必须用"步平均量"接入 BE，不能把 $kO$ 当成速率直接塞进隐式方程。**
+> 记本步回滩量（m²）
+> $$
+> \boxed{\ R_n=\frac{k}{k+\lambda}\bigl(O^{n}-O^{n+1}+S\bigr)\ }
+> $$
+> 则 $y$ 方程的源项为 $+\dfrac{R_n}{H\,\Delta t}$（m/yr），**逐单元常数**，与隐式矩阵无关。
+> **禁止**三种写法：$kO^{n+1}/H$（高估，且把 $O$ 隐式耦合进三对角）、$kO^{n}/H$（低估）、$\frac{k}{H}\frac{O^n+O^{n+1}}{2}$（与 $O$ 的精确解不一致，T6 会漂）。
+> 自检：$\sum_i R_n/H\,\Delta t\cdot\Delta x$ 必须等于台账里的 `recovery_cum` 增量。
+
 > **为什么是 $(O^n+S)e^{-a\Delta t}$ 而不是"连续注入"式**：§2.4b 规定风暴沙在事件时刻**一次性**注入（$S$ 是总量 m²，不是速率），随后自由衰减。连续注入式 $O^n e^{-a\Delta t}+\frac{S}{\Delta t a}(1-e^{-a\Delta t})$ 会把事件摊到整个 $\Delta t$，与"即时"不符；两者相差约 $a\Delta t/2\approx0.8\%$，虽小但会让 T6 的 0.87 判据漂移。恢复/损失两式对两种写法都成立（都只依赖 $O^n,O^{n+1},S$）。
 
 ### 2.4 时间推进
@@ -89,13 +98,18 @@ $$
 4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}})$。**不能用 $w_{\text{eff}}+\Delta y_{\text{cut}}$**（会让 $w$ 跨过 0）；`dy_cut` 废弃。先因子、后上限。
 5. **空间足迹**：$S_k(x)=H\Delta y_k\,\phi_k(x)$。主算 $\phi_k=1$ 覆盖整个 9 km 域（区域风暴）；敏感性用 $\phi_k=\exp[-(x-x_k)^2/(2\sigma_e^2)]$，$\sigma_e=2$ km，$x_k\sim U(-L_b,L_b)$。`events.csv` 记 $x_k$、$\sigma_e$、中央/全域注入体积。**不得只给标量 $\Delta y$ 而不给足迹**。
 6. **注入**：$y\leftarrow y-\Delta y_k\phi_k$；$O\leftarrow O+H\Delta y_k\phi_k$；$S_k\ge0$。事件时刻按 §2.4 截到步边界。
-7. **干滩耗尽**：`w_raw=w0+y`，`w_eff=max(w_raw,0)`。`w_eff=0` 时该步风暴 $\Delta y=0$（无干滩沙；沙丘侵蚀不在模型内），但 **$L_c$、$O$ 的恢复/损失、边界通量、后续补沙全部继续**；`y` 可为负。`beach_exhausted` 只作诊断，不冻结、不删失。`risk_w=1{w_eff<w_mgmt}`，`risk_b=1{d_b+y<m_s}` 分开计算。
+7. **干滩耗尽**：`w_raw=w0+y`，`w_eff=max(w_raw,0)`。`w_eff=0` 时该步风暴 $\Delta y=0$（无干滩沙；沙丘侵蚀不由风暴项建模），但 **$L_c$、$O$ 的恢复/损失、边界通量、后续补沙全部继续**。
+   - `y` **可以**继续为负（侵蚀前锋进陆），**不加下限**；
+   - **下限加在 $V$ 上**：`V=max(V0+H*y, V0-H*w0)`，触底差额进 `R_c`（§2.4c）；
+   - `risk_w=1{w_eff<w_mgmt}`（耗尽后恒 1）；`risk_b=1{d_b+y<m_s}`（**按公式算，不强制 1**）。
 8. $R_k/\gamma$ 参数化只作敏感性；当前 `params.yaml` 未给 $R_{\text{ref}}$，**不作为主算**。
 
 **事件推进伪代码（必须按此顺序，禁止把 $S$ 放进连续步）**：
 
 ```
-t = 0;  next_event = sample_first_arrival()      # Poisson, 单位 yr
+t = 0
+apply_due_placements(0.0)                        # ★ 先做 t=0 投放，再抽样任何事件
+next_event = sample_first_arrival()              # Poisson, 单位 yr（严格 > 0）
 while t < T:
     t_stop = min(t + dt_max, next_event, T)      # 步长截到事件时刻
     h      = t_stop - t
@@ -110,6 +124,10 @@ while t < T:
     apply_due_placements(t)
 ```
 
+> **P0-4 顺序铁律**：$t=0$ 的投放必须发生在**第一次抽样之前**，否则第一行连续步会在"没有投放"的初始场上推进，且若手工把事件设到 $t=0$，风暴会先于投放执行。
+> 完整顺序固定为：`t=0 投放 → 抽样首个事件 → 截步 → 连续步 → 事件跳变 → 同一时刻的投放 → 记录 → 下一事件`。
+> 事件时刻若恰为 $t=0$（仅测试用），也必须在 `apply_due_placements(0)` **之后**注入。
+>
 > 默认 A/B/C 的补沙是**瞬时脉冲**（§2.5），所以连续步里 $I=0$。若以后实现 `ramp` 匀速投放，则 $I$ 进入连续步，且 `apply_due_placements` 只负责登记起止时刻，**不得再加同一笔**——两种模式只能选一种。
 
 - 浮点比较用 `abs(t - next_event) < 1e-9`，不要用 `==`。
@@ -121,24 +139,25 @@ while t < T:
 >
 > **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
 
-### 2.4c 非负性裁剪与退岸计数器（A2/D9，**必须实现**）
+### 2.4c 非负性裁剪与退岸计数器（A2/D9 + P0-2，**必须实现**）
 
-每个时间步的源汇更新之后、进入下一步之前：
+**裁剪对象是 $V$，不是 $y$。**
 
 ```python
-y_min = -w0(x)                       # 逐单元下限
-excess = (y_min - y)                 # >0 表示越界
-mask = excess > 0
-R_c[mask] += excess[mask] * H        # 退岸计数器，单位 m^2，单调不减
-y[mask] = y_min[mask]                # 裁剪
+V = V0 + H*y                      # 代数关系（仅在 y >= -w0 时成立）
+V_min = V0 - H*w0(x)              # 逐单元下界
+deficit = np.maximum(V_min - V, 0.0)
+if deficit.any():
+    R_c += deficit                # 退岸计数器，m^2，单调不减
+    V    = np.maximum(V, V_min)   # 裁剪
+    # y 不裁剪：y 继续表示侵蚀前锋，risk_b 用它
 ```
 
-- `R_c` **只增不减**；补沙抬升 $y$ 之后**不回退** $R_c$；
-- `ledger.csv` 增加一列 `R_c_cum`（区内 $\int R_c\,dx$，m³），并把它加进守恒式右端；
-- `exhausted_mask = (y - y_min < 1e-12)`，只在 `results.json` 与诊断里用；
-- **`y`、`V` 在 `exhausted` 单元不得作为物理量输出**：`fields.npz` 里这些格点要打一个 `exhausted[nt,nx]` 布尔掩膜，后处理一律先掩膜再用；
-- 风险指示**不删失**：`risk_w = (w_eff < w_mgmt)`、`risk_b = (r < m_s)` 在耗尽后恒为 1，继续累计。
-
+- `R_c` **只增不减**；补沙抬升 $y$ 后，一旦 $y>-w_0$，$V$ 重新由 $V_0+Hy$ 决定，但 `R_c` 不回退；
+- `ledger.csv` 增加 `R_c_cum`（区内 $\int R_c\,dx$，m³）并计入守恒式右端；
+- **通量限制器**：连续步装配前，把每个单元的可用存量算出来；若某步净流出使 $V<V_{\min}$，按比例缩放该单元的对岸通量，**未搬走的部分不记账**（不要"先搬再补"）。`Q_limited_cum` 只作诊断；
+- `exhausted = (V - V_min < 1e-12)`：该掩膜只用于**诊断与输出屏蔽**（$V$ 不再作物理量报告），**不冻结、不删失**；
+- `fields.npz` 输出 `exhausted[nt,nx]` 布尔掩膜；后处理引用 $V$ 前必须先掩膜。
 ### 2.5 补沙源项 $I$
 
 瞬时投放：在 $t_s$ 那一步把 $\Delta y=\mathcal{V}/(H\ell_s)$ 加到 $|x-x_c|\le\ell_s/2$ 的单元上（**按单元与投放区重叠长度加权，保证总量精确**）。
@@ -158,7 +177,10 @@ $$
 $$
 
 - **实际投放量为 0 的工程不收 $c_0$**（`if V_j <= 0: continue`）；
-- `external` 供沙情景另加 $c_{\text{transport}}=3$ USD/m³，**只加到 $c_1$ 上**：$\text{cost}\mathrel{+}=\sum c_{\text{transport}}\mathcal V_j$；
+- **外调沙的单价必须按结构分别算（P0-5）**：
+  - `all_in` + `external`：$c_1^{\text{eff}}=27+3=\mathbf{30}$ USD/m³；
+  - `marginal_plus_fixed` + `external`：$c_1^{\text{eff}}=11+3=\mathbf{14}$ USD/m³，**不是 30**；
+  - 外调成本**只加到 $c_1$ 上**，绝不能再乘一次或加到 $c_0$ 上。
 - 两种结构的输出目录必须不同（`results/E4_all_in/...`、`results/E4_marginal/...`），**不得**把两条成本曲线画在同一张图上；
 - $c_0^*$ **只在 `marginal_plus_fixed` 下输出**；`all_in` 下 `c0_star` 字段写 `null`，不要伪造。
 
@@ -301,7 +323,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
-| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min y \ge y_{\min}-10^{-9}$；(b) $R_c$ 单调不减；(c) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(d) `exhausted` 单元数与手算一致（热点约 5 年） | — |
+| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c=\int H[-w_0-y]^{+}d\tau$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
 | **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.214\pm0.002$、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
