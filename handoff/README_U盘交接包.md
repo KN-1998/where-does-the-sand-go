@@ -1,6 +1,6 @@
 # where-does-the-sand-go — U 盘交接包
 
-> 备份时间：2026-11-09（Round 5 资料库扩充后刷新）
+> 备份时间：2026-11-10（Round 8 第三轮审查整改后刷新）
 > 基准仓库：https://github.com/KN-1998/where-does-the-sand-go
 > 本地工作副本：`D:\where-does-the-sand-go`
 > 当前提交：见 `git/COMMIT.txt`（本次备份的 HEAD；Round 5 完成）
@@ -16,7 +16,7 @@ where-does-the-sand-go_handoff/
 │   ├─ 00_README_索引.md        ← 先看这个
 │   ├─ modeling/                ← MODEL_SPEC / NONDIM / DECISIONS / params / 审查
 │   ├─ handoff/                 ← CODER_SPEC（给编程手）/ WRITER_NOTES（给论文手）
-│   ├─ ledger/claims.csv        ← 98 条数字台账（68 OBS / 21 ASSUME / 9 MODEL）
+│   ├─ ledger/claims.csv        ← 103 条数字台账（69 OBS / 25 ASSUME / 9 MODEL）
 │   ├─ 资料/                    ← 数据主表、7 份摘录、USGS 岸线说明
 │   │   └─ 06_原始摘录/         ← _pdf（6 份全文）、_txt（提取文本）、_gis（USGS 岸线）
 │   └─ problem/                 ← 题目 PDF
@@ -37,15 +37,15 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 > bundle 是**全量**的（`--all`），不依赖 GitHub 也能完整恢复。
 > 若只想看文档，直接读 `docs/`，不需要 git。
 
-## 3. 当前状态（截至 2026-11-09）
+## 3. 当前状态（截至 2026-11-10）
 
 | 项 | 状态 |
 |---|---|
 | 题目拆解 | ✅ `modeling/CHECKLIST.md` |
-| 主模型 | ✅ v0.4 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签 |
+| 主模型 | ✅ v0.5 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签；耗尽态不冻结 |
 | 决策 | ✅ D1–D7 已签；D8 待签（主算成本结构 $c_0=0$，不再依赖 $c_0^*$） |
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
-| 台账 | ✅ **98 行**（68 OBS / 9 MODEL / 21 ASSUME） |
+| 台账 | ✅ **103 行**（69 OBS / 9 MODEL / 25 ASSUME） |
 | 解析基准 | ✅ 原型 `modeling/sanity/erf_prototype.py`，$T_p=6.15/7.33/7.36$ yr |
 | 独立验证集 | ✅ USGS 14 条岸线（1978–2002）已存入 `docs/资料/06_原始摘录/_gis/` |
 | 求解器 | ⛔ 未实现（编程手任务） |
@@ -53,23 +53,25 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 
 ## 4. 必须建模手拍板的事（按急迫度）
 
-| # | 事 | 影响 | agent 的建议 |
+| # | 事 | 影响 | 状态 / 建议 |
 |---|---|---|---|
-| **Q-33** | D7 预算不绑定：旧 $V_{\max}$ 三种语义混用 | E4/Q5 | **已定位**：拆为 $V_{15}=5.0$M 与 $V_{m event}=2.9$M；$N=1$ 买 2.9M、$N\ge2$ 买 4.44M；**不需要改 $C_{\max}$**。待签字 |
-| **Q-40–44** | 主风险指标、$V_{\max}$ 语义、成本口径、滩宽耗尽、本地速率 | 全部定量结论 | 见 `OPEN_QUESTIONS.md`；Q-40 建议"建筑净距 + 管理滩宽并列" |
-| **Q-38** | $c_0$ 证据区间是 0.5–4M（2026 Buxton/Avon 反推），8M 偏高 | E4 的 $c_0$ 扫描 | 扫描范围改 $[0,10]$M，8M 作上界 |
-| **Q-39** | `slr_base` 4.55 → NOAA 现行 **4.88**（1978–2023） | 基线/情景起点 | 改 4.88，4.55 作敏感性 |
-| **Q-34** | S2 的 `forced_dy=25` 是潜在还是实际后退 | S2 情景强度 | 论文写明"25 是 potential"，或对该事件关闭饱和 |
-| **Q-35** | $H=10$ vs Buxton 9.3 | 所有绝对米数 | **证据已加强（Nags Head 反推 9.5），建议结项：保留 10** |
-| **Q-36** | CERC 更正后 $D=3\times10^5$ 在下沿，$T_p$ 偏乐观 8–12% | 绝对值 | 保留 3e5 主算，论文并列 4.1e5 / 8e5 |
-| **Q-37** | $\rho_e$ 与显式风暴可能双计数（约 +0.35 m/yr） | 基线速率 | 口径 (i) 并在 Q3 做 L0 核对 |
+| **Q-33** | D7 三约束：$V_{15}=5.0$M、$V_{\text{event}}=2.9$M、$S_{\text{borrow}}=2.45$M | E4/Q5 | ✅ 已解决：本地沙主算最紧；外调沙 $N=1$ 2.9M、$N\ge2$ 4.0M；不需要改 $C_{\max}$ |
+| **Q-40** | 主风险指标：管理滩宽还是建筑净距 | Q1/Q5 全部口径 | 建议并列；Q5 主指标 $E_b+T_{\text{safe,cum}}^b$（**待建模手签字**） |
+| **Q-41** | $V_{\max}$ 语义 | E4 | ✅ 已拆为 $V_{15}$ / $V_{\text{event}}$ |
+| **Q-42** | 成本模型 | 策略排序 | ✅ 主算 all-in $c_1=27,c_0=0$；替代结构仅敏感性 |
+| **Q-43** | 滩宽耗尽 | 风险指标 | ✅ 不冻结：`w_eff=max(w,0)`，连续过程继续 |
+| **Q-44** | 本地 transect LRR（−3.43/−4.58）高于 $\rho_c=2.3$ | 全部 $T_p$ | 主算保留 2.3，敏感性覆盖 3.5–4.6；**待建模手决定** |
+| **Q-34** | S2 `forced_dy=25` | S2 强度 | ✅ 已定义：实际后退 25 m（代码反解潜在值） |
+| **Q-35** | $H=10$ vs Buxton 9.3 | 绝对米数 | 证据支持保留 10；待签字 |
+| **Q-36** | $D=3\times10^5$ 偏乐观 8–12% | 绝对值 | 保留 3e5 主算，论文并列 4.1e5 / 8e5 |
+| **Q-37** | $\rho_e$ 与风暴项可能双计数 | 基线速率 | 口径 (i) + Q3 用 L0 核对；未定 |
 
 ## 5. 编程手从哪开始
 
 1. 读 `docs/handoff/CODER_SPEC.md`（实现契约、接口、验收测试）。
 2. 按 **C-D4**：先 `zeroflux` 跑 T1（收支闭合）与 T3（零源项），再切 `open` 复验 T1。
 3. 风暴按 §2.4b 的**对数正态 $\Delta y_{\rm pot}$**，不要用 `0.5H` 截断。
-4. **E4 前先签 Q-33/Q-40/Q-41/Q-42**（$V_{15}/V_{m event}$、预算与成本口径）；E0–E3、E5–E7 与 T1–T8 不受影响；T9 优先用现成 `Hatteras_Transects.dbf` 的 LRR 字段。
+4. **E4 前先签 Q-40/Q-44**（主风险指标、本地速率）；Q-33/Q-41/Q-42 已按最新口径写入。E0–E3、E5–E7 与 T1–T10 不受影响；T9 优先用现成 `Hatteras_Transects.dbf` 的 LRR 字段。
 
 ## 6. 论文手从哪开始
 

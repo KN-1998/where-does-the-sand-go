@@ -5,7 +5,7 @@
 >
 > 配套：`modeling/MODEL_SPEC.md`（**模型合同**）、`modeling/NONDIM.md`（解析基准与对拍数值）、
 > `modeling/params.yaml`（参数）、`modeling/SCENARIOS_STRATEGIES.md`（情景与策略）。
-> 版本：v0.4（2026-11-09 审查后）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
+> 版本：v0.5（2026-11-10 第三轮审查后）。参数以 `params.yaml` 为准，本文中的数值若不一致以 yaml 为准。
 
 ---
 
@@ -86,8 +86,33 @@ $$
 4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}})$。**不能用 $w_{\text{eff}}+\Delta y_{\text{cut}}$**（会让 $w$ 跨过 0）；`dy_cut` 废弃。先因子、后上限。
 5. **空间足迹**：$S_k(x)=H\Delta y_k\,\phi_k(x)$。主算 $\phi_k=1$ 覆盖整个 9 km 域（区域风暴）；敏感性用 $\phi_k=\exp[-(x-x_k)^2/(2\sigma_e^2)]$，$\sigma_e=2$ km，$x_k\sim U(-L_b,L_b)$。`events.csv` 记 $x_k$、$\sigma_e$、中央/全域注入体积。**不得只给标量 $\Delta y$ 而不给足迹**。
 6. **注入**：$y\leftarrow y-\Delta y_k\phi_k$；$O\leftarrow O+H\Delta y_k\phi_k$；$S_k\ge0$。事件时刻按 §2.4 截到步边界。
-7. **耗尽（吸收态）**：任何单元到 $w=0$ 即 `beach_exhausted`；此后该单元风险恒为 1、状态冻结、不再补沙，但 **$E$ 继续积分到 15 年**。$T_p$ 对耗尽样本右删失（报告"15 年内未恢复"的比例），不能当无穷大。
+7. **干滩耗尽**：`w_raw=w0+y`，`w_eff=max(w_raw,0)`。`w_eff=0` 时该步风暴 $\Delta y=0$（无干滩沙；沙丘侵蚀不在模型内），但 **$L_c$、$O$ 的恢复/损失、边界通量、后续补沙全部继续**；`y` 可为负。`beach_exhausted` 只作诊断，不冻结、不删失。`risk_w=1{w_eff<w_mgmt}`，`risk_b=1{d_b+y<m_s}` 分开计算。
 8. $R_k/\gamma$ 参数化只作敏感性；当前 `params.yaml` 未给 $R_{\text{ref}}$，**不作为主算**。
+
+**事件推进伪代码（必须按此顺序，禁止把 $S$ 放进连续步）**：
+
+```
+t = 0;  next_event = sample_first_arrival()      # Poisson, 单位 yr
+while t < T:
+    t_stop = min(t + dt_max, next_event, T)      # 步长截到事件时刻
+    h      = t_stop - t
+    # (1) 连续步：BE 解 [t, t_stop)，源项只有 -Lc；I=0、S=0
+    solve_BE(h)                                  # 扩散 + 漂移 + Lc + 边界
+    t = t_stop
+    # (2) 跳变：仅当 t 到达事件时刻，注入一次
+    if abs(t - next_event) < 1e-9:
+        apply_storm_once()                       # y -= dy_k*phi; O += H*dy_k*phi
+        next_event = t + sample_interarrival()   # 用同一个 RNG 流
+    # (3) 同一时刻若有补沙计划，放在风暴跳变之后；瞬时加 y，不经过 BE 源项
+    apply_due_placements(t)
+```
+
+> 默认 A/B/C 的补沙是**瞬时脉冲**（§2.5），所以连续步里 $I=0$。若以后实现 `ramp` 匀速投放，则 $I$ 进入连续步，且 `apply_due_placements` 只负责登记起止时刻，**不得再加同一笔**——两种模式只能选一种。
+
+- 浮点比较用 `abs(t - next_event) < 1e-9`，不要用 `==`。
+- 事件**只注入一次**：`apply_storm_once()` 内部不推进时间，也不再次抽样。
+- 若事件恰好落在 $t=T$（模拟终点），仍须注入并记账；不得因循环结束而丢弃。
+- 连续步中的 $L_c$、$O$ 恢复/损失用**跳变后**的 $O$ 进入下一步（§2.4a 的 $(O^n+S)e^{-a\Delta t}$ 即等价写法）。
 
 > **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w)$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w$ 太窄以致 $25>w$，取 $w$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
 >
@@ -99,17 +124,35 @@ $$
 
 > ⚠ 常见 bug：用 `x_c ± l/2` 直接 `np.where` 会把边界单元整格计入，导致总方量误差 1–2%，T1 直接不过。
 
+**每次投放的可行量（必须按顺序取 min，且记账）**：
+
+```
+V_j = min( V_desired,
+           V_event_max,
+           V15_total   - V_used,
+           S_cap       - S_used,          # S_cap = a_borrow*S_borrow_total (local)
+                                          #       = V15_total (external)
+           (C_max - cost_used - c0) / c1_eff )
+c1_eff = c1                       # cost_model = all_in
+       = c1 + c_transport          # supply_scenario = external
+       = c1 + c_transport          # marginal_plus_fixed 也照加
+```
+
+- `local` 主算：`S_cap = 1.0 × 2.45e6`（可用率 0.8 仅敏感性）；`external`：`S_cap = V15_total`。
+- 若 `V_j < V_min_meaningful`（例如低于 1e5 m³），**不得静默投放**：记录 `skipped_reason`，策略 A/B/C 的对比必须报告实际投放总量与设计总量的差。
+- 每次投放后更新 `V_used += V_j`、`S_used += V_j`、`cost_used += c0 + c1_eff*V_j`；`permit_delay`/`tau_build` 只影响**批准到施工**的时间，不改变方量。
+
 ### 2.6 边界条件（三套，`--bc` 切换）
 
 | 代码 | 实现 |
 |---|---|
-| `open`（默认） | **扩散**：零梯度 ghost $y_{\text{ghost}}=y_0$（不是 $2y_0-y_1$；后者给梯度 $(y_1-y_0)/\Delta x\neq0$）。**对流**：$u>0$ 时左端入流需要上游状态，取 $y_{\text{ghost}}=y_0$（或情景给定的上游值），右端出流用 $y_N$；$u<0$ 镜像。**边界体积通量**记 `flux += H*F*dt`（m³），不是 $F\,dt$（m²） |
+| `open`（默认） | **扩散**：零梯度 ghost $y_{\text{ghost}}=y_0$（$y_0$ = **第一个内点** `y[0]`，不是初值；不是 $2y_0-y_1$，后者给梯度 $(y_1-y_0)/\Delta x\neq0$）。**对流**：$u>0$ 时左端入流需要上游状态，取 $y_{\text{ghost}}=y_0$（或情景给定的上游值），右端出流用 $y_N$；$u<0$ 镜像。**边界体积通量**记 `flux += H*F*dt`（m³），不是 $F\,dt$（m²） |
 | `zeroflux` | **直接把总面通量置零**：$F_{\text{boundary}}=0$（扩散+对流都为零）。只设镜像 ghost 只零掉扩散项 |
-| `dirichlet` | 若给定的是**物理边界面值** $y_b$，则 ghost $=2y_b-y_0$（不是 $y_b$）；面通量按上式正常计算 |
+| `dirichlet` | 若给定的是**物理边界面值** $y_b$，则 ghost $=2y_b-y_0$（$y_0$ = 第一个内点 `y[0]`；不是 $y_b$）；面通量按上式正常计算 |
 
 > **单位（审查 P0）**：$F=u y-Dy_x$ 的单位是 m²/yr；账本存量是 m³。累计边界体积必须是 $H F\Delta t$。接口里只做一次转换，不要在两处各乘一次。
 >
-> **不要**在面通量里再加 $Q_\infty$：$Q_0$ 的空间梯度已经并入 $L_c=\rho_e H$，再加一次就是双计数。
+> **不要**在面通量里再加 $Q_\infty$：$\tilde Q_0=Q_0+D V_{0,x}$ 的空间梯度已经并入 $L_c=\rho_e H$，再加一次就是双计数。若 $V_0$ 沿岸变化，面通量的扩散部分仍用 $D H y_x$；不要改写成 $D V_x$ 而漏掉 $V_{0,x}$。
 >
 > **T7 不再断言"zeroflux 留存一定更高"**：无净输送、边界未受扰或有入流时两者可相等。改用一个**有已知外流**的算例：初始在域中心放一个凸起、$u>0$、$D>0$，用解析/半解析估计边界流出量，比较 `open` 的 `flux` 台账与估计值；`zeroflux` 只作为"流出为零"的对照。
 
@@ -178,7 +221,7 @@ overrides:                   # 任何 params.yaml 里的键
 
 | 文件 | 内容 | 形状/单位 |
 |---|---|---|
-| `results.json` | 标量结果：$T_p$ 分位、$E$、留存率、成本、参数快照 | — |
+| `results.json` | 标量结果：四个时长指标（`T_first_fail_w/b`、`T_safe_cum_w/b`、`T_recovery`）、$E_w/E_b$、留存率、成本、参数快照。**不得再输出含糊的 `T_p` 字段**；解析基准的 $T_p$ 只能出现在 validation 报告里 | — |
 | `fields.npz` | `y[nt,nx]` [m]、`O[nt,nx]` [m²]、`w[nt,nx]` [m]、`x[nx]` [m]、`t[nt]` [yr] | float32（体积考虑） |
 | `ledger.csv` | 逐时间步的沙量台账（见 §4.3） | — |
 | `events.csv` | 每次风暴：$t_k$、$\Delta y_{\rm pot}$、$\Delta y_k$、$x_k$、$\sigma_e$、中央 5 km/全域 9 km 的注入体积（m³）、耗尽单元数 | — |
@@ -219,6 +262,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T7** | 边界通量 | 初始中心凸起、$u>0,D>0$ 的**已知外流**算例 | `open` 的 `flux_outer` 与半解析估计差 $<10\%$；`zeroflux` 的 `flux=0` | 不比较"留存率高低" |
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
+| **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 
@@ -268,19 +312,18 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | E1 | `--scenario S1 --strategy {A,B,C}` | 三方案对照表 + 沙去向堆叠图 |
 | E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | $T_p$ 分位、$E$ 分位 |
 | E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_p$、min $w$、2042 年 $w$） |
-| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive}`，并对 $c_0\in[0,10]$ M\$ 扫描（Q-38 建议；未批前可按 $[3,15]$ 跑，但必须同时给 $[0,10]$） | 三策略同约束对比 + $c_0^*$ 交叉点 + 成本 |
+| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive} --supply {local,external} --cost-model {all_in,marginal_plus_fixed}`。**主算 `all_in`（$c_1=27,c_0=0$）**；$c_0\in[0,10]$ M\$ 扫描**只在 `marginal_plus_fixed` 下做**，不得与 `all_in` 混算 | 三策略同约束对比 + 成本；`marginal_plus_fixed` 才输出 $c_0^*$ 交叉点 |
 | E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}`；另做 **域大小敏感性**：$L_b=4.5$ km vs $7$ km（中央 5 km 指标差异 >5% 则报告） | 边界/缓冲敏感性表 |
 | E7 | $\mathcal{V}\in[1e5,5e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |
 
-> **Q-33 已解决（2026-11-09）**：符号拆成 $V_{15,\text{total}}=5.0$M（15 年总量）与 $V_{\text{event,max}}=2.9$M（单次 5 年工程）。$C_{\max}=120$M、$c_1=27$、$c_0=0$ 时：
-> - $N=1$：$\min(5,2.9,4.44)=2.9$M（单次上限绑定）
-> - $N=2$：$\min(5,5.8,4.44)=4.44$M（预算绑定）
-> - $N=3$：$\min(5,8.7,4.44)=4.44$M（预算绑定）
+> **Q-33 已解决（2026-11-09，第三轮补沙源约束）**：符号拆成 $V_{15,\text{total}}=5.0$M（15 年总量）、$V_{\text{event,max}}=2.9$M（单次 5 年工程）、$S_{\text{borrow,total}}=2.45$M（本地沙源）。$C_{\max}=120$M、$c_1=27$、$c_0=0$ 时：
+> - **本地沙（主算）**：$N=1$ 为 $\min(5,2.9,2.45,4.44)=2.45$M（沙源绑定）；$N\ge2$ 仍为 2.45M（沙源绑定）。三策略都只能用 2.45M，差别在时机与空间分配。
+> - **外调沙（情景）**：$N=1$ 为 $\min(5,2.9,5.0,4.0)=2.9$M（单次上限绑定）；$N=2,3$ 为 $\min(5,5.8/8.7,5.0,4.0)=4.0$M（预算绑定；外调 $c_1^{\text{eff}}=30$）。
 >
-> 主算 $c_0=0$ 时，N≥2 的可买总量相同（4.44M），差别只在**时机**；这正是"固定成本不是唯一机制"的体现。
+> 主算 `all_in` 且 $c_0=0$：外调沙下 $N\ge2$ 可买总量相同（4.0M），差别只在**时机**；本地沙下所有 $N$ 都受 2.45M 约束。$c_0>0$ 只在 `marginal_plus_fixed` 下扫描，主算没有 $c_0^*$。
 >
-> **不需要改 $C_{\max}$**。$c_0>0$ 只作替代成本结构的敏感性；主算没有 $c_0^*$。
+> **不需要改 $C_{\max}$**。
 
 ### 7.2 出图规格（论文手直接用）
 

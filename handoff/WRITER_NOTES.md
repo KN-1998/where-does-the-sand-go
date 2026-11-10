@@ -21,7 +21,7 @@
 **要证明什么**：我们能用一个可测量、可验证、且**能同时容纳长期趋势与风暴扰动**的框架描述未干预海滩。
 
 **论证链**：
-1. 选三个指标：岸线位置 $y$、干滩宽度 $w$、剖面沙量 $V$。**它们换算关系显式**：$V=V_0+H(y-y_0)$，$H=h_*+B$。（→ 直接回应 "not interchangeable"）
+1. 选三个指标：岸线位置 $y$（相对 2027 基准的异常）、干滩宽度 $w$、剖面沙量 $V$。**它们换算关系显式**：$V=V_0+H\,y$、$w=w_0+y$，$H=h_*+B$。（→ 直接回应 "not interchangeable"；**不要再写 $y-y_0$**，本模型 $y$ 已是异常）
 2. 用 Pelnard-Considère 的线性化输沙得到扩散方程；把**长期趋势**放进 $\rho_e$（观测速率），把**风暴**放进事件脉冲 + $O$ 状态。
 3. 边界条件**不是**随手零通量：给三套并解释偏误方向（零通量会把沙虚假困住 → 正是题面警告的"把问题藏起来"）。
 4. 风险映射：$w$ 与建筑退距、爬高余量比较。
@@ -84,8 +84,12 @@
 
 ```latex
 % 状态与换算
-V(x,t) = V_0(x) + \bigl(h_*+B\bigr)\bigl[y(x,t)-y_0(x)\bigr], \qquad
-w(x,t) = w_0(x) + \bigl[y(x,t)-y_0(x)\bigr]
+V(x,t) = V_0(x) + \bigl(h_*+B\bigr)y(x,t), \qquad
+w(x,t) = w_0(x) + y(x,t)
+
+% 输沙（注意 \tilde Q_0 含 D V_{0,x}；若 V_0 沿岸均匀则 \tilde Q_0=Q_0）
+Q = \tilde Q_0 - D\,\frac{\partial V}{\partial x},
+\qquad \tilde Q_0 \equiv Q_0 + D\,\frac{\partial V_0}{\partial x}
 
 % 控制方程
 \frac{\partial V}{\partial t}
@@ -177,7 +181,7 @@ E_b = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{r<m_s\}\,dx\,dt
 | $\lambda$ | 沙库永久离岸损失率 | yr⁻¹ |
 | $\ell$ | 投放段长 | m |
 | $\mathcal{V}$ | 补沙总方量 | m³ |
-| $T_p$ | 有效保护期 | yr |
+| $T_p$ | 保护期（仅无风暴单调侵蚀时 = 首次失守；与累计安全时间分开） | yr |
 | $w_{\text{mgmt}}$ | 管理滩宽阈值（独立 ASSUME） | m |
 | $r$ | 建筑净距 $=d_b+y$ | m |
 | $E$ | 风险暴露（长度×时间） | m·yr |
@@ -215,7 +219,7 @@ E_b = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{r<m_s\}\,dx\,dt
 | $c_0$（仅敏感性） | 0 | \$ | 0–10 ×10⁶ | ASSUME |
 | $T_{\min}$ | 3 | yr | 2–5 | ASSUME |
 
-> **$C_{\max}$ 注意事项（2026-11-09 更正）**：$V_{15,\text{total}}=5.0$M 是 15 年总量，$V_{\text{event,max}}=2.9$M 是单次 5 年工程。以 $C_{\max}=1.2\times10^8$、$c_1=27$、$c_0=0$ 计，$N=1$ 买 2.9M（单次上限）、$N\ge2$ 买 4.44M（预算）。**不要**把 $C_{\max}$ 改成 60M；主算没有 $c_0^*$。
+> **$C_{\max}$ 注意事项（2026-11-09 更正）**：$V_{15,\text{total}}=5.0$M 是 15 年总量，$V_{\text{event,max}}=2.9$M 是单次 5 年工程。以 $C_{\max}=1.2\times10^8$、$c_1=27$、$c_0=0$ 计，$N=1$ 买 2.9M（单次上限）、$N\ge2$ 买 4.0M（预算；外调沙另加 3 \$/m³ 运输）。**不要**把 $C_{\max}$ 改成 60M；主算没有 $c_0^*$。
 
 > 表注必须写："OBS = based on public data (see references and access dates); MODEL = derived from a stated physical relation; ASSUME = a labelled modelling choice with a sensitivity range."
 
@@ -323,7 +327,7 @@ E_b = \int_0^{T}\int_{-L/2}^{L/2}\mathbb{1}\{r<m_s\}\,dx\,dt
 **不能写**：
 - "完整模型已验证""T1–T9 已通过""E0–E7 已完成"；
 - 建筑净距口径的 $T_p$、$E$、A/B/C 排序（**尚未重算**）；
-- 耗尽后的 15 年累计风险（吸收态刚定义，未实现）；
+- 耗尽后的 15 年累计风险（不冻结口径已定义，未实现）；
 - "第一场风暴决定大半收益""某策略恒优""物理撤退判据已触发"；
 - 把 $E$ 的降低说成房屋倒塌概率或美元收益（$E$ 是长度加权，不是资产加权）。
 
