@@ -113,7 +113,8 @@ next_event = sample_first_arrival()              # Poisson, 单位 yr（严格 >
 while t < T:
     t_stop = min(t + dt_max, next_event, T)      # 步长截到事件时刻
     h      = t_stop - t
-    # (1) 连续步：BE 解 [t, t_stop)，源项为 -Lc + kO/H；I=0、S=0
+    # (1) 连续步：BE 解 [t, t_stop)，源项为 -Lc + R_n/(H*dt)；I=0、S=0
+    #     R_n = k/(k+lambda)*(O^n - O^{n+1} + S)  ← 步平均，见 §2.3
     solve_BE(h)                                  # 扩散 + 漂移 + Lc + kO 恢复 + 边界
     t = t_stop
     # (2) 跳变：仅当 t 到达事件时刻，注入一次
@@ -164,7 +165,7 @@ if deficit.any():
 
 > ⚠ 常见 bug：用 `x_c ± l/2` 直接 `np.where` 会把边界单元整格计入，导致总方量误差 1–2%，T1 直接不过。
 
-### 2.5b 成本模型（A6/D12，两种结构**分开**算）
+### 2.5b 成本模型（A6/D18，两种结构**分开**算）
 
 $$
 \text{cost}_{\text{all\_in}}=\sum_{j:\ \mathcal V_j>0} c_1\,\mathcal V_j
@@ -324,7 +325,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
 | **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c=\int H[-w_0-y]^{+}d\tau$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
-| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.214\pm0.002$、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
+| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036\pm0.002$（$1518/5000$）、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 

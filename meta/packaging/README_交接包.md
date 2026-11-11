@@ -50,7 +50,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 |---|---|
 | 题目拆解 | ✅ `modeling/CHECKLIST.md` |
 | 主模型 | ✅ v0.6 双状态（V 活跃剖面（不含 O）+ O 近岸沙坝），D1 已签；耗尽态不冻结 |
-| 决策 | ✅ D1–D7 已签；D8 待签（主算成本结构 $c_0=0$，不再依赖 $c_0^*$） |
+| 决策 | ✅ **D1–D18 全部已定**（D9–D14 建模手 2026-11-10；D15–D18 执行口径 2026-11-11）；主算 $c_0=0$ |
 | 参数 | ✅ `modeling/params.yaml`（YAML 可解析，全部带单位/区间/来源） |
 | 台账 | ✅ **103 行**（69 OBS / 9 MODEL / 25 ASSUME） |
 | 解析基准 | ✅ 原型 `modeling/sanity/erf_prototype.py`，$T_p=6.15/7.33/7.36$ yr |
@@ -69,7 +69,7 @@ git remote add origin https://github.com/KN-1998/where-does-the-sand-go.git
 | **Q-43** | 滩宽耗尽 | 风险指标 | ✅ 不冻结：`w_eff=max(w,0)`，连续过程继续 |
 | **Q-44** | 本地 transect LRR（−3.43/−4.58）高于 $\rho_c=2.3$ | 全部时长指标 | 主算保留 2.3，敏感性覆盖 3.5–4.6；**待建模手决定** |
 | **Q-34** | S2 `forced_dy=25` | S2 强度 | ✅ 已定义：实际后退 25 m（代码反解潜在值） |
-| **Q-35** | $H=10$ vs Buxton 9.3 | 绝对米数 | 证据支持保留 10；待签字 |
+| **Q-35** | $H=10$ vs Buxton 9.3 | 绝对米数 | ✅ 已定（D9）：保留 10，敏感性 8–12 |
 | **Q-36** | $D=3\times10^5$ 偏乐观 8–12% | 绝对值 | 保留 3e5 主算，论文并列 4.1e5 / 8e5 |
 | **Q-37** | $\rho_e$ 与风暴项可能双计数 | 基线速率 | 口径 (i) + Q3 用 L0 核对；未定 |
 

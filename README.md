@@ -123,7 +123,7 @@ python erf_prototype.py > results.txt     # 约 1 秒
   `PARAM_EVIDENCE.md`、`VALIDATION_PLAN.md`、`SCENARIOS_STRATEGIES.md`、`meta/reviews/REVIEW.md`
 - **交接包已完成**：`handoff/CODER_SPEC.md`（→ 编程手）、`handoff/WRITER_NOTES.md`（→ 论文手）、
   `handoff/README_交接说明.md`（交接包说明）
-- `DECISIONS.md` 中 **D1–D7 已签**（2026-11-09）；**D8 待签，但不依赖 $c_0^*$**（主算 `all_in` 下无 $c_0^*$）；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
+- `DECISIONS.md` 中 **D1–D18 全部已定**（D1–D8 于 2026-11-09/10；D9–D14 由建模手 2026-11-10 落笔；D15–D18 为执行口径，2026-11-11）；**D8 按 A5 改写后不再依赖 $c_0^*$**（主算 `all_in` 下无 $c_0^*$）；未定项按"推荐项"推进并标注依赖（见 `OPEN_QUESTIONS.md`）
 - ✅ 已通过：erf 解析基准与原型一致；守恒有限体积的质量守恒到机器精度（1e-16）；匀铺可行性判据有闭式解
 - ⛔ 未通过：M2（求解器尚未实现，收支闭合与收敛测试未跑）；台账 **103 行（69 OBS / 9 MODEL / 25 ASSUME）**，其中 2 条 `need-manual-check`、20 条仅搜索摘要、1 条二手转引（S4）
 - 红队第 1 轮（口径已修）：**3 Pass（文档层）/ 12 Partial / 0 Fail** —— **"Pass"必须由数值结果支撑，现在拿不到**（见 `meta/reviews/REVIEW.md`）

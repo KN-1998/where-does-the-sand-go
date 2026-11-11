@@ -56,4 +56,4 @@
 ## 6. 状态
 
 见 `PROGRESS.md`。当前：阶段 0–4 文档完成；求解器与实验**未开始**（等编程手）。
-`modeling/DECISIONS.md` 中 **D1–D7 已签**（2026-11-09）；**D8 待签，但不依赖 $c_0^*$**。Q-33/Q-41/Q-42 已解决；**E4 前仍需签 Q-40（主风险口径）与 Q-44（本地 LRR）**，见 `OPEN_QUESTIONS.md`。
+`modeling/DECISIONS.md` 中 **D1–D18 全部已定**；D8 按 A5 改写后不再依赖 $c_0^*$。Q-33/Q-41/Q-42 已解决；**E4 前仍需签 Q-40（主风险口径）与 Q-44（本地 LRR）**，见 `OPEN_QUESTIONS.md`。

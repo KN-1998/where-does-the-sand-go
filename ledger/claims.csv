@@ -14,7 +14,7 @@ O-12,补沙单位成本 15-35 USD/cy（2020s 美国东岸）,15-35,USD/cy,OBS,,2
 O-13,NOAA 潮位站相对海平面趋势表（NC 站）,null,null,OBS,https://tidesandcurrents.noaa.gov/sltrends/sltrends_states.shtml?region=nc,2026-11-09,superseded,slr_base,页面为 JS 渲染，未取到具体 mm/yr；必须人工读 Oregon Inlet(8652587)/Duck(8651370) 数值 | 已被 S1-S3 取代/细化
 O-14,Beaufort NC 相对海平面 3.1 mm/yr（1953-2018）,3.1,mm/yr,OBS,https://ncseagrant.ncsu.edu/coastwatch/land-versus-sea/,2026-11-09,superseded,slr_base,仅作量级参照；Beaufort 与外滩不同站，不可直接替换 | 已被 S3 取代/细化
 O-15,NC 海平面上升评估报告：相对海平面速率在北卡北部（Cape Hatteras 以北）更高,null,null,OBS,https://www.deq.nc.gov/documents/pdf/science-panel/2015-nc-slr-assessment-final-report-jan-28-2016/download,2026-11-09,snippet-only,slr_base + D-4 讨论,支持'区域 SLR != 局地后退'的论证
-O-17,Frazer et al. 2009 GRL "Modeling storms improves estimates of long-term shoreline change"：风暴驱动的永久变化隐含在长期趋势中，只显式建模 transient 部分,--,OBS,https://doi.org/10.1029/2009GL040061,2026-11-10,verified-fulltext,双计数论证 (D11/Q-37),全文已获取 (dee7894e-1)
+O-17,"Frazer et al. 2009 GRL ""Modeling storms improves estimates of long-term shoreline change""：风暴驱动的永久变化隐含在长期趋势中，只显式建模 transient 部分",--,OBS,https://doi.org/10.1029/2009GL040061,2026-11-10,verified-fulltext,双计数论证 (D11/Q-37),全文已获取 (dee7894e-1)
 O-18,Nags Head 2011 填沙几何：4.6M cy / 10 mi / +75 ft 独立反推 H=9.5 m,9.5,m,OBS,http://hdl.handle.net/11681/2135,2026-11-10,verified-page,H_dep (Q-35/P4),CSE 2011 报告几何反推
 O-19,Nags Head 2007 BA：closure depth -18 ft NGVD ≈ 5.5 m + profile volumes 473-561 cy/ft,5.5,m,OBS,https://www.nagsheadnc.gov/DocumentCenter/View/433/Attachment-3---Project-Purpose-and-Design-Basis-PDF,2026-11-10,verified-page,h_star 锚点 (Q-35),CSE 2005a 数据
 O-20,Buxton 2017-18 设计闭合深度 -7.3 m NAVD,-7.3,m,OBS,https://connect.ncdot.gov/resources/PROTECT2023-NC12/Documents/2022%20Coastal%20Monitoring%20Program.pdf,2026-11-10,verified-page,h_star 锚点 (Q-35/P1),NCDOT 监测报告
@@ -108,3 +108,4 @@ E14,USGS 现成 transect LRR（Rodanthe 5 km 窗口，n=101）：1978-2002 均�
 A-24,触发规则的监测与聚合参数（sigma_m=3 m、delta_f=0.10、f_thr=0.5、冷却 1 yr）,3/0.10/0.5/1.0,m/-/-/yr,ASSUME,,2026-11-10,assumption,D8 触发规则 / MODEL_SPEC §6.3,无实测监测精度；按 RTK-GPS 剖面典型 1-5 m 取值，敏感性覆盖 1.5-5 m
 M-10,去双计数的背景侵蚀率 rho_bg = rho_obs - lambda_s*E[dy]*lambda/(k+lambda),1.283,m/yr,MODEL,,2026-11-10,derived,主算 rho_e,=1.7-0.417；见 MODEL_SPEC §3.7 / DECISIONS D11
 M-11,风暴年均永久贡献 rho_storm 与热点放大 a_h,0.522 / 1.78,m/yr / -,MODEL,,2026-11-10,derived,rho_e / a_h,E[dy]=10.2 取对数正态均值（非中位 8），截断后 9.5-10.2；rho_storm=0.4*10*0.1304=0.522；a_h 由 DEQ 热点 3.8 反解；rho_bg=1.18 属 MODEL-APPROX 非已验证
+O-16,泥沙与破碎参数：s=2.65（石英）、p=0.4、gamma_b=0.78（SPM）,2.65/0.4/0.78,-,OBS,,2026-11-10,textbook,K_c 换算 / D,教科书常值（USACE SPM 1984；Dean & Dalrymple 2002）；论文手需补正式引用
