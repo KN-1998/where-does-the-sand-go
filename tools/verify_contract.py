@@ -143,13 +143,17 @@ def main():
 
     chk("CODER 有全局数值口径 §3.5", "3.5 全局数值口径约定" in coder)
     chk("CODER 有足迹归一化 §2.4d", "2.4d 风暴足迹" in coder)
-    chk("S2 用相对投放时刻", "forced_event_after_first_placement" in coder)
-    chk("params 无绝对 forced_event_at", "forced_event_at:" not in open(
+    chk("R_c 为峰值亏空（非积分）", "峰值亏空" in coder and "峰值亏空" in mspec)
+    chk("网格 360 格", "nx  = 360" in coder)
+    chk("原型含断言与退出码", "sys.exit(main())" in open(
+        os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
+    chk("S2 用绝对 2.25 + 共享事件表", "t=2.25" in coder and "shared_per_scenario" in coder)
+    chk("params 事件表需共享", "shared_per_scenario" in open(
         os.path.join(ROOT, "modeling", "params.yaml"), encoding="utf-8").read())
     num = P["numerics"]
     for k in ("metric_domain", "phi_shape", "seed_rule", "placement_time_rule"):
         chk(f"numerics.{k} 已定义", k in num)
-    chk("T12 已按离散容差说明", "0.3050" in coder)
+    chk("T12 已按 360 格离散值 0.3000", "0.3000" in coder)
     chk("discrete_contract 含投放/风暴测试", "def place(" in open(
         os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
 

@@ -246,14 +246,17 @@ V_{\min}=V_{\text{ref}}-H\,w_0\ }
 $$
 
 $$
-\boxed{\;R_c^{\,n+1}=R_c^{\,n}+\bigl[\,V_{\min}-V^{\,n+1,\text{trial}}\,\bigr]^{+},
-\qquad
-V^{\,n+1}=\max\bigl\{V^{\,n+1,\text{trial}},\ V_{\min}\bigr\}\;}
+\boxed{\;V^{\,n+1}_{\text{abs}}=V_{\text{ref}}+H\,y^{\,n+1},\qquad
+V^{\,n+1}_{\text{book}}=\max\bigl\{V^{\,n+1}_{\text{abs}},\ V_{\min}\bigr\},\qquad
+R_c^{\,n+1}=\max\Bigl\{\,R_c^{\,n},\ \bigl[V_{\min}-V^{\,n+1}_{\text{abs}}\bigr]^{+}\Bigr\}\;}
 $$
 
-其中 $V^{\,n+1,\text{trial}}$ 是**本步**源汇与通量更新后、裁剪前的存量。$R_c$ 单位 m²，是**逐步累加的计数器**。
+- $y$ **不裁剪**（侵蚀前锋），$V_{\text{abs}}$ 可以变负；
+- **$R_c$ 取峰值亏空（历史最大亏空）**，即 `R_c = max(R_c_prev, current_deficit)`。这天然单调、且**不会把同一份亏空重复累加**；
+- 台账用 $V_{\text{book}}$（≥ $V_{\min}$）。
 
 > ⚠ **不是时间积分**。旧式 $R_c=\int H[-w_0-y]^{+}dt$ 有两个错：量纲变成 m²·yr；且只要 $y<-w_0$ 持续，每个时间步都会把**同一份亏空**重复加一次。
+> 也不能写成 `R_c += deficit`（每步加一次现值）——那是把亏空当流量，同样重复计。
 > 离散自洽恒等式（必须逐单元成立到 $10^{-12}$）：
 > $$V^{\,n+1}-V^{\,n}=\Delta t\Bigl[-\partial_x Q+I-S+kO-L_c\Bigr]^{\,n,n+1}+\bigl(R_c^{\,n+1}-R_c^{\,n}\bigr).$$
 > 即"存量变化 = 源汇 + 通量 + 被计入退岸计数器的亏空"，三项必须闭合。

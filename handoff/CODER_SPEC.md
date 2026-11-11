@@ -68,7 +68,8 @@
 ### 2.0 初始化场与情景时变（**照抄，不要自己发明**）
 
 ```python
-x   = np.linspace(-Lb, Lb, nx)          # Lb=4500, dx=25
+nx  = 360; Lb = 4500.0; dx = 25.0
+x   = -Lb + dx/2 + dx*np.arange(nx)     # 360 个控制体中心；ΣΔx = 9000 m
 w0  = w_far - (w_far - w_min) * np.exp(-x**2 / (2*sigma_w**2))     # 25,16,700
 rho_base = rho_e * (1 + a_h * np.exp(-x**2 / (2*sigma_h**2)))      # 1.7,1.2,600
 y0  = np.zeros(nx)                       # 岸线异常，单位 m
@@ -79,7 +80,8 @@ w   = w0 + y                             # 干滩宽度
 ```
 
 - $H=h_*+B=10$ m；`V = V0 + H*y` 只允许出现在**这一个函数**里（`units.py`）。
-- 初始化后必须自检：`abs(w.min()-16)<1e-9`、`abs(w.max()-25)<0.05`、`abs(V_min.max()-90)<1e-9`。
+- **网格自检**：`nx*dx == 9000`、中央 `|x|<=2500` 恰为 **200** 格（不是 201）。
+- **初始场自检**：`abs(w.min()-16)<1e-9`、`abs(w.max()-25)<0.05`、`abs(V_min.max()-90)<1e-9`。
 
 **S3 的时变律（线性插值，端点由 `params.yaml` 给）**：
 
@@ -212,8 +214,10 @@ while t < T:
 - 若事件恰好落在 $t=T$（模拟终点），仍须注入并记账；不得因循环结束而丢弃。
 - 连续步中的 $L_c$、$O$ 恢复/损失用**跳变后**的 $O$ 进入下一步（§2.4a 的 $(O^n+S)e^{-a\Delta t}$ 即等价写法）。
 
-> **S2 的强制事件的时刻是相对第一次投放的**：`forced_event_after_first_placement=0.5` → 事件放在 $t_{\text{place},1}+0.5$；
-> 若该情景下没有任何投放（`strategy=none`），退化为 $t=0.5$。**不要用绝对时刻 0.5**——`once` 策略的首次投放要等 $\tau_{\text{permit}}+\tau_{\text{build}}=1.75$ yr，绝对 0.5 会让风暴先于补沙到达，情景含义反转。
+> **S2 的强制事件用绝对时刻 $t=2.25$ yr**（$=\tau_{\text{permit}}(1.0)+\tau_{\text{build}}(0.75)+0.5$）。
+> 为什么不是"相对首次投放"：**基线与补沙必须用同一张事件表**（`MODEL_SPEC` §6.2），否则两跑差里混进了不同的风暴时间，差值就不能解释为补沙效应。
+> 事件表按 `scenario+seed` **预先生成**（`event_table: shared_per_scenario`），基线、三种布置、四种策略**重放同一张表**。
+> 若研究"风暴距投放 0.5 年"的条件效应，另开一个实验（E3），**不得**与同事件配对的策略效应混用。
 >
 > **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w_{\text{eff}})$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w_{\text{eff}}$ 太窄以致 $25>w_{\text{eff}}$，取 $w_{\text{eff}}$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
 >
@@ -224,13 +228,12 @@ while t < T:
 **裁剪对象是 $V$，不是 $y$。**
 
 ```python
-V = V0 + H*y                      # 代数关系（仅在 y >= -w0 时成立）
-V_min = V0 - H*w0(x)              # 逐单元下界
-deficit = np.maximum(V_min - V, 0.0)
-if deficit.any():
-    R_c += deficit                # 退岸计数器，m^2，单调不减
-    V    = np.maximum(V, V_min)   # 裁剪
-    # y 不裁剪：y 继续表示侵蚀前锋，risk_b 用它
+V_abs  = V_ref + H*y                     # 代数存量，可为负
+V_min  = V_ref - H*w0(x)                 # 逐单元下界
+V_book = np.maximum(V_abs, V_min)        # 账面存量（>= V_min）
+deficit = np.maximum(V_min - V_abs, 0.0) # 当前亏空
+R_c    = np.maximum(R_c, deficit)        # ★ 峰值亏空：单调、不重复计
+# y 一律不裁剪：它是侵蚀前锋，risk_b 直接用
 ```
 
 - `R_c` **只增不减**；补沙抬升 $y$ 后，一旦 $y>-w_0$，$V$ 重新由 $V_0+Hy$ 决定，但 `R_c` 不回退；
@@ -515,6 +518,10 @@ residual, residual_rel
 
 ## 5. 验收测试清单（**建模手拥有，你必须全部通过**）
 
+> **边界说明（2026-11-11）**：`tools/verify_contract.py` 只检查**文档结构与数值一致性**（57 项），**不运行模型**。真正的验收是 `tests/` 里 T1–T12 的**退出码测试**。
+> 参考实现 `modeling/sanity/discrete_contract.py` 已全部改成 `assert`/`sys.exit`，可直接当第一个真测试的模板。
+
+
 | # | 测试 | 做法 | 判据 | 预期数值 |
 |---|---|---|---|---|
 | **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 目标 $10^{-12}$，double 可达 $10^{-16}$ |
@@ -527,8 +534,8 @@ residual, residual_rel
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
-| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c=\int H[-w_0-y]^{+}d\tau$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
-| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036$（解析 $1518/5000$）**；$dx=25$ 时离散值约 0.3050（61 格），容差按 $\pm0.003$ 判**、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
+| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c^{n+1}=\max\{R_c^n,[V_{\min}-V_{\text{abs}}^{n+1}]^{+}\}$（**峰值亏空，不是时间积分**）；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
+| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036$（解析 $1518/5000$）；**360 个单元、$dx=25$ 时离散值 0.3000（60 格），容差 $\pm0.005$**、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T1/T3/T11 的参考实现与实测值（`modeling/sanity/discrete_contract.py`，130 行）
 
