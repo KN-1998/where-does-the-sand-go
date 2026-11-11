@@ -143,7 +143,10 @@ def main():
 
     chk("CODER 有全局数值口径 §3.5", "3.5 全局数值口径约定" in coder)
     chk("CODER 有足迹归一化 §2.4d", "2.4d 风暴足迹" in coder)
-    chk("R_c 为峰值亏空（非积分）", "峰值亏空" in coder and "峰值亏空" in mspec)
+    chk("R_c 为当前亏空（可恢复）", "当前亏空" in coder and "当前亏空" in mspec)
+    chk("明确禁止峰值写法", "历史峰值" in coder)
+    chk("原型含 refill 测试", "run_erode_refill" in open(
+        os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
     chk("网格 360 格", "nx  = 360" in coder)
     chk("原型含断言与退出码", "sys.exit(main())" in open(
         os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())

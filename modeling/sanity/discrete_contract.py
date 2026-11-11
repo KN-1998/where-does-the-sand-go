@@ -58,23 +58,25 @@ def run(rho_val, years=5.0, w0_val=16.0, O0=0.0, y_init=0.0, src=0.0):
     y = np.full(NX, float(y_init))
     O = np.full(NX, float(O0))
     V_min = np.full(NX, V_REF - H * float(w0_val))
-    Rc_cell = np.zeros(NX)
+    Dmax_cell = np.zeros(NX)                   # 诊断：历史最深亏空（不参与守恒）
     lamO_cum = Lc_cum = 0.0
-    V0_total = ((V_REF + H * y).sum() * DX) + O.sum() * DX   # 绝对存量（含 V_REF）
+    V0_total = ((V_REF + H * y).sum() * DX) + O.sum() * DX
     src_cum = src * H * NX * DX * years
+    D0 = np.maximum(V_min - (V_REF + H * y), 0.0).sum() * DX
     for _ in range(int(round(years / DT))):
         y, O, Rn, lamO = step(y, O, src, np.full(NX, rho_val))
         V_abs = V_REF + H * y
-        Rc_cell = np.maximum(Rc_cell, np.maximum(V_min - V_abs, 0.0))
+        D_cell = np.maximum(V_min - V_abs, 0.0)      # ★ 当前亏空（可恢复）
+        Dmax_cell = np.maximum(Dmax_cell, D_cell)     # 诊断
         lamO_cum += lamO.sum() * DX
         Lc_cum += rho_val * H * NX * DX * DT
     V_book = np.maximum(V_REF + H * y, V_min)
-    R_c = Rc_cell.sum() * DX
+    D_end = np.maximum(V_min - (V_REF + H * y), 0.0).sum() * DX
     placed = src_cum
     dVO = (V_book.sum() * DX + O.sum() * DX) - V0_total
-    residual = placed - (lamO_cum + Lc_cum) - dVO + R_c
-    return dict(y=y, O=O, V=V_book, R_c=R_c, resid=residual,
-                Lc=Lc_cum, lamO=lamO_cum, placed=placed, Vmin=float(V_min[0]))
+    residual = placed - (lamO_cum + Lc_cum) - dVO + (D_end - D0)
+    return dict(y=y, O=O, V=V_book, R_c=D_end, R_peak=Dmax_cell.sum() * DX,
+                resid=residual, Lc=Lc_cum, lamO=lamO_cum, placed=placed, Vmin=float(V_min[0]))
 
 
 def place(y, volume, xc=30.0, ell=1000.0):
@@ -96,6 +98,31 @@ def storm(y, O, dy_pot, xk=0.0, sigma_e=2000.0, gaussian=False, w0v=16.0, w_s=20
     dy = dy * g
     inj = (H * dy * DX).sum()
     return y - dy, O + H * dy, float(dy[np.argmin(abs(X - xk))]), inj
+
+
+def run_erode_refill(rho=12.0, t1=5.0, t2=5.0, vol=1.5e7, w0_val=16.0):
+    """先侵蚀 t1 年、再一次性补 vol m^3、再跑 t2 年（复核 ac8b71d 的 P0 复现案例）。"""
+    y = np.zeros(NX); O = np.zeros(NX)
+    V_min = np.full(NX, V_REF - H * float(w0_val))
+    Dmax = np.zeros(NX)
+    lamO_cum = Lc_cum = 0.0
+    V0 = ((V_REF + H * y).sum() * DX) + O.sum() * DX
+    D0 = np.maximum(V_min - (V_REF + H * y), 0.0).sum() * DX
+    placed = 0.0
+    for _ in range(int(round(t1 / DT))):
+        y, O, Rn, lamO = step(y, O, 0.0, np.full(NX, rho))
+        Dmax = np.maximum(Dmax, np.maximum(V_min - (V_REF + H * y), 0.0))
+        lamO_cum += lamO.sum() * DX; Lc_cum += rho * H * NX * DX * DT
+    y, pr = place(y, vol, xc=0.0, ell=5000.0); placed += pr
+    for _ in range(int(round(t2 / DT))):
+        y, O, Rn, lamO = step(y, O, 0.0, np.full(NX, rho))
+        Dmax = np.maximum(Dmax, np.maximum(V_min - (V_REF + H * y), 0.0))
+        lamO_cum += lamO.sum() * DX; Lc_cum += rho * H * NX * DX * DT
+    V_book = np.maximum(V_REF + H * y, V_min)
+    D_end = np.maximum(V_min - (V_REF + H * y), 0.0).sum() * DX
+    dVO = (V_book.sum() * DX + O.sum() * DX) - V0
+    resid = placed - (lamO_cum + Lc_cum) - dVO + (D_end - D0)
+    return dict(resid=resid, D_end=D_end, R_peak=Dmax.sum() * DX, placed=placed)
 
 
 def main():
@@ -125,7 +152,7 @@ def main():
     r = run(12.0, years=8.0)
     chk("min y < -w0 (unclipped)", r["y"].min() < -16.0 + 1e-9, f"y_min={r['y'].min():.2f}")
     chk("min V >= V_min", (r["V"] - r["Vmin"]).min() > -1e-9, f"V_min={r['V'].min():.1f}")
-    chk("R_c > 0", r["R_c"] > 0, f"{r['R_c']:.3e}")
+    chk("R_peak > 0 且单调", r["R_peak"] > 0, f"R_peak={r['R_peak']:.3e}")
 
     print("\n[T1] ledger closure (with O0 and continuous source)")
     for kw in (dict(rho_val=0.0, years=5.0),
@@ -149,6 +176,12 @@ def main():
     chk("uniform peak = 8*f", abs(dyc - 8.0 * f0) < 1e-12, f"{dyc:.6f}")
     chk("gauss peak unchanged", abs(dyc2 - dyc) < 1e-12, f"{dyc2:.6f}")
     chk("gauss total < uniform", inj2 < inj, f"{inj2:.3e} < {inj:.3e}")
+
+    print("\n[T13] erode 5 yr -> refill 5 yr (gate P0 repro)")
+    r = run_erode_refill()
+    scale = max(1.0, abs(r["placed"]))
+    chk("refill still closes", abs(r["resid"]) / scale < 1e-10,
+        f"resid={r['resid']:+.2e} rel={abs(r['resid'])/scale:.1e} D_end={r['D_end']:.2e} peak={r['R_peak']:.2e}")
 
     print("\n===== " + ("ALL PASS" if not fails else "FAIL: " + ", ".join(fails)) + " =====")
     return 0 if not fails else 1

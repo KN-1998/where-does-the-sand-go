@@ -246,14 +246,16 @@ V_{\min}=V_{\text{ref}}-H\,w_0\ }
 $$
 
 $$
-\boxed{\;V^{\,n+1}_{\text{abs}}=V_{\text{ref}}+H\,y^{\,n+1},\qquad
-V^{\,n+1}_{\text{book}}=\max\bigl\{V^{\,n+1}_{\text{abs}},\ V_{\min}\bigr\},\qquad
-R_c^{\,n+1}=\max\Bigl\{\,R_c^{\,n},\ \bigl[V_{\min}-V^{\,n+1}_{\text{abs}}\bigr]^{+}\Bigr\}\;}
+\boxed{\;V_{\text{abs}}=V_{\text{ref}}+H\,y,\qquad
+V_{\text{book}}=\max\{V_{\text{abs}},\,V_{\min}\},\qquad
+R_c\equiv D=\bigl[V_{\min}-V_{\text{abs}}\bigr]^{+}\;}
 $$
 
 - $y$ **不裁剪**（侵蚀前锋），$V_{\text{abs}}$ 可以变负；
-- **$R_c$ 取峰值亏空（历史最大亏空）**，即 `R_c = max(R_c_prev, current_deficit)`。这天然单调、且**不会把同一份亏空重复累加**；
-- 台账用 $V_{\text{book}}$（≥ $V_{\min}$）。
+- **$R_c$ 就是"当前亏空" $D$，它是可恢复的**：补沙或 $O$ 回滩使 $V_{\text{abs}}$ 抬升时，$D$ 同步下降；
+- **台账只用 $D$，不用历史最大值**。若用峰值，补沙后 $R_c$ 不回落，恒等式必然不闭合（实测"侵蚀 5 年再补回 5 年"残差 $+3.6\times10^{6}$ m³，而用 $D$ 时为 $2\times10^{-6}$）；
+- 另设**诊断量** $D_{\max}(x)=\max_t D$（单调），只用于报告"历史最深亏空"，**不参与守恒**；
+- **口径警告**：$D$ 不是"不可逆的退岸量"。本模型不解析沙丘侵蚀的不可逆性，论文**不得**把 $R_c$ 写成"已经退掉的岸"。
 
 > ⚠ **不是时间积分**。旧式 $R_c=\int H[-w_0-y]^{+}dt$ 有两个错：量纲变成 m²·yr；且只要 $y<-w_0$ 持续，每个时间步都会把**同一份亏空**重复加一次。
 > 也不能写成 `R_c += deficit`（每步加一次现值）——那是把亏空当流量，同样重复计。

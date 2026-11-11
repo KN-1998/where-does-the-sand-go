@@ -231,10 +231,12 @@ while t < T:
 V_abs  = V_ref + H*y                     # 代数存量，可为负
 V_min  = V_ref - H*w0(x)                 # 逐单元下界
 V_book = np.maximum(V_abs, V_min)        # 账面存量（>= V_min）
-deficit = np.maximum(V_min - V_abs, 0.0) # 当前亏空
-R_c    = np.maximum(R_c, deficit)        # ★ 峰值亏空：单调、不重复计
+R_c    = np.maximum(V_min - V_abs, 0.0)  # ★ 当前亏空（可恢复），进台账
+D_max  = np.maximum(D_max, R_c)          # 诊断：历史最深亏空，不进守恒
 # y 一律不裁剪：它是侵蚀前锋，risk_b 直接用
 ```
+
+> ⚠ **不要写 `R_c = np.maximum(R_c, deficit)`**（历史峰值）。补沙后 $R_c$ 不回落，T1 会在"侵蚀后再补沙"的算例里炸掉（实测残差 $3.6\times10^{6}$ m³）。
 
 - `R_c` **只增不减**；补沙抬升 $y$ 后，一旦 $y>-w_0$，$V$ 重新由 $V_0+Hy$ 决定，但 `R_c` 不回退；
 - `ledger.csv` 增加 `R_c_cum`（区内 $\int R_c\,dx$，m³）并计入守恒式右端；
@@ -508,6 +510,7 @@ residual, residual_rel
   ```
   中央闭合把 `flux_outer_*` 换成 `flux_inner_*`，并把 offshore/chronic 限定在中央。
   **$R_c$ 是减项**：它是"本该被侵蚀、但被下限挡住没真的侵蚀掉"的部分。
+  更严格地写是 `− (R_c_end − R_c_start)`；初始 $V_{\text{abs}}=V_{\text{ref}}\ge V_{\min}$ ⇒ $R_c^{start}=0$，但测试里请显式记 $D_0$。
   自检：无补沙、无通量、$\lambda=0$、$L_c>0$ 且全程触底 ⇒ `R_c_cum = chronic_loss_cum`，残差 0。
 - `residual_rel` 分母取 $\max(1\ \mathrm{m^3}, |placed\_cum|)$；T1 看最大值。
 - 账本与验收场用 **float64**；`fields.npz` 的 float32 只用于展示，不能拿来重算收支。
@@ -534,7 +537,8 @@ residual, residual_rel
 | **T8** | 可复现 | 同一 seed 跑两次 | `results.json` 逐字节相同 + `fields.npz` md5 相同 | — |
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
-| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c^{n+1}=\max\{R_c^n,[V_{\min}-V_{\text{abs}}^{n+1}]^{+}\}$（**峰值亏空，不是时间积分**）；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
+| **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c^{n}=\bigl[V_{\min}-V_{\text{abs}}^{n}\bigr]^{+}$（**当前亏空**，可恢复；不是时间积分、也不是历史峰值）；另报诊断量 $D_{\max}$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
+| **T13** | **侵蚀后再补沙的守恒**（复核 P0） | 先 $\rho_e=12$ 跑 5 yr，再于 $t=5$ 一次性补 $1.5\times10^{7}$ m³，再跑 5 yr | (a) 台账残差 $<10^{-10}$（相对）；(b) $R_c$ 在补沙后**下降**；(c) $D_{\max}$ 单调不减 | 参考实现实测 rel $1.4\times10^{-13}$ |
 | **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036$（解析 $1518/5000$）；**360 个单元、$dx=25$ 时离散值 0.3000（60 格），容差 $\pm0.005$**、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T1/T3/T11 的参考实现与实测值（`modeling/sanity/discrete_contract.py`，130 行）
