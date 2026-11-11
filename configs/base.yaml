@@ -1,0 +1,14 @@
+﻿# configs/base.yaml — 第一个可跑配置（E0 基线）
+# 用法: python -m exp.run_one --config configs/base.yaml --strategy none --out results/E0_local
+inherit: modeling/params.yaml
+
+scenario: S1          # S1 平静
+strategy: none        # 只跑基线，不补沙
+bc: zeroflux          # 先零通量：T1 最容易闭合（切换 open 前必须先过 T1）
+
+seed: 42
+t_end: 5.0            # 先跑 5 年，不是 15 年
+dx: 25.0              # 360 个控制体
+dt: 0.02
+
+overrides: {}         # 不覆盖任何参数，先用主算

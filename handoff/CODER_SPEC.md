@@ -11,6 +11,19 @@
 >
 > 三个数一绿，直接进 E0/E1。**不要**先把代码写"漂亮"，也不要先写文档。
 >
+> ### 0.0 第一件事：让能跑的先跑起来（60 分钟，照抄 `START_HERE.md`）
+>
+> | # | 动作 | 验收 |
+> |---|---|---|
+> | 1 | `python modeling/sanity/discrete_contract.py` | 末行 `ALL PASS`，退出码 0 |
+> | 2 | `git checkout -b code` | 不在 main 上提交 |
+> | 3 | `mkdir -p src/sim src/exp tests`，把参考实现拆成 `grid.py`/`model.py`/`io.py` | 四个文件能 import |
+> | 4 | 三条断言绿：T1 闭合、T3 零源项、T13 侵-回填 | `pytest -q tests/test_mass.py` 全过 |
+> | 5 | `python -m exp.run_one --config configs/base.yaml --strategy none --out results/E0_local` | 产出 `results.json`/`fields.npz`/`ledger.csv`/`meta.json`，`residual_rel<1e-6` |
+>
+> **这五步做完之前，不要碰 E1–E7，不要改任何文档，不要写可视化。**
+> 卡住就按 §0.6 自裁并记一行 `[自决]`，不要停。
+>
 > ### 0.1 你可以自己决定（不需要问任何人）
 >
 > | 事项 | 说明 |

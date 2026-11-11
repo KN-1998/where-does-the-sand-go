@@ -161,6 +161,10 @@ def main():
         os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
 
     chk("SCHEDULE.md 存在", os.path.exists(os.path.join(ROOT, "SCHEDULE.md")))
+    chk("START_HERE.md 存在", os.path.exists(os.path.join(ROOT, "START_HERE.md")))
+    chk("CODER 有 §0.0 第一小时", "0.0 第一件事" in coder)
+    chk("configs/base.yaml 存在", os.path.exists(os.path.join(ROOT, "configs", "base.yaml")))
+    chk("tests/README.md 存在", os.path.exists(os.path.join(ROOT, "tests", "README.md")))
     chk("CODER 有 §0 立即执行令", "0. 立即执行令" in coder)
     chk("CODER 有自主决断清单", "0.1 你可以自己决定" in coder)
     chk("PROGRESS 有编程手提问段", "编程手提问" in open(
