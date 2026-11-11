@@ -170,6 +170,11 @@ def main():
     chk("README 指向 SCHEDULE", "SCHEDULE.md" in open(
         os.path.join(ROOT, "README.md"), encoding="utf-8").read())
 
+    chk("无「只增不减」残留", "只增不减" not in coder and "只增不减" not in mspec)
+    chk("无「不回退」残留", "不回退" not in coder and "不回退" not in mspec)
+    chk("R_c_cum 语义已澄清", "不是时间累计量" in coder)
+    chk("有冲突裁决权 §0.6", "0.6 冲突裁决权" in coder)
+
     print("\n=== C. 结构完整性 ===")
     dec = open(os.path.join(ROOT, "modeling", "DECISIONS.md"), encoding="utf-8").read()
     nums = re.findall(r"^## (D\d+) ·", dec, re.M)
