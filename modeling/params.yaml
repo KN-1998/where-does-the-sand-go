@@ -105,7 +105,10 @@ scenarios:
   #     S3 rho_storm=0.530 -> 1.459 -> scale 1.068 -> 1.531
   # 禁止：用固定的 rho_storm=0.522 套到三个情景（S1 会少扣、S3 会多扣）。
   S1_calm: {lambda_s: 0.2, dy_ref: 6.0, rho_e: 1.7, slr: 4.0}
-  S2_storm_soon: {lambda_s: 0.4, dy_ref: 8.0, rho_e: 3.0, slr: 4.3, forced_event_at: 0.5, forced_dy: 25.0, forced_dy_semantics: actual}
+  S2_storm_soon: {lambda_s: 0.4, dy_ref: 8.0, rho_e: 3.0, slr: 4.3,
+                forced_event_after_first_placement: 0.5,   # ★ 相对第一次投放，不是绝对时刻（否则补沙 1.75 yr 迟、风暴 0.5 yr 先到，情景含义反转）
+                forced_dy: 25.0, forced_dy_semantics: actual,
+                forced_event_if_no_placement: 0.5}          # 无投放（strategy=none）时退化为 t=0.5
   S3_repeat: {lambda_s: [0.4, 0.8], dy_ref: [8.0, 11.0], rho_e: [3.0, 5.0], slr: [4.0, 8.0], Hs_trend: 3.0}
 
 numerics:
@@ -113,3 +116,7 @@ numerics:
   dt:  {value: 0.02, unit: yr, note: "隐式格式可用；显式需满足 D*dt/dx^2 <= 0.5"}
   scheme: {value: "conservative FV + backward Euler", note: "见 CODER_SPEC §2"}
   rtol: {value: 1.0e-6, note: "沙量收支闭合相对残差阈值"}
+  metric_domain: {value: "central", options: ["central","domain"], note: "时长/暴露/失败比例只在中央 5 km 上算；沙量闭合用全域 9 km"}
+  phi_shape: {value: "uniform", options: ["uniform","gaussian"], note: "主算全域均匀(phi=1)；高斯仅敏感性，按峰值归一化"}
+  seed_rule: {value: "seed*1000003+i mod 2^32", note: "MC 第 i 次实现的种子；必须写进 meta.json"}
+  placement_time_rule: {value: "snap_up_to_step", note: "计划时刻吸附到第一个 >= t_s 的步边界；超过 T 则取消并记 skipped_due_to_window"}

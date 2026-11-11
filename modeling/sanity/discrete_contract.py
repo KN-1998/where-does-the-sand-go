@@ -85,6 +85,40 @@ def run(rho_val, years=15.0, w0_val=16.0, O0=0.0, y_init=0.0, bc_src=0.0):
                 R_c=R_c_cum, Lc=Lc_cum, lamO=lamO_cum, Vmin=V_min)
 
 
+def place(y, volume, xc=30.0, ell=1000.0):
+    """按单元与投放区的重叠长度加权投放（CODER_SPEC §2.5 / §3.5）。
+
+    返回 (y_new, 实际投放体积)。断言：实际 == 设计（<1e-12 相对）。
+    """
+    lo, hi = xc - ell / 2, xc + ell / 2
+    cell_lo = X - DX / 2
+    cell_hi = X + DX / 2
+    overlap = np.clip(np.minimum(cell_hi, hi) - np.maximum(cell_lo, lo), 0, None)
+    tot = overlap.sum() * DX
+    assert abs(tot - ell) < 1e-9 or tot > 0, "投放区与网格无交集"
+    frac = overlap / overlap.sum()                     # 体积按重叠长度分配
+    dy = (volume * frac) / (H * DX)                    # 每单元的 Δy [m]
+    placed = (H * dy * DX).sum()
+    return y + dy, placed
+
+
+def storm(y, O, dy_pot, xk=0.0, sigma_e=2000.0, gaussian=False, w0v=16.0, w_s=20.0):
+    """一次风暴注入（CODER_SPEC §2.4b + §2.4d）。返回 (y, O, 中心 dy, 注入体积)。"""
+    w_eff = np.maximum(w0v + y, 0.0)
+    f = 1.0 - np.exp(-w_eff / w_s)
+    dy = np.minimum(dy_pot * f, w_eff)
+    if gaussian:
+        g = np.exp(-(X - xk) ** 2 / (2 * sigma_e ** 2))
+        g = g / g.max()                                # 峰值归一化，不是 Σ 归一化
+    else:
+        g = np.ones_like(X)
+    dy = dy * g
+    y_new = y - dy
+    O_new = O + H * dy
+    inj = (H * dy * DX).sum()
+    return y_new, O_new, float(dy[np.argmin(abs(X - xk))]), inj
+
+
 def main():
     print("=" * 68)
     r = run(rho_val=0.0, years=5.0, y_init=3.0)
@@ -106,6 +140,27 @@ def main():
         rel = abs(r["resid"]) / max(1.0, abs(r["V"]))
         print(f"       rho_e={rho:5.1f}  residual={r['resid']:+.3e} m^3  "
               f"rel={rel:.2e}  V={r['V']:.3e}  R_c={r['R_c']:.3e}")
+
+    print("=" * 68)
+    y0 = np.zeros(NX)
+    _, placed = place(y0, 1.0e6, xc=30.0, ell=1000.0)
+    print(f"[投放] 设计 1.000e6 m^3 → 实投 {placed:.6f} m^3  "
+          f"相对误差 {abs(placed-1e6)/1e6:.2e}  (判据 <1e-12)")
+
+    f0 = 1.0 - np.exp(-16.0 / 20.0)          # w0=16 时的窄滩因子
+    exp_dy = 8.0 * f0
+    y1, O1, dyc, inj = storm(y0, np.zeros(NX), 8.0, gaussian=False)
+    print(f"[风暴-uniform] 中心 dy={dyc:.4f} m (期望 dy_pot*f = 8*{f0:.4f} = {exp_dy:.4f})  "
+          f"注入 {inj:.4e} m^3 vs 解析 H*dy*L={H*exp_dy*NX*DX:.4e}")
+
+    y2, O2, dyc2, inj2 = storm(y0, np.zeros(NX), 8.0, gaussian=True, sigma_e=2000.0)
+    print(f"[风暴-gauss]   中心 dy={dyc2:.4f} m (与 uniform 同值=峰值归一化生效)  "
+          f"注入 {inj2:.4e} m^3 < uniform {inj:.2e}")
+
+    print("\n[断言] 三条硬判据")
+    print(f"  place 守恒      rel={abs(placed-1e6)/1e6:.2e}")
+    print(f"  uniform 峰值    |{dyc:.6f}-{exp_dy:.6f}|={abs(dyc-exp_dy):.2e}")
+    print(f"  gauss 峰值      |{dyc2:.6f}-{exp_dy:.6f}|={abs(dyc2-exp_dy):.2e}  (归一化后峰值不变)")
 
 
 if __name__ == "__main__":

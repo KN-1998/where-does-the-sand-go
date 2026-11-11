@@ -141,6 +141,18 @@ def main():
     chk("discrete_contract.py 存在", os.path.exists(
         os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py")))
 
+    chk("CODER 有全局数值口径 §3.5", "3.5 全局数值口径约定" in coder)
+    chk("CODER 有足迹归一化 §2.4d", "2.4d 风暴足迹" in coder)
+    chk("S2 用相对投放时刻", "forced_event_after_first_placement" in coder)
+    chk("params 无绝对 forced_event_at", "forced_event_at:" not in open(
+        os.path.join(ROOT, "modeling", "params.yaml"), encoding="utf-8").read())
+    num = P["numerics"]
+    for k in ("metric_domain", "phi_shape", "seed_rule", "placement_time_rule"):
+        chk(f"numerics.{k} 已定义", k in num)
+    chk("T12 已按离散容差说明", "0.3050" in coder)
+    chk("discrete_contract 含投放/风暴测试", "def place(" in open(
+        os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
+
     print("\n=== C. 结构完整性 ===")
     dec = open(os.path.join(ROOT, "modeling", "DECISIONS.md"), encoding="utf-8").read()
     nums = re.findall(r"^## (D\d+) ·", dec, re.M)

@@ -126,6 +126,8 @@ $$
 1. **到达**：齐次 Poisson，$\lambda_s$ 取 `params.yaml`。
 2. **潜在后退**：$\Delta y_{\text{pot}}\sim\mathrm{LogNormal}$，中位 $\Delta y_{\text{ref}}=8$ m，$P_{95}=25$ m ⇒ $\sigma_{\ln}=\ln(25/8)/1.645=0.694$。
 3. **窄滩饱和**：$w_{\text{eff}}=\max(w,0)$；$f=1-\exp(-w_{\text{eff}}/w_s)$，$w_s=20$ m；$\Delta y_k=\Delta y_{\text{pot}}f$。**必须取 max**。
+   > **$f$ 是可变的**：$w=16$ 时 $f=0.551$、$w=25$ 时 $f=0.713$。所以 8 m 的"潜在后退"在热点实际只有 4.41 m。
+   > S2 要把**实际**后退钉到 25 m，必须反解 $\Delta y_{\text{pot}}=25/f$（再受 $w_{\text{eff}}$ 上限）；直接给 25 只会得到 $25f\approx13$–18 m。
 4. **上限**：$\Delta y_k=\min(\Delta y_k,\;w_{\text{eff}})$。**不能用 $w_{\text{eff}}+\Delta y_{\text{cut}}$**（会让 $w$ 跨过 0）；`dy_cut` 废弃。先因子、后上限。
 5. **空间足迹**：$S_k(x)=H\Delta y_k\,\phi_k(x)$。主算 $\phi_k=1$ 覆盖整个 9 km 域（区域风暴）；敏感性用 $\phi_k=\exp[-(x-x_k)^2/(2\sigma_e^2)]$，$\sigma_e=2$ km，$x_k\sim U(-L_b,L_b)$。`events.csv` 记 $x_k$、$\sigma_e$、中央/全域注入体积。**不得只给标量 $\Delta y$ 而不给足迹**。
 6. **注入**：$y\leftarrow y-\Delta y_k\phi_k$；$O\leftarrow O+H\Delta y_k\phi_k$；$S_k\ge0$。事件时刻按 §2.4 截到步边界。
@@ -167,6 +169,9 @@ while t < T:
 - 若事件恰好落在 $t=T$（模拟终点），仍须注入并记账；不得因循环结束而丢弃。
 - 连续步中的 $L_c$、$O$ 恢复/损失用**跳变后**的 $O$ 进入下一步（§2.4a 的 $(O^n+S)e^{-a\Delta t}$ 即等价写法）。
 
+> **S2 的强制事件的时刻是相对第一次投放的**：`forced_event_after_first_placement=0.5` → 事件放在 $t_{\text{place},1}+0.5$；
+> 若该情景下没有任何投放（`strategy=none`），退化为 $t=0.5$。**不要用绝对时刻 0.5**——`once` 策略的首次投放要等 $\tau_{\text{permit}}+\tau_{\text{build}}=1.75$ yr，绝对 0.5 会让风暴先于补沙到达，情景含义反转。
+>
 > **S2 的 `forced_dy=25` 按"实际后退"定义**：代码先算 $f(w_{\text{eff}})$，再取 $\Delta y_{\text{pot}}=25/f$（若 $f>0$），使**实际** $\Delta y=25$ m；若 $w_{\text{eff}}$ 太窄以致 $25>w_{\text{eff}}$，取 $w_{\text{eff}}$（耗尽）。这样"大风暴"情景的强度不随滩宽漂移（Q-34 的推荐口径）。
 >
 > **S3 的 SLR**：主通道是 `rho_e_scale(t)`（走廊均值 3.0→5.0）；若启用"风暴基线"第二通道，令 $\Delta y_{\text{ref}}(t)=\Delta y_{\text{ref},0}[1+\beta(S_{\text{SLR}}(t)-S_{\text{SLR},0})]$，$\beta$ 必须作为 ASSUME 写入台账；若不启用，在结果里注明"storm-water-level baseline 未单独建模"。
@@ -190,6 +195,27 @@ if deficit.any():
 - **通量限制器**：连续步装配前，把每个单元的可用存量算出来；若某步净流出使 $V<V_{\min}$，按比例缩放该单元的对岸通量，**未搬走的部分不记账**（不要"先搬再补"）。`Q_limited_cum` 只作诊断；
 - `exhausted = (V - V_min < 1e-12)`：该掩膜只用于**诊断与输出屏蔽**（$V$ 不再作物理量报告），**不冻结、不删失**；
 - `fields.npz` 输出 `exhausted[nt,nx]` 布尔掩膜；后处理引用 $V$ 前必须先掩膜。
+### 2.4d 风暴足迹 $\phi$ 的归一化（**必须写死，否则总量会随机变**）
+
+$\Delta y_k$ 的语义是**足迹峰值的后退量**（不是全段等效后退）。逐单元：
+
+```python
+for i:
+    f_i  = 1 - np.exp(-w_eff[i] / w_s)          # 窄滩饱和
+    dy_i = np.minimum(dy_pot * f_i, w_eff[i])   # 上限：不能超过可蚀宽度
+    dy_i = dy_i * phi[i]                         # 足迹（峰值=1）
+y   -= dy
+O   += H * dy
+```
+
+- **uniform（主算）**：$\phi_i\equiv1$，注入总体积 $=H\sum dy_i\Delta x$；
+- **Gaussian（仅敏感性）**：$\phi_i=\exp[-(x_i-x_k)^2/(2\sigma_e^2)]$，**再除以 $\max_i\phi_i$ 使峰值为 1**（不是除以 $\sum\phi$——那会把峰值压低，$\Delta y$ 的含义就变了）；
+- `events.csv` 必须同时记：**中心后退** $\Delta y_k$、$\phi$ 的形状与 $\sigma_e$、**全域注入体积**与**中央 5 km 注入体积**。
+- **自检**：$\sum_i H\,dy_i\Delta x$ 必须等于 `storm_injected_cum` 的增量（相对误差 $<10^{-12}$）。
+
+> ⚠ 常见错法：把 Gaussian 归一化成 $\sum\phi_i\Delta x=1$（即"总量守恒但峰值极小"），此时 $\Delta y_k$ 不再是中心后退，情景强度全变。
+
+
 ### 2.5 补沙源项 $I$
 
 瞬时投放：在 $t_s$ 那一步把 $\Delta y=\mathcal{V}/(H\ell_s)$ 加到 $|x-x_c|\le\ell_s/2$ 的单元上（**按单元与投放区重叠长度加权，保证总量精确**）。
@@ -260,6 +286,8 @@ c1_eff = c_unit + (c_transport if supply_scenario == "external" else 0.0)
 - `repeat` 的 5 年间隔是**设计选择**（不是最优值），论文必须写明。
 - 策略比较一律用**实际可投方量**（§2.5 的 `V_j`），并报告设计量 vs 实投量的差。
 - `adaptive` 的空间选址依赖主指标 $E_b$（D12），不是 $E_w$。
+- **E1（布置对比）用理想化 $t=0$ 投放、不计许可/施工时滞**；**E4（策略对比）必须计**。两套结果不能混报，
+  否则"一次 vs 多次"的差异会同时包含"空间形态"与"时滞"两个因素，归因不清。
 
 
 ### 2.6 边界条件（三套，`--bc` 切换）
@@ -314,6 +342,20 @@ python -m exp.mc       --config configs/S2.yaml --strategy A --n 1000 --jobs 8 \
 ```
 
 ---
+
+## 3.5 全局数值口径约定（**第二轮审查新增；不遵守必出怪数**）
+
+| 项 | 约定 | 为什么必须写死 |
+|---|---|---|
+| **状态与台账** | 内部状态用**绝对** $V=V_{\text{ref}}+Hy$（$V_{\text{ref}}=250$）；`ledger.csv` 的 `V_*`、`O_*` 是**相对初始的增量**（$V-V_{\text{ref}}$、$O-O(0)$） | 混用会让 T11 的 $\min V\ge V_{\min}$ 与 T1 的闭合差一个 $V_{\text{ref}}L$ 的常数 |
+| **指标定义域** | 所有时长/暴露/失败比例 $f_c(t)$ 只在**中央 5 km** $[-2500,2500]$ 上算；边界通量与沙量闭合算**全域 9 km** | 两者混用会被"缓冲区"污染，且与论文口径不符 |
+| **通量符号** | `flux_outer_left_cum` 表示**从左边流出域**的累计体积（m³），流出为正；右边同理。实现时先用面通量 $F$ 的正方向，再乘符号 | 符号写反时 T7 会给出"流出为负" |
+| **补沙时刻** | 计划时刻 $t_s$ 必须**吸附到第一个 $\ge t_s$ 的步边界**，并在 `events.csv` 记 `t_s_actual`；若 $t_s_{\text{actual}}>T$ 则取消并记 `skipped_due_to_window` | 否则同一输入会因 $dt$ 不同给出不同结果 |
+| **投放体积守恒** | 投放必须按**单元与投放区重叠长度加权**，并断言 $\lvert\sum_i H\Delta y_i\Delta x-\mathcal{V}\rvert/\mathcal{V}<10^{-12}$ | 整格投放会有 1–2% 误差，T1 直接不过 |
+| **MC 随机种子** | 第 $i$ 次实现用 `seed_i = (seed * 1000003 + i) % 2**32`，并把它写进 `meta.json` | 否则 T8 不可复现，也无法事后重跑单条 |
+| **风暴强度分布** | 对数正态，**中位 $\Delta y_{\text{ref}}$、$\sigma_{\ln}=0.6927$ 固定**（即 P95/中位 = 3.125 恒定）；S3 只改中位，不改形状 | 形状随时间变会让情景之间不可比 |
+| **两类随机流** | 到达时刻与强度用**两条独立 RNG 流**（`rng_arrival`、`rng_mag`），不共用 | 共用会让"加一次事件"改变后续所有强度 |
+
 
 ## 4. 输入输出接口
 
@@ -443,7 +485,7 @@ residual, residual_rel
 | **T9** | **历史岸线诊断（Q3，不是通过/失败测试）** | 用 `_gis/hatteras_transects/Hatteras_Transects.dbf` 的 `LRR78_2002`/`LRR89_2002`（1308 条，含 DAS_km）；**先固定 transect 选择规则**（走廊范围、DAS 窗口、缺测/异常剔除），再算观测分布 | 报告观测均值/中位/区间与模型基线的**差异**；**2.5–4.5 m/yr 只是设计参考区间，不是通过标准**。不确定度按 4.5–4.8 m 披露 | 见 `资料/01_岸线侵蚀速率/USGS_岸线数据说明.md` |
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
 | **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c=\int H[-w_0-y]^{+}d\tau$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
-| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036\pm0.002$（$1518/5000$）、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
+| **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036$（解析 $1518/5000$）**；$dx=25$ 时离散值约 0.3050（61 格），容差按 $\pm0.003$ 判**、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
 
 ### T1/T3/T11 的参考实现与实测值（`modeling/sanity/discrete_contract.py`，130 行）
 
