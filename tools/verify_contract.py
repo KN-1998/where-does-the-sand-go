@@ -153,6 +153,16 @@ def main():
     chk("discrete_contract 含投放/风暴测试", "def place(" in open(
         os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py"), encoding="utf-8").read())
 
+    chk("SCHEDULE.md 存在", os.path.exists(os.path.join(ROOT, "SCHEDULE.md")))
+    chk("CODER 有 §0 立即执行令", "0. 立即执行令" in coder)
+    chk("CODER 有自主决断清单", "0.1 你可以自己决定" in coder)
+    chk("PROGRESS 有编程手提问段", "编程手提问" in open(
+        os.path.join(ROOT, "PROGRESS.md"), encoding="utf-8").read())
+    chk("WRITER_NOTES 有 §0 执行令", "0. 立即执行令" in open(
+        os.path.join(ROOT, "handoff", "WRITER_NOTES.md"), encoding="utf-8").read())
+    chk("README 指向 SCHEDULE", "SCHEDULE.md" in open(
+        os.path.join(ROOT, "README.md"), encoding="utf-8").read())
+
     print("\n=== C. 结构完整性 ===")
     dec = open(os.path.join(ROOT, "modeling", "DECISIONS.md"), encoding="utf-8").read()
     nums = re.findall(r"^## (D\d+) ·", dec, re.M)
