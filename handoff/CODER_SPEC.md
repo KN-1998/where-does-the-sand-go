@@ -22,6 +22,37 @@
 
 ## 2. 方程与离散（照抄即可）
 
+### 2.0 初始化场与情景时变（**照抄，不要自己发明**）
+
+```python
+x   = np.linspace(-Lb, Lb, nx)          # Lb=4500, dx=25
+w0  = w_far - (w_far - w_min) * np.exp(-x**2 / (2*sigma_w**2))     # 25,16,700
+rho_base = rho_e * (1 + a_h * np.exp(-x**2 / (2*sigma_h**2)))      # 1.7,1.2,600
+y0  = np.zeros(nx)                       # 岸线异常，单位 m
+V0  = np.full(nx, V_ref)                 # 250 m^2，常数
+O0  = np.zeros(nx)
+V_min = V_ref - H * w0                   # 远场 0，热点 90 m^2
+w   = w0 + y                             # 干滩宽度
+```
+
+- $H=h_*+B=10$ m；`V = V0 + H*y` 只允许出现在**这一个函数**里（`units.py`）。
+- 初始化后必须自检：`abs(w.min()-16)<1e-9`、`abs(w.max()-25)<0.05`、`abs(V_min.max()-90)<1e-9`。
+
+**S3 的时变律（线性插值，端点由 `params.yaml` 给）**：
+
+```python
+u = t / 15.0                                   # 0 -> 1
+lambda_s(t) = 0.4 + (0.8-0.4)*u                # 0.4 -> 0.8
+dy_ref(t)   = 8.0 + (11.0-8.0)*u               # 8 -> 11
+target_total(t) = 3.0 + (5.0-3.0)*u            # 3 -> 5
+rho_storm(t) = lambda_s(t) * dy_ref(t)*exp(sig**2/2) * lam/(k+lam)
+scale(t)     = (target_total(t) - rho_storm(t)) / 2.31
+rho_e(x,t)   = scale(t) * rho_base(x)
+```
+
+> S1、S2 是**定常**的，直接用表里的常数，不要插值。
+> `lambda_s(t)` 是**非齐次泊松**：到达率随时间变，抽样要用**反函数/细化法**（thin-and-simplify 到 $\lambda_{\max}=0.8$ 再接受/拒绝），不能把 15 年当成一个常数率。
+
 ### 2.1 连续形式
 
 $$
@@ -194,14 +225,42 @@ V_j = min( V_desired,
            S_cap       - S_used,          # S_cap = a_borrow*S_borrow_total (local)
                                           #       = V15_total (external)
            (C_max - cost_used - c0) / c1_eff )
-c1_eff = c1                       # cost_model = all_in
-       = c1 + c_transport          # supply_scenario = external
-       = c1 + c_transport          # marginal_plus_fixed 也照加
+c_unit = c1                        # cost_model == all_in        (27 USD/m3)
+       = c1_marginal               # cost_model == marginal_plus_fixed (11 USD/m3)
+c1_eff = c_unit + (c_transport if supply_scenario == "external" else 0.0)
+       # => all_in+local 27 | all_in+external 30 | marginal+local 11 | marginal+external 14
 ```
 
 - `local` 主算：`S_cap = 1.0 × 2.45e6`（可用率 0.8 仅敏感性）；`external`：`S_cap = V15_total`。
-- 若 `V_j < V_min_meaningful`（例如低于 1e5 m³），**不得静默投放**：记录 `skipped_reason`，策略 A/B/C 的对比必须报告实际投放总量与设计总量的差。
+- 若 `V_j < V_min_meaningful`（例如低于 1e5 m³），**不得静默投放**：记录 `skipped_reason`，布置/策略的对比必须报告实际投放总量与设计总量的差。
 - 每次投放后更新 `V_used += V_j`、`S_used += V_j`、`cost_used += c0 + c1_eff*V_j`；`permit_delay`/`tau_build` 只影响**批准到施工**的时间，不改变方量。
+
+### 2.5c 两个族：布置（Q2）与策略（Q5）——**命名不要混**
+
+题型里有两组"A/B/C"，含义不同，实现时必须用不同枚举名，否则 E1 与 E4 会对不上。
+
+**布置族 `placement`（Q2 / E1，总方量相同）**
+
+| 名 | 规则 |
+|---|---|
+| `uniform` | $x_c=0,\ \ell=5000$ m |
+| `hotspot` | $x_c=x_h=0,\ \ell=1000$ m |
+| `multi` | 5 段 × 500 m，中心间隔 900 m，各投 $\mathcal{V}/5$ |
+
+**策略族 `strategy`（Q5 / E4，同一预算/沙源约束）**
+
+| 名 | 次数与时刻 | 空间 | 每次方量 |
+|---|---|---|---|
+| `once` | 1 次，$t=\tau_{\text{permit}}+\tau_{\text{build}}$ | `uniform` | 可行量全部 |
+| `repeat` | 3 次，$t\in\{0,5,10\}+\tau_{\text{permit}}+\tau_{\text{build}}$ | `uniform` | 每次取 1/3 |
+| `targeted` | 1 次（可追加至 4 次，每次触发后） | `hotspot` 1 km，投到 $\arg\max \Delta E_b/\text{cost}$ 处 | 可行量全部 |
+| `adaptive` | 按 `SCENARIOS_STRATEGIES.md` §4.1 触发（$t=0$ 只评不动工） | 逐次选址 | 逐次决策 |
+
+- 所有时刻都要加 $\tau_{\text{permit}}+\tau_{\text{build}}$（默认 1.0 + 0.75 yr）；若加完超过 $T=15$，该次**取消并记录** `skipped_due_to_window`。
+- `repeat` 的 5 年间隔是**设计选择**（不是最优值），论文必须写明。
+- 策略比较一律用**实际可投方量**（§2.5 的 `V_j`），并报告设计量 vs 实投量的差。
+- `adaptive` 的空间选址依赖主指标 $E_b$（D12），不是 $E_w$。
+
 
 ### 2.6 边界条件（三套，`--bc` 切换）
 
@@ -272,11 +331,28 @@ dt: 0.02
 placement:                   # 覆盖默认投放（不填则用 strategy 的默认）
   - {t: 0.0, xc: 0.0, len: 5000.0, volume: 1500000.0}
 overrides:                   # 任何 params.yaml 里的键
-  rho_e_scale: 1.30         # 走廊均值目标 3.0 / 基线 2.3；乘基线 rho_e(x)，保留热点
+  rho_e_scale: 1.068        # S2: (3.0 - 0.530)/2.31；乘基线 rho_e(x)，保留热点
   D_diff: 300000.0
 ```
 
-> **$\rho_e$ 是空间场，不是标量**：情景里只给"走廊均值目标"（如 S2=3.0 m/yr）；实现用 `rho_e_scale = target / 2.3` 乘基线 $\rho_e(x)$，保留热点结构。**不要**用 `rho_e: 3.0` 覆盖整场，否则热点消失、定点投放的对比失真。
+> **$\rho_e$ 是空间场，不是标量；而且缩放必须扣掉情景自己的风暴贡献（2026-11-11 修正）。**
+>
+> 情景表里的 `rho_e` 是**走廊总速率目标**（含风暴），模型里 $\rho^{\text{storm}}$ 是另外加上去的。所以：
+> $$
+> \text{scale}(s)=\frac{\text{target}(s)-\rho^{\text{storm}}(s)}{\bar\rho_e},\qquad
+> \rho^{\text{storm}}(s)=\lambda_s(s)\cdot\bigl[\Delta y_{\text{ref}}(s)e^{\sigma^2/2}\bigr]\cdot\frac{\lambda}{k+\lambda}
+> $$
+> 其中 $\bar\rho_e=2.31$、$\sigma=0.6927$、$\lambda/(k+\lambda)=0.1304$。然后 $\rho_e(x;s)=\text{scale}(s)\cdot\rho_e^{\text{base}}(x)$，**保留热点结构**。
+>
+> | 情景 | $\rho^{\text{storm}}$ | target | **scale** |
+> |---|---|---|---|
+> | S1 | 0.199 | 1.7 | **0.649** |
+> | S2 | 0.530 | 3.0 | **1.068** |
+> | S3 $t=0$ | 0.530 | 3.0 | **1.068** |
+> | S3 $t=15$ | 1.459 | 5.0 | **1.531** |
+>
+> **不要用 `target/2.3`**（S2 会给 1.304），那是把风暴算了两遍，S2 总速率会高估约 22%。
+> **不要**用 `rho_e: 3.0` 覆盖整场，否则热点消失、定点投放的对比失真。
 
 ### 4.2 输出目录（**每件必备**）
 
@@ -288,13 +364,47 @@ overrides:                   # 任何 params.yaml 里的键
 | `events.csv` | 每次风暴：$t_k$、$\Delta y_{\rm pot}$、$\Delta y_k$、$x_k$、$\sigma_e$、中央 5 km/全域 9 km 的注入体积（m³）、耗尽单元数 | — |
 | `meta.json` | 代码 md5、params md5、Git commit、seed、运行耗时 | — |
 
+### 4.2b `results.json` 字段（**固定 schema，论文手按名取值**）
+
+```json
+{
+  "meta": {"scenario":"S2","strategy":"A","bc":"open","cost_model":"all_in",
+           "supply":"local","seed":42,"commit":"<git sha>","params_md5":"..."},
+
+  "initial": {"f_w0": 0.3036, "f_b0": 0.0, "w_min": 16.0, "w_mean": 21.84},
+
+  "duration": {
+    "T_first_fail_w": {"value": 4.21, "censored": false},
+    "T_first_fail_b": {"value": 11.8, "censored": false},
+    "T_safe_cum_w":   14.02,
+    "T_safe_cum_b":   15.00,
+    "T_recovery":     {"median": 1.31, "n": 7, "censored": 2}
+  },
+
+  "exposure": {"E_w": 3.1, "E_b": 0.42},
+  "retention": {"R_ret_1yr": 0.71, "R_ret_5yr": 0.38, "R_ret_15yr": 0.11},
+
+  "mass": {"placed": 2.45e6, "flux_out": 3.1e5, "offshore": 1.2e5,
+           "chronic": 8.0e5, "R_c": 1.4e5, "residual_rel_max": 3.2e-15},
+
+  "cost": {"cost_used": 6.62e7, "n_projects": 3, "c0_star": null},
+
+  "state": {"w_end_min": 3.2, "w_end_mean": 14.6, "exhausted_frac": 0.27}
+}
+```
+
+- **删失语义**：`censored=true` 时 `value` 必须写 `null`，不许写 15 冒充观测到的失守时间；分位数统计要按右删失处理（Kaplan–Meier 或直接报"≤15 年"的计数）。
+- `c0_star` 在 `cost_model=all_in` 下必须为 `null`。
+- 任何字段算不出来（未跑）就删掉键，**不要填 0**——0 会被当成真实结果画进图。
+
 ### 4.3 `ledger.csv` 列（**沙量台账，T1 的载体**）
 
 ```
-t, V_central, O_central, V_domain, O_domain,
+t, V_central, O_central, V_domain, O_domain, R_c_cum,
 placed_cum, flux_inner_left_cum, flux_inner_right_cum,
 flux_outer_left_cum, flux_outer_right_cum,
-offshore_loss_cum, chronic_loss_cum, residual, residual_rel
+offshore_loss_cum, chronic_loss_cum, storm_injected_cum, recovery_cum,
+residual, residual_rel
 ```
 
 - **两个控制体，不能混**：中央研究区 $[-2500,2500]$（5 km）与全计算域 $[-4500,4500]$（9 km）。
@@ -302,7 +412,15 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
   - `flux_inner_*`：穿过 $x=\pm2500$ 的**体积**通量；`flux_outer_*`：穿过 $x=\pm4500$ 的。
   - 中央流出的沙可能仍在 2 km 缓冲区，**不能**当成已离开 9 km 域，更不能解释为"下游社区受害"。
 - **单位**：体积通量累计 $=H\cdot F\cdot\Delta t$（m³）；$F$ 是 m²/yr。
-- 全域闭合：`placed = (V+O)_domain + (outer_out) + offshore + chronic`；中央闭合把 `outer_out` 换成 `inner_out`，并把 offshore/chronic 限定在中央。
+- **全域闭合（含 $R_c$，符号 2026-11-11 修正）**：
+  ```
+  placed_cum = (V+O)_domain + flux_outer_left_cum + flux_outer_right_cum
+             + offshore_loss_cum + chronic_loss_cum - R_c_cum
+  residual   = placed_cum - (上面右端)
+  ```
+  中央闭合把 `flux_outer_*` 换成 `flux_inner_*`，并把 offshore/chronic 限定在中央。
+  **$R_c$ 是减项**：它是"本该被侵蚀、但被下限挡住没真的侵蚀掉"的部分。
+  自检：无补沙、无通量、$\lambda=0$、$L_c>0$ 且全程触底 ⇒ `R_c_cum = chronic_loss_cum`，残差 0。
 - `residual_rel` 分母取 $\max(1\ \mathrm{m^3}, |placed\_cum|)$；T1 看最大值。
 - 账本与验收场用 **float64**；`fields.npz` 的 float32 只用于展示，不能拿来重算收支。
 
@@ -316,7 +434,7 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 |---|---|---|---|---|
 | **T1** | 沙量收支闭合 | 任意一次运行，读 `ledger.csv` | $\max\lvert\text{residual\_rel}\rvert<10^{-6}$ | 目标 $10^{-12}$，double 可达 $10^{-16}$ |
 | **T2** | 对 erf 解收敛 | **光滑高斯初值**（$\sigma=200$ m）；主格式 **BE + $\Delta t\propto\Delta x$**；CN 可选，用 $\Delta t\propto\Delta x^2$；另用阶跃初值测 $L_1$/前沿 | **BE：** L2 比值 $\in[1.8,2.2]$；**CN（可选）：** $\in[3.5,4.5]$；阶跃的 $L_\infty$ 不判阶；另做**非负性检查** | 见下 |
-| **T3** | 零源项/守恒 | (a) 均匀 $y$、$O=0$、$u=0$、零通量 ⇒ 全场不变；(b) 非均匀 $y$、零通量 ⇒ 总量守恒 + 对 erf 解；(c) $O$ 单独指数衰减 | (a) $<10^{-12}$；(b) 质量 $<10^{-10}$；(c) $e^{-(k+\lambda)t}$ | — |
+| **T3** | 零源项/守恒 | (a) 均匀 $y$、$O=0$、$u=0$、零通量 ⇒ 全场不变；(b) 非均匀 $y$、零通量 ⇒ **总量守恒**（不比对 erf，零通量下 erf 不适用）；(b') 大域 + 开边界 ⇒ 对 erf 解（与 T2 共用算例）；(c) $O$ 单独指数衰减 | (a) $<10^{-12}$；(b) 质量 $<10^{-10}$；(c) $e^{-(k+\lambda)t}$ | — |
 | **T4** | 网格/时间步一致性 | $dx=50$ vs $25$，同一情景确定性运行 | 关键指标（$T_{\text{first,fail}}^{w}$、留存率）差异 $<2\%$ | — |
 | **T5** | 无风暴退化 | 配置：$\lambda_s=0$、$\lambda=0$、$u=0$、$\rho_e$ 均匀 2.3、$w_0$ 均匀 18、$w_{mgmt}=20$；与 NONDIM §7 对拍 | **解析 $T_p$**（仅 validation）相对误差 $<10\%$ | 见 §6 |
 | **T6** | 单事件恢复 | 一次 $S_0$，无后续事件 | 最终回滩比例 $\to k/(k+\lambda)=0.87$；$t\to\infty$ 时 $O\to0$ | $0.87\pm0.001$ |
@@ -326,6 +444,21 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | **T10** | **事件落在步边界/终点** | 三次运行：事件在 $t=1.00$（$\Delta t=0.02$ 的整倍数）、$t=1.01$（步中）、$t=T$（终点）；每次只放 1 个事件，关闭后续抽样 | (a) `n_events_applied=1`，不得 0 或 2；(b) 跳变后瞬时 $O=H\Delta y_k\phi$（误差 $<10^{-12}$ 相对）；(c) `storm_injected_cum` = 设计注入量；(d) 质量账本闭合（T1 同时成立） | 解析值 |
 | **T11** | **非负性与退岸计数器** | 强制 $y$ 越过下限（$\rho_e$ 拉大 10 倍、$\lambda_s=0$）跑 5 年 | (a) $\min V \ge V_{\min}-10^{-9}$（**判 $V$，不是判 $y$**）；(b) 存在单元 $y<-w_0$ 且 **$y$ 未被裁剪**；(c) $R_c\ge0$ 单调不减，且逐单元 $R_c=\int H[-w_0-y]^{+}d\tau$；(d) 台账含 `R_c_cum` 后残差仍 $<10^{-6}$；(e) `risk_w` 在 $w\le0$ 时恒 1，而 `risk_b` 仍按 $d_b+y<m_s$ 计算（热点要到 $y<-20$ m 才为 1） | — |
 | **T12** | **空间聚合与初始条件** | 用初始场直接算 $f_w(0),f_b(0)$；再用 $f\ge0.5$ 求 $T_{\text{first,fail}}$ | (a) $f_w(0)=0.3036\pm0.002$（$1518/5000$）、$f_b(0)=0$；(b) 结果里**不存在** `T_first_any` 参与排序；(c) $T_{\text{safe,cum}}\in[0,15]$；(d) 删失标记 `censored=true` 与数值字段互斥 | 见 `MODEL_SPEC` §6.3 |
+
+### T1/T3/T11 的参考实现与实测值（`modeling/sanity/discrete_contract.py`，130 行）
+
+**先跑这个再写你的求解器**：它把"BE + 零通量 + O 子步 + V 下限 + R_c + 台账"这条最小链跑通，实测：
+
+| 检查 | 实测 | 判据 |
+|---|---|---|
+| T3a 零源项零通量 | $\max\lvert\Delta y\rvert=7.5\times10^{-13}$ | $<10^{-12}$ |
+| T3c O 指数衰减 | 相对误差 $2.8\times10^{-15}$ | 机器精度 |
+| T11 V 触底 | $\min V=V_{\min}=90$，$y$ 未被裁剪 | 判 $V$ |
+| T1 台账残差 | $\rho_e=3$: $1.1\times10^{-13}$；$\rho_e=12$: $1.6\times10^{-13}$ | $<10^{-6}$ |
+
+> 关键：**残差公式里 $R_c$ 是减项**。把它写成加号，同一个算例会给出 $\sim10^{13}$ 的相对残差——这是最快的自检。
+> 该脚本不含风暴/补沙/聚合，只验证离散与台账；不要直接拿它当求解器。
+
 
 ### T2 的参考数值（已由原型实测，可直接对拍）
 
@@ -372,10 +505,10 @@ offshore_loss_cum, chronic_loss_cum, residual, residual_rel
 | 编号 | 命令要点 | 输出 |
 |---|---|---|
 | E0 | `--scenario S{1,2,3} --strategy none` | 基线 $w(x,t)$、$E_0$ |
-| E1 | `--scenario S1 --strategy {A,B,C}` | 三方案对照表 + 沙去向堆叠图 |
-| E2 | `--scenario {S1,S2,S3} --strategy A --mc 1000` | 四个时长指标分位、$E_w/E_b$ 分位 |
+| E1 | `--scenario S1 --placement {uniform,hotspot,multi}` | 三方案对照表 + 沙去向堆叠图 |
+| E2 | `--scenario {S1,S2,S3} --strategy once --mc 1000` | 四个时长指标分位、$E_w/E_b$ 分位 |
 | E3 | **风暴时机**对照：early（0–5 yr）/ spread（每 2.5 yr）/ late（10–15 yr），各 6 次事件、同一强度分布、seed 固定 | 时机对照表（$T_{\text{first,fail}}^{w}$、min $w$、2042 年 $w$） |
-| E4 | `--scenario {S1,S2,S3} --strategy {A,B,C,adaptive} --supply {local,external} --cost-model {all_in,marginal_plus_fixed}`。**主算 `all_in`（$c_1=27,c_0=0$）**；$c_0\in[0,10]$ M\$ 扫描**只在 `marginal_plus_fixed` 下做**，不得与 `all_in` 混算 | 三策略同约束对比 + 成本；`marginal_plus_fixed` 才输出 $c_0^*$ 交叉点 |
+| E4 | `--scenario {S1,S2,S3} --strategy {once,repeat,targeted,adaptive} --supply {local,external} --cost-model {all_in,marginal_plus_fixed}`。**主算 `all_in`（$c_1=27,c_0=0$）**；$c_0\in[0,10]$ M\$ 扫描**只在 `marginal_plus_fixed` 下做**，不得与 `all_in` 混算 | 三策略同约束对比 + 成本；`marginal_plus_fixed` 才输出 $c_0^*$ 交叉点 |
 | E5 | `sweep.py --oat` + `--sobol`；风暴组必须含 `dy_p95=40`（2025 Buxton 观测到 43 m） | tornado 图 + Sobol 图 |
 | E6 | `--bc {open,zeroflux,dirichlet}`；另做 **域大小敏感性**：$L_b=4.5$ km vs $7$ km（中央 5 km 指标差异 >5% 则报告） | 边界/缓冲敏感性表 |
 | E7 | $\mathcal{V}\in[1e5,5e6]$ × $w_{\min}\in[6,22]$ 网格 | 相图（含 $\mathcal{V}_{\text{thr}}$ 线） |

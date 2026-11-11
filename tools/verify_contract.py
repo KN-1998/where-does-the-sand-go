@@ -128,6 +128,19 @@ def main():
         hits = [os.path.basename(d) for d, s_ in blob.items() if tok in s_]
         chk(f"关键值「{tok}」已写入文档", bool(hits), ",".join(hits[:4]))
 
+    print("\n=== B2. 可执行口径 ===")
+    coder = open(os.path.join(ROOT, "handoff", "CODER_SPEC.md"), encoding="utf-8").read()
+    mspec = open(os.path.join(ROOT, "modeling", "MODEL_SPEC.md"), encoding="utf-8").read()
+    bad_scale = [l for l in coder.splitlines()
+                 if ("target / 2.3" in l or "target/2.3" in l) and "不要用" not in l]
+    chk("情景缩放不再用 target/2.3", not bad_scale, bad_scale[0][:40] if bad_scale else "")
+    chk("缩放公式含 rho_storm", "rho_storm" in coder and "(3.0 - 0.530)/2.31" in coder)
+    chk("台账列含 R_c_cum", "R_c_cum" in coder)
+    chk("闭合式中 R_c 为减项", "chronic_loss_cum - R_c_cum" in coder)
+    chk("MODEL_SPEC 恒等式 R_c 为减项", "-(V_0+O_0)" in mspec or "-\\int R_c" in mspec)
+    chk("discrete_contract.py 存在", os.path.exists(
+        os.path.join(ROOT, "modeling", "sanity", "discrete_contract.py")))
+
     print("\n=== C. 结构完整性 ===")
     dec = open(os.path.join(ROOT, "modeling", "DECISIONS.md"), encoding="utf-8").read()
     nums = re.findall(r"^## (D\d+) ·", dec, re.M)
