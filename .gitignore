@@ -39,8 +39,12 @@ desktop.ini
 # ---- 运行产物（按需保留：优先提交脚本与结果摘要，不提交缓存）----
 modeling/sanity/*.png
 results/*.nc
+results/**/fields.npz
+results/**/mc_fields/*.npz
 *.h5
 *.pkl
+__pycache__/
+*.egg-info/
 
 # 资料库：大体积原始 PDF 与提取文本不入库（保留 .md 摘要）
 资料/06_原始摘录/_pdf/
@@ -51,3 +55,4 @@ results/*.nc
 # 交付包产物
 dist/
 
+_scratch/
