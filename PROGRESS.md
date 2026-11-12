@@ -667,3 +667,24 @@ T1   5 组用例（含 O0=100、src=1）rel ≤ 1.1e-13
 
 > 下一步建议：建模手先回填上述 9 条 `[自决]`（尤其第 7 条 E3 方向、第 9 条 L0 偏差口径），再决定是否要
 > 补 T9 数据 / 提高 Sobol 的 N。论文手可直接用 `results/SUMMARY.md` 的表与 `figures/F1–F8`。
+
+---
+
+## Round 21（2026-11-13，编程手）：复核审计 + 交接反馈
+
+### 本轮做了什么
+
+| 动作 | 结果 |
+|---|---|
+| 独立结果审计 | 新增 `python -m exp.audit`：106 个 run、8 个 MC、E1/E4/E7 专项、F1–F8，共 **2268 项检查 / 0 失败**；报告 `results/validation/AUDIT.md` |
+| 一键门禁 | 新增 `python -m exp.check_all`（原型 + 17 测试 + 67 合同 + 2268 审计），全过 |
+| CLI 复现性 | 同 seed 两次独立进程：`results.json`/`fields.npz` md5 相同 |
+| 字段补全 | `fields.npz` 补 `exhausted[nt,nx]`（CODER_SPEC §2.4c），重跑 E0 确定性/E1/E3/E0_local 的场文件 |
+| 交接文档 | `feedback/TO_MODELER.md`、`feedback/TO_CHIEF_CODER.md`、`feedback/RE_RUN_AND_OPEN_ISSUES.md` |
+| 仓库卫生 | 只读区零改动；入库最大文件 230 KB；台账/场文件不入库（约 45 MB 留在磁盘） |
+
+### 结论
+
+**当前没有“算错”而必须立刻重跑的点**；所有需要重跑的情形都是“建模手改口径”或“补数据”，
+清单、影响范围、代价与纪律见 `feedback/RE_RUN_AND_OPEN_ISSUES.md`。
+最需要建模手拍板的三件事：L0 双计数偏差（+1.6% 而非 +22.5%）、$f_c$ 聚合口径、通量限制器实现。

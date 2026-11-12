@@ -10,8 +10,8 @@
     "t_end": 15.0,
     "dx": 25.0,
     "dt": 0.02,
-    "runtime_s": 39.86164140701294,
-    "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
+    "runtime_s": 39.90196919441223,
+    "git_commit": "4d874f151acc109bb2d8ae06231172f290ac54cc",
     "overrides": {},
     "scenario_law": {
       "name": "S3",

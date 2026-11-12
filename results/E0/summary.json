@@ -1,11 +1,13 @@
 {
   "experiment": "E0",
-  "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
+  "git_commit": "4d874f151acc109bb2d8ae06231172f290ac54cc",
   "generated_rows": [
     {
       "scenario": "S1",
       "strategy": "none",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "E0_S1",
       "E_w": 66238.47434900927,
       "E_b": 8248.173820579099,
@@ -27,6 +29,8 @@
       "scenario": "S2",
       "strategy": "none",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "E0_S2",
       "E_w": 70223.67778522513,
       "E_b": 37485.336458960286,
@@ -48,6 +52,8 @@
       "scenario": "S3",
       "strategy": "none",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "E0_S3",
       "E_w": 70350.04035050969,
       "E_b": 41625.38636099135,

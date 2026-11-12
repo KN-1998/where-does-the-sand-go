@@ -21,9 +21,9 @@
 
 ## 每个 run 目录的必备文件
 
-`results.json`（固定 schema，论文按名取值）、`fields.npz`（`y/O/w/x/t`，float32 展示用）、
-`ledger.csv`（逐时间步沙量台账，T1 的载体）、`events.csv`（每次风暴）、`meta.json`
-（代码/参数 md5、git sha、seed、运行耗时、网格）。
+`results.json`（固定 schema，论文按名取值）、`fields.npz`（`y/O/w/exhausted/x/t`；`exhausted`
+为 `V<=V_min` 的布尔掩膜，其余 float32 仅展示用）、`ledger.csv`（逐时间步沙量台账，T1 的载体）、
+`events.csv`（每次风暴）、`meta.json`（代码/参数 md5、git sha、seed、运行耗时、网格）。
 
 ## 版本控制说明
 

@@ -2,6 +2,10 @@
 """Result serialisation: ``results.json``, ``fields.npz``, ``ledger.csv``,
 ``events.csv``, ``meta.json`` (CODER_SPEC §4.2).
 
+``fields.npz`` carries ``y/O/w/exhausted/x/t``; ``exhausted`` is the boolean
+diagnostic mask required by CODER_SPEC §2.4c (``V <= V_min``).  All arrays except
+the mask are float32 for display only -- never recompute the ledger from them.
+
 Determinism
 -----------
 ``results.json`` and ``fields.npz`` must be byte-identical for the same seed
@@ -166,7 +170,8 @@ def write_results(outdir: str | Path, res: SimResult,
         json.dump(results, fh, ensure_ascii=False, indent=2)
     if write_fields:
         w = res.w0[None, :] + res.y
-        save_npz(outdir / "fields.npz", y=res.y, O=res.O, w=w, x=res.grid.x, t=res.t)
+        save_npz(outdir / "fields.npz", y=res.y, O=res.O, w=w,
+                 exhausted=res.exhausted, x=res.grid.x, t=res.t)
     res.ledger.write(outdir / "ledger.csv")
     _write_events(outdir / "events.csv", res.events)
     meta = {

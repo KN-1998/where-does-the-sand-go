@@ -1,0 +1,9 @@
+﻿[PASS] reference prototype       1.2s    [PASS] refill still closes  resid=-2.17e-06 rel=1.4e-13 D_end=4.52e+05 peak=4.07e+06
+
+===== ALL PASS =====
+[PASS] pytest T1-T13             4.9s  .................                                                        [100%]
+[PASS] contract verifier         0.2s  
+===== �����67 ͨ�� / 0 ʧ�� =====
+ȫ��ͨ����
+[PASS] result audit              1.3s  ===== audit: 2268 checks, 0 failed =====
+===== check_all: ALL PASS =====

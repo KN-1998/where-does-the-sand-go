@@ -39,6 +39,7 @@ class SimResult:
     w0: np.ndarray
     y_end: np.ndarray
     O_end: np.ndarray
+    exhausted: np.ndarray
     ledger: Ledger
     events: List[Dict[str, Any]]
     metrics: Dict[str, Any]
@@ -170,6 +171,7 @@ class Simulator:
         self._t_hist: List[float] = []
         self._y_hist: List[np.ndarray] = []
         self._O_hist: List[np.ndarray] = []
+        self._exh_hist: List[np.ndarray] = []
 
         # simple account accumulators (all m^3 / m^3); compensated sums keep the
         # 15-year closure at ~1e-13 instead of accumulating step rounding
@@ -405,6 +407,8 @@ class Simulator:
         if self.store_fields:
             self._y_hist.append(self.y.astype(np.float32))
             self._O_hist.append(self.O.astype(np.float32))
+            self._exh_hist.append(
+                V_abs_of_y(self.y, self.V_ref, self.H) <= self.V_min + 1e-12)
 
     # ------------------------------------------------------------------
     # forecasts (adaptive strategy only)
@@ -566,6 +570,7 @@ class Simulator:
             self.metrics_out = m
             y_end = self.y.copy()
             O_end = self.O.copy()
+            exh = np.asarray(self._exh_hist, dtype=bool)
             self._y_hist = np.asarray(self._y_hist, dtype=np.float32)
             self._O_hist = np.asarray(self._O_hist, dtype=np.float32)
             self._t_hist = np.asarray(self._t_hist, dtype=float)
@@ -573,11 +578,12 @@ class Simulator:
             m = self.metrics.finalize(self.y)
             y_end = self.y.copy()
             O_end = self.O.copy()
+            exh = np.zeros((0, g.nx), dtype=bool)
         return SimResult(
             grid=g, t=np.asarray(self._t_hist, dtype=float),
             y=self._y_hist if collect else self.y,
             O=self._O_hist if collect else self.O,
-            w0=self.w0, y_end=y_end, O_end=O_end,
+            w0=self.w0, y_end=y_end, O_end=O_end, exhausted=exh,
             ledger=self.ledger, events=self.events_rows, metrics=m,
             budget=self.budget.as_dict(), strategy_log=getattr(strat, "trigger_log", []),
             n_events_applied=self.n_events_applied,

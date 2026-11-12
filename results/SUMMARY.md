@@ -31,7 +31,9 @@
 | T13 侵蚀后补沙 | 终值相对残差 $<10^{-10}$、$R_c$ 下降、$D_{\max}$ 单调 | $1.4\times10^{-14}$、$1.40\to1.39\times10^6$、单调 | ✅ |
 
 > 全库 106 个 `results.json` 的 `residual_rel_max` 最大值 $=1.9\times10^{-7}<10^{-6}$。
-> 日志：`results/validation/pytest.log`。T9 见 `results/validation/T9_report.md`（缺 GIS，未重算）。
+> 日志：`results/validation/pytest.log`。结果层另有 **2268 项一致性审计 0 失败**
+> （`results/validation/AUDIT.md`，一键门禁 `python -m exp.check_all`）。
+> T9 见 `results/validation/T9_report.md`（缺 GIS，未重算）。
 
 ---
 

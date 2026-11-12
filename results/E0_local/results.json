@@ -6,7 +6,7 @@
     "cost_model": "all_in",
     "supply": "local",
     "seed": 42,
-    "commit": "0b110cb17514a702a4bb4f483e9767ceb3a4f67c",
+    "commit": "4d874f151acc109bb2d8ae06231172f290ac54cc",
     "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
     "n_events_applied": 1,
     "phi_shape": "uniform",

@@ -44,6 +44,14 @@ python -m pytest tests -v -s
 # 日志已存：results/validation/pytest.log
 ```
 
+一键门禁（推荐每次改动后跑）：
+
+```powershell
+python -m exp.check_all
+# = 参考原型 + pytest 17 项 + 合同自检 67 项 + 结果审计 2268 项
+# 日志：results/validation/check_all.log / AUDIT.json / AUDIT.md
+```
+
 单项：`python -m pytest tests/test_mass.py -v -s` 等；文件与判据见 `tests/README.md`。
 
 ## 3. 第一个 E0 产物（约 1 s）

@@ -1,11 +1,13 @@
 {
   "experiment": "E1",
-  "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
+  "git_commit": "4d874f151acc109bb2d8ae06231172f290ac54cc",
   "generated_rows": [
     {
       "scenario": "S1",
       "strategy": "placement",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "uniform",
       "E_w": 32866.4389788323,
       "E_b": 0.0,
@@ -35,6 +37,8 @@
       "scenario": "S1",
       "strategy": "placement",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "hotspot",
       "E_w": 31259.56339457332,
       "E_b": 0.0,
@@ -64,6 +68,8 @@
       "scenario": "S1",
       "strategy": "placement",
       "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
       "label": "multi",
       "E_w": 32468.962936771342,
       "E_b": 0.0,
