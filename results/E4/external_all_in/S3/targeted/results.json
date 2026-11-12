@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "scenario": "S3",
+    "strategy": "targeted",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "external",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 12,
+    "phi_shape": "uniform",
+    "label": "E4_external_all_in_S3_targeted",
+    "scenario_law": {
+      "name": "S3",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.8,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 11.0,
+      "target_0": 3.0,
+      "target_15": 5.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.5331679299957455
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.733664846267615,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": 14.209587168301242,
+      "censored": false
+    },
+    "T_safe_cum_w": 11.74231812541933,
+    "T_safe_cum_b": 14.888188147976315,
+    "T_recovery": {
+      "median": 0.09999999999999787,
+      "n": 108,
+      "censored": 8
+    }
+  },
+  "exposure": {
+    "E_w": 16288.409372903367,
+    "E_b": 559.0592601184302
+  },
+  "mass": {
+    "placed": 4000000.0,
+    "flux_out": 34915.524366868136,
+    "offshore": 731095.9977719466,
+    "chronic": 3624474.3705036542,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 6636210.314523286,
+    "recovery": 4876410.305138883,
+    "residual_rel_max": 8.789356797933578e-09
+  },
+  "cost": {
+    "cost_used": 120000000.0,
+    "n_projects": 2,
+    "c0_star": null,
+    "c1_eff": 30.0,
+    "V_used": 4000000.0,
+    "S_used": 4000000.0
+  },
+  "state": {
+    "w_end_min": 2.9672063794008636,
+    "w_end_mean": 8.338943398957888,
+    "w_min_ever": 0.8428752304116003,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": 14.027524940293967,
+      "censored": false
+    }
+  },
+  "placements": [
+    {
+      "t": 1.750629191587549,
+      "tag": "targeted_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 2900000.0,
+      "cost": 87000000.0,
+      "skipped_reason": null
+    },
+    {
+      "t": 2.010629191587549,
+      "tag": "targeted_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 1100000.0,
+      "cost": 33000000.0,
+      "skipped_reason": null
+    },
+    {
+      "t": 14.769752219787122,
+      "tag": "targeted_3",
+      "xc": -2000.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 0.0,
+      "skipped_reason": "below_min_meaningful_or_exhausted"
+    }
+  ],
+  "strategy_log": [
+    {
+      "t": 0.25062919158754765,
+      "why": "delta_f",
+      "action": "schedule",
+      "xc": 0.0,
+      "at": 2.0006291915875476
+    },
+    {
+      "t": 0.750629191587548,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.5106291915875487,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.750629191587549,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.252752789306125,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.5155069348795407,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.755506934879541,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 13.00197997674036,
+      "why": "delta_f",
+      "action": "schedule",
+      "xc": -2000.0,
+      "at": 14.75197997674036
+    },
+    {
+      "t": 13.261979976740355,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 13.50647124521254,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 13.756083556276474,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 14.019515316871786,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 14.269752219787133,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 14.509752219787128,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 14.769752219787122,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 15.0,
+      "why": "building_hard",
+      "action": "cooldown"
+    }
+  ],
+  "retention": {
+    "R_ret_1yr": null,
+    "placed_1yr": 0.0,
+    "R_ret_5yr": 0.9125352160070082,
+    "placed_5yr": 4000000.0,
+    "R_ret_15yr": 0.5788076553902352,
+    "placed_15yr": 4000000.0
+  }
+}

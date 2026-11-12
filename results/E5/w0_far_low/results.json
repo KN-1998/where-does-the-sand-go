@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "scenario": "S2",
+    "strategy": "once",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 6,
+    "phi_shape": "uniform",
+    "label": "E5_w0_far_low",
+    "scenario_law": {
+      "name": "S2",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.4,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 8.0,
+      "target_0": 3.0,
+      "target_15": 3.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.0691252134262372
+    }
+  },
+  "initial": {
+    "f_w0": 1.0,
+    "f_b0": 0.0,
+    "w_min": 16.000637704263298,
+    "w_mean": 18.596786178076574
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 9.47236993420273,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 27638.15032898616,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 2450000.0,
+    "flux_out": 23291.91637056139,
+    "offshore": 319270.856210023,
+    "chronic": 2945671.9110110453,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 2730931.0305820676,
+    "recovery": 2129536.6109208534,
+    "residual_rel_max": 6.6356733441352844e-09
+  },
+  "cost": {
+    "cost_used": 66150000.0,
+    "n_projects": 1,
+    "c0_star": null,
+    "c1_eff": 27.0,
+    "V_used": 2450000.0,
+    "S_used": 2450000.0
+  },
+  "state": {
+    "w_end_min": 3.0357036990109876,
+    "w_end_mean": 6.4541847912754875,
+    "w_min_ever": 3.0357036990109876,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 1.7612583831750965,
+      "tag": "once",
+      "xc": 0.0,
+      "ell": 5000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 2450000.0,
+      "cost": 66150000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": []
+}

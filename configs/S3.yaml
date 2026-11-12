@@ -1,0 +1,10 @@
+# configs/S3.yaml — repeated storms + rising chronic erosion and wave climate
+inherit: modeling/params.yaml
+scenario: S3
+strategy: repeat
+bc: open
+seed: 42
+t_end: 15.0
+dx: 25.0
+dt: 0.02
+overrides: {}

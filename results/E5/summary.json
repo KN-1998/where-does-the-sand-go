@@ -1,0 +1,486 @@
+{
+  "experiment": "E5",
+  "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+  "generated_rows": [
+    {
+      "param": "base",
+      "value": null,
+      "scenario": "S2",
+      "strategy": "once",
+      "bc": "open",
+      "supply": "local",
+      "cost_model": "all_in",
+      "label": "base",
+      "E_w": 17287.147194493842,
+      "E_b": 0.0,
+      "T_safe_cum_w": 11.54257056110123,
+      "T_safe_cum_b": 15.0,
+      "T_first_fail_w": 0.562586978221088,
+      "T_first_fail_b": null,
+      "w_end_min": 2.552835912600708,
+      "w_end_mean": 8.883771732455717,
+      "exhausted_frac": 0.0,
+      "placed": 2450000.0,
+      "cost": 66150000.0,
+      "n_projects": 1,
+      "n_events": 6,
+      "residual_rel_max": 6.810296326875687e-09,
+      "protected_shoreline_years": 57712.852805506154
+    },
+    {
+      "label": "D_diff_low",
+      "param": "D",
+      "value": 100000.0,
+      "E_w": 11793.523501984368,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.64129529960313,
+      "T_first_fail_w": 0.6051448298886422,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "D_diff_high",
+      "param": "D",
+      "value": 800000.0,
+      "E_w": 22644.47475986701,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 10.471105048026573,
+      "T_first_fail_w": 0.5189845256090636,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "H_dep_low",
+      "param": "H",
+      "value": 8.0,
+      "E_w": 8886.97942010495,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 13.22260411597901,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "H_dep_high",
+      "param": "H",
+      "value": 12.0,
+      "E_w": 26707.419252408683,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 9.658516149518242,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "rho_e_low",
+      "param": "rho_e",
+      "value": 1.2,
+      "E_w": 6785.278019722988,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 13.642944396055402,
+      "T_first_fail_w": 1.1550108641016827,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "rho_e_high",
+      "param": "rho_e",
+      "value": 2.1,
+      "E_w": 28148.887330061007,
+      "E_b": 671.5220295582008,
+      "T_safe_cum_b": 14.865695594088361,
+      "T_safe_cum_w": 9.370222533987766,
+      "T_first_fail_w": 0.42118756856831485,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "rho_e_hotspot_amp_low",
+      "param": "a_h",
+      "value": 0.5,
+      "E_w": 11515.925578347353,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.696814884330538,
+      "T_first_fail_w": 0.7320552815203583,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "rho_e_hotspot_amp_high",
+      "param": "a_h",
+      "value": 2.0,
+      "E_w": 24294.069040360715,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 10.14118619192784,
+      "T_first_fail_w": 0.43749370415025235,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "u_drift_low",
+      "param": "u",
+      "value": 0.0,
+      "E_w": 16639.473221279313,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 11.672105355744145,
+      "T_first_fail_w": 0.562754933033194,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "u_drift_high",
+      "param": "u",
+      "value": 150.0,
+      "E_w": 22100.51333651712,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 10.579897332696575,
+      "T_first_fail_w": 0.5618225678473189,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "lambda_s_low",
+      "param": "lambda_s",
+      "value": 0.2,
+      "E_w": 25693.15743804605,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 9.86136851239079,
+      "T_first_fail_w": 0.8412955380468353,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "lambda_s_high",
+      "param": "lambda_s",
+      "value": 0.8,
+      "E_w": 32085.749695185306,
+      "E_b": 934.4313501311626,
+      "T_safe_cum_b": 14.81311372997377,
+      "T_safe_cum_w": 8.58285006096292,
+      "T_first_fail_w": 0.754144538873264,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "dy_ref_low",
+      "param": "dy_ref",
+      "value": 4.0,
+      "E_w": 14370.34872410513,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.125930255178977,
+      "T_first_fail_w": 1.0892415947011889,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "dy_ref_high",
+      "param": "dy_ref",
+      "value": 12.0,
+      "E_w": 21522.49839419554,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 10.695500321160893,
+      "T_first_fail_w": 0.42071797544210926,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "k_rec_low",
+      "param": "k_rec",
+      "value": 0.33,
+      "E_w": 24763.550414236157,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 10.047289917152742,
+      "T_first_fail_w": 0.5009785180123288,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "k_rec_high",
+      "param": "k_rec",
+      "value": 2.0,
+      "E_w": 13686.161535472398,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.26276769290552,
+      "T_first_fail_w": 1.1580506597024787,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "lam_off_low",
+      "param": "lam_off",
+      "value": 0.02,
+      "E_w": 13266.65059826917,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.34666988034618,
+      "T_first_fail_w": 0.5637260650802898,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "lam_off_high",
+      "param": "lam_off",
+      "value": 0.3,
+      "E_w": 26120.59647666841,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 9.77588070466629,
+      "T_first_fail_w": 0.559886790705012,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "w0_far_low",
+      "param": "w0_far",
+      "value": 20.0,
+      "E_w": 27638.15032898616,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 9.47236993420273,
+      "T_first_fail_w": 0.0,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "w0_far_high",
+      "param": "w0_far",
+      "value": 40.0,
+      "E_w": 7998.39680964773,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 13.400320638070443,
+      "T_first_fail_w": 14.408777703479185,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "w_mgmt_low",
+      "param": "w_mgmt",
+      "value": 12.0,
+      "E_w": 4472.236166629196,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 14.105552766674169,
+      "T_first_fail_w": 14.406165335401637,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "w_mgmt_high",
+      "param": "w_mgmt",
+      "value": 32.0,
+      "E_w": 50582.22657446263,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 4.88355468510752,
+      "T_first_fail_w": 0.0,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "V15_total_low",
+      "param": "V15_total",
+      "value": 3500000.0,
+      "E_w": 17287.147194493842,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 11.54257056110123,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "V15_total_high",
+      "param": "V15_total",
+      "value": 6800000.0,
+      "E_w": 17287.147194493842,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 11.54257056110123,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "V_event_max_low",
+      "param": "V_event_max",
+      "value": 1500000.0,
+      "E_w": 47353.74533533889,
+      "E_b": 2741.065147177433,
+      "T_safe_cum_b": 14.451786970564516,
+      "T_safe_cum_w": 5.52925093293225,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 1500000.0,
+      "cost": 40500000.0
+    },
+    {
+      "label": "V_event_max_high",
+      "param": "V_event_max",
+      "value": 3500000.0,
+      "E_w": 17287.147194493842,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 11.54257056110123,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2450000.0,
+      "cost": 66150000.0
+    },
+    {
+      "label": "S_borrow_total_low",
+      "param": "S_borrow_total",
+      "value": 1500000.0,
+      "E_w": 47353.74533533889,
+      "E_b": 2741.065147177433,
+      "T_safe_cum_b": 14.451786970564516,
+      "T_safe_cum_w": 5.52925093293225,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 1500000.0,
+      "cost": 40500000.0
+    },
+    {
+      "label": "S_borrow_total_high",
+      "param": "S_borrow_total",
+      "value": 3200000.0,
+      "E_w": 10249.965646162993,
+      "E_b": 0.0,
+      "T_safe_cum_b": 15.0,
+      "T_safe_cum_w": 12.950006870767405,
+      "T_first_fail_w": 0.562586978221088,
+      "placed": 2900000.0,
+      "cost": 78300000.0
+    }
+  ],
+  "sobol": {
+    "group1": {
+      "params": [
+        "D_diff",
+        "rho_e",
+        "u_drift"
+      ],
+      "N": 96,
+      "n_runs": 480,
+      "S1": {
+        "E_b": {
+          "D_diff": -0.0020831682629226383,
+          "rho_e": 0.5066299692864712,
+          "u_drift": -0.0029237375530026337
+        },
+        "E_w": {
+          "D_diff": 0.09646802781920255,
+          "rho_e": 0.8856130151580769,
+          "u_drift": -0.028751630895375455
+        }
+      },
+      "var": {
+        "E_b": 76860.38877974557,
+        "E_w": 58432302.865055524
+      },
+      "bounds": {
+        "D_diff": [
+          100000.0,
+          800000.0
+        ],
+        "rho_e": [
+          1.2,
+          2.1
+        ],
+        "u_drift": [
+          0.0,
+          150.0
+        ]
+      }
+    },
+    "group2": {
+      "params": [
+        "lambda_s",
+        "dy_ref",
+        "k_rec"
+      ],
+      "N": 96,
+      "n_runs": 480,
+      "S1": {
+        "E_b": {
+          "lambda_s": 0.06433972422878548,
+          "dy_ref": 0.0026462641996647528,
+          "k_rec": 0.004458548018065109
+        },
+        "E_w": {
+          "lambda_s": -0.029851498542339153,
+          "dy_ref": 0.12589786486695867,
+          "k_rec": 0.6098521724483575
+        }
+      },
+      "var": {
+        "E_b": 418468.6473858734,
+        "E_w": 38901800.526704766
+      },
+      "bounds": {
+        "lambda_s": [
+          0.2,
+          0.8
+        ],
+        "dy_ref": [
+          4.0,
+          12.0
+        ],
+        "k_rec": [
+          0.33,
+          2.0
+        ]
+      }
+    },
+    "group3": {
+      "params": [
+        "V15_total",
+        "V_event_max",
+        "S_borrow_total"
+      ],
+      "N": 96,
+      "n_runs": 480,
+      "S1": {
+        "E_b": {
+          "V15_total": 0.0,
+          "V_event_max": 0.6401697229710737,
+          "S_borrow_total": 0.6372174002018061
+        },
+        "E_w": {
+          "V15_total": 0.0,
+          "V_event_max": 0.76536224854238,
+          "S_borrow_total": 1.0277799352321209
+        }
+      },
+      "var": {
+        "E_b": 402249.6905556321,
+        "E_w": 110770646.1892877
+      },
+      "bounds": {
+        "V15_total": [
+          3500000.0,
+          6800000.0
+        ],
+        "V_event_max": [
+          1500000.0,
+          3500000.0
+        ],
+        "S_borrow_total": [
+          1500000.0,
+          3200000.0
+        ]
+      }
+    }
+  }
+}

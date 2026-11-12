@@ -1,0 +1,65 @@
+{
+  "code_md5": "5ca964608b0344e54866f2f16436c9ad",
+  "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+  "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+  "seed": 42,
+  "runtime_s": null,
+  "config": {
+    "scenario": "S1",
+    "strategy": "adaptive",
+    "bc": "open",
+    "seed": 42,
+    "t_end": 15.0,
+    "dx": 25.0,
+    "dt": 0.02,
+    "Lb": 4500.0,
+    "phi_shape": "uniform",
+    "cost_model": "all_in",
+    "supply": "external",
+    "limiter": true,
+    "overrides": {},
+    "forced_events": [],
+    "dirichlet_yb": null,
+    "label": "E4_external_all_in_S1_adaptive",
+    "source_config": null
+  },
+  "scenario": {
+    "name": "S1",
+    "sigma_ln": 0.6926652177436868,
+    "lambda_s_0": 0.2,
+    "lambda_s_15": 0.2,
+    "dy_ref_0": 6.0,
+    "dy_ref_15": 6.0,
+    "target_0": 1.7,
+    "target_15": 1.7,
+    "rho_scale_0": 0.6498397039525878,
+    "rho_scale_15": 0.6498397039525878
+  },
+  "grid": {
+    "nx": 360,
+    "dx": 25.0,
+    "Lb": 4500.0,
+    "length": 9000.0,
+    "n_central": 200,
+    "x_min": -4487.5,
+    "x_max": 4487.5
+  },
+  "python": "3.13.9",
+  "numpy": "2.3.5",
+  "created_unix": 1794497076.5039368,
+  "n_events_applied": 5,
+  "solver": {
+    "scheme": "conservative FV + backward Euler",
+    "limiter": true,
+    "bc": "open"
+  },
+  "experiment": "E4",
+  "destinations": {
+    "placed": 2900000.0,
+    "retained_domain": 2743421.547237359,
+    "flux_out_domain": 29484.018076386204,
+    "offshore_loss": 127094.43468659572,
+    "chronic_diff": 0.0,
+    "split_residual": -3.4086406230926514e-07
+  }
+}

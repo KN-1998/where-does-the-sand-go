@@ -1,0 +1,244 @@
+{
+  "rows": [
+    {
+      "c0_M": 0.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 26950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 0.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 26949999.999999996,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 0.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 26950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 0.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 26950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 2.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 28950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 2.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 32949999.999999996,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 2.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 28950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 2.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 28950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 4.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 30950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 4.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 38950000.0,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 4.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 30950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 4.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 30950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 6.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 32950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 6.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 44950000.0,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 6.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 32950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 6.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 32950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 8.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 34950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 8.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 50950000.0,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 8.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 34950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 8.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 34950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 10.0,
+      "strategy": "once",
+      "E_b": 0.0,
+      "E_w": 17287.147194493842,
+      "T_safe_cum_b": 15.0,
+      "cost": 36950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 10.0,
+      "strategy": "repeat",
+      "E_b": 0.0,
+      "E_w": 32500.49295861106,
+      "T_safe_cum_b": 15.0,
+      "cost": 56950000.0,
+      "n_projects": 3,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 10.0,
+      "strategy": "targeted",
+      "E_b": 0.0,
+      "E_w": 15019.366882415892,
+      "T_safe_cum_b": 15.0,
+      "cost": 36950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    },
+    {
+      "c0_M": 10.0,
+      "strategy": "adaptive",
+      "E_b": 0.0,
+      "E_w": 17841.114111072053,
+      "T_safe_cum_b": 15.0,
+      "cost": 36950000.0,
+      "n_projects": 1,
+      "placed": 2450000.0
+    }
+  ]
+}

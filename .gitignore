@@ -39,7 +39,12 @@ desktop.ini
 # ---- 运行产物（按需保留：优先提交脚本与结果摘要，不提交缓存）----
 modeling/sanity/*.png
 results/*.nc
+# 单次运行的体积型中间产物留在磁盘上（可再生，见 REPRODUCE.md），不进 git；
+# results.json / meta.json / summary.* / mc_summary.json 仍提交
 results/**/fields.npz
+results/**/ledger.csv
+results/**/events.csv
+results/**/mc_results.csv
 results/**/mc_fields/*.npz
 *.h5
 *.pkl

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Nourishment placements, budget/sand-source constraints and strategies.
 
-Two families, deliberately kept apart (CODER_SPEC §2.5c):
+Two families, deliberately kept apart (CODER_SPEC 搂2.5c):
 
 * ``placement`` (Q2 / E1): uniform | hotspot | multi -- same total volume.
 * ``strategy``  (Q5 / E4): once | repeat | targeted | adaptive.
 
-Feasible volume per project is the ordered ``min`` of CODER_SPEC §2.5b::
+Feasible volume per project is the ordered ``min`` of CODER_SPEC 搂2.5b::
 
     min(V_desired, V_event_max, V15_total - V_used, S_cap - S_used,
         (C_max - cost_used - c0) / c1_eff)
@@ -63,7 +63,7 @@ class Budget:
         return self.V15_total if self.supply == "external" else self.S_borrow_total * self.a_borrow
 
     def planned_total(self, n: int) -> float:
-        """V_tot(N) from SCENARIOS_STRATEGIES §3."""
+        """V_tot(N) from SCENARIOS_STRATEGIES 搂3."""
         budget_cap = (self.C_max - n * self.c0) / self.c1_eff
         return max(0.0, min(self.V15_total, n * self.V_event_max, self.S_cap, budget_cap))
 
@@ -141,7 +141,9 @@ class Strategy:
         self.run = run
         self.budget = budget
         self.delay = float(params["permit_delay"]) + float(params["tau_build"])
-        self.last_place_t = 0.0
+        # sentinel: the cooldown only separates *projects*; it must not block the
+        # very first project (there is no "previous project still under construction")
+        self.last_place_t = -1.0e9
         self.f_at_last_place: Optional[float] = None
         self.trigger_log: List[Dict[str, Any]] = []
 
@@ -207,8 +209,8 @@ class _TriggeredStrategy(Strategy):
         super().__init__(params, run, budget)
         self.delta_f = float(params["delta_f_trig"])
         self.sigma_m = float(params["sigma_m"])
-        self.m_s = float(params["m_s"])
-        self.d_b = float(params["d_b"])
+        self.m_s = float(params["m_safe"])
+        self.d_b = float(params["d_bldg"])
         self.cooldown = self.delay + float(params["cooldown_extra"])
 
     def _measure(self, model, t: float):
@@ -310,7 +312,9 @@ class AdaptiveStrategy(_TriggeredStrategy):
 
 
 def make_strategy(params, run, budget: Budget, placements=None) -> Strategy:
-    if placements:
+    # an explicit (possibly empty) list means "scripted": forecasts pass [] for
+    # "do nothing" and must never recurse into the live adaptive strategy.
+    if placements is not None:
         return ScriptedStrategy(params, run, budget, placements)
     name = run.strategy
     if name in ("none", None):
@@ -324,3 +328,4 @@ def make_strategy(params, run, budget: Budget, placements=None) -> Strategy:
     if name == "adaptive":
         return AdaptiveStrategy(params, run, budget)
     raise KeyError(f"unknown strategy {name!r}")
+

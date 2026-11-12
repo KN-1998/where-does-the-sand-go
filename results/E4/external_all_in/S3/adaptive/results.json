@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "scenario": "S3",
+    "strategy": "adaptive",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "external",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 12,
+    "phi_shape": "uniform",
+    "label": "E4_external_all_in_S3_adaptive",
+    "scenario_law": {
+      "name": "S3",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.8,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 11.0,
+      "target_0": 3.0,
+      "target_15": 5.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.5331679299957455
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.733664846267615,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": 14.209530844861149,
+      "censored": false
+    },
+    "T_safe_cum_w": 11.303806566230369,
+    "T_safe_cum_b": 14.919118914694144,
+    "T_recovery": {
+      "median": 0.11999999999999744,
+      "n": 111,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 18480.967168848154,
+    "E_b": 404.4054265292584
+  },
+  "mass": {
+    "placed": 4000000.0,
+    "flux_out": -28167.53260225121,
+    "offshore": 734513.2056533546,
+    "chronic": 3624474.3705036542,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 6695769.562481373,
+    "recovery": 4899203.081707875,
+    "residual_rel_max": 8.789356797933578e-09
+  },
+  "cost": {
+    "cost_used": 120000000.0,
+    "n_projects": 2,
+    "c0_star": null,
+    "c1_eff": 30.0,
+    "V_used": 4000000.0,
+    "S_used": 4000000.0
+  },
+  "state": {
+    "w_end_min": 2.986087007747642,
+    "w_end_mean": 8.437237962484396,
+    "w_min_ever": 0.8358150672818532,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": 14.027524940293967,
+      "censored": false
+    }
+  },
+  "placements": [
+    {
+      "t": 2.010629191587549,
+      "tag": "adaptive_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 2900000.0,
+      "cost": 87000000.0,
+      "skipped_reason": null
+    },
+    {
+      "t": 4.775506934879526,
+      "tag": "adaptive_2",
+      "xc": -2000.0,
+      "ell": 1000.0,
+      "volume_design": 1100000.0,
+      "volume_actual": 1100000.0,
+      "cost": 33000000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": [
+    {
+      "t": 0.0,
+      "why": "initial_assessment",
+      "f_w0": 0.3035899684646725,
+      "f_b0": 0.0,
+      "action": "none"
+    },
+    {
+      "t": 0.25062919158754765,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 2900000.0,
+      "E_b_base": 0.0,
+      "E_b_best": 0.0,
+      "delta_E_b": 0.0,
+      "best_xc": 0.0,
+      "benefit_fallback": true,
+      "T_first_fail_b_forecast": null,
+      "scores": {
+        "-1500.0": 0.0,
+        "-750.0": 0.0,
+        "0.0": 0.0,
+        "750.0": 0.0,
+        "1500.0": 0.0
+      },
+      "decision": "place"
+    },
+    {
+      "t": 0.750629191587548,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.5106291915875487,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.750629191587549,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.010629191587549,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.252752789306125,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.5155069348795407,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.755506934879541,
+      "why": "building_hard",
+      "action": "cooldown"
+    },
+    {
+      "t": 3.015506934879541,
+      "why": "building_hard",
+      "horizon": 5.0,
+      "volume": 1100000.0,
+      "E_b_base": 0.0,
+      "E_b_best": 0.0,
+      "delta_E_b": 0.0,
+      "best_xc": -2000.0,
+      "benefit_fallback": true,
+      "T_first_fail_b_forecast": null,
+      "scores": {
+        "-1500.0": 0.0,
+        "-750.0": 0.0,
+        "0.0": 0.0,
+        "750.0": 0.0,
+        "1500.0": 0.0
+      },
+      "decision": "place"
+    },
+    {
+      "t": 13.00197997674036,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 13.261979976740355,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 13.50647124521254,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 13.756083556276474,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.019515316871786,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.269752219787133,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.509752219787128,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.769752219787122,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 15.0,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    }
+  ],
+  "retention": {
+    "R_ret_1yr": null,
+    "placed_1yr": 0.0,
+    "R_ret_5yr": 0.9033158133032178,
+    "placed_5yr": 4000000.0,
+    "R_ret_15yr": 0.58115582397577,
+    "placed_15yr": 4000000.0
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "scenario": "S2",
+    "strategy": "once",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 6,
+    "phi_shape": "uniform",
+    "label": "E5_D_diff_low",
+    "scenario_law": {
+      "name": "S2",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.4,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 8.0,
+      "target_0": 3.0,
+      "target_15": 3.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.0691252134262372
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.6051448298886422,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 12.64129529960313,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 11793.523501984368,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 2450000.0,
+    "flux_out": 23871.79746623186,
+    "offshore": 332289.37532490643,
+    "chronic": 2945671.9110110453,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 2879988.388531297,
+    "recovery": 2216370.1334171263,
+    "residual_rel_max": 1.1059455573558807e-09
+  },
+  "cost": {
+    "cost_used": 66150000.0,
+    "n_projects": 1,
+    "c0_star": null,
+    "c1_eff": 27.0,
+    "V_used": 2450000.0,
+    "S_used": 2450000.0
+  },
+  "state": {
+    "w_end_min": 6.7814351611350965,
+    "w_end_mean": 12.709186594280801,
+    "w_min_ever": 6.7814351611350965,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 1.7612583831750965,
+      "tag": "once",
+      "xc": 0.0,
+      "ell": 5000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 2450000.0,
+      "cost": 66150000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": []
+}

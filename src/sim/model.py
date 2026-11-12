@@ -472,13 +472,23 @@ class Simulator:
         for xc in candidates:
             benefit = float(base_e.mean() - cand_e[xc].mean())
             scores[xc] = benefit / max(v, 1.0)
-        best_xc = max(scores, key=scores.get)
-        tf_best = min(cand_tf[best_xc]) if cand_tf[best_xc] else float("inf")
+        best_cand = max(scores, key=scores.get)
+        # In calm scenarios the 5-year forecast window can contain no building
+        # risk at all (T_first_fail_b is ~14 yr), so every candidate ties at zero
+        # benefit.  Then fall back to the risk-weighted deficit location instead
+        # of an arbitrary argmax.  [自决, reported in PROGRESS]
+        fallback = max(scores.values()) <= 1e-12
+        best_xc = self.target_xc_hotspot() if fallback else best_cand
+        if fallback:
+            tf_best = float("inf")  # no building risk in the forecast window
+        else:
+            tf_best = min(cand_tf[best_cand]) if cand_tf[best_cand] else float("inf")
         log.update({
             "E_b_base": float(base_e.mean()),
-            "E_b_best": float(cand_e[best_xc].mean()),
-            "delta_E_b": float(base_e.mean() - cand_e[best_xc].mean()),
+            "E_b_best": float(cand_e[best_cand].mean()),
+            "delta_E_b": float(base_e.mean() - cand_e[best_cand].mean()),
             "best_xc": best_xc,
+            "benefit_fallback": fallback,
             "T_first_fail_b_forecast": (None if tf_best == float("inf") else float(tf_best)),
             "scores": {str(k): float(val) for k, val in scores.items()},
         })

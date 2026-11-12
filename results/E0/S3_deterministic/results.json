@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "scenario": "S3",
+    "strategy": "none",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 12,
+    "phi_shape": "uniform",
+    "label": "E0_S3",
+    "scenario_law": {
+      "name": "S3",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.8,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 11.0,
+      "target_0": 3.0,
+      "target_15": 5.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.5331679299957455
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.733664846267615,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": 7.197246670295071,
+      "censored": false
+    },
+    "T_safe_cum_w": 0.9299919298981701,
+    "T_safe_cum_b": 6.674922727801718,
+    "T_recovery": {
+      "median": null,
+      "n": 200,
+      "censored": 200
+    }
+  },
+  "exposure": {
+    "E_w": 70350.04035050969,
+    "E_b": 41625.38636099135
+  },
+  "mass": {
+    "placed": 0.0,
+    "flux_out": -65193.72730913146,
+    "offshore": 203468.92388349876,
+    "chronic": 3624474.3705036542,
+    "R_c": 1673604.3352758025,
+    "R_c_max": 1676512.2989267549,
+    "Q_limited": 73982716.58000901,
+    "storm_injected": 1562976.782685205,
+    "recovery": 1357137.7223029367,
+    "residual_rel_max": 1.878943294286728e-07
+  },
+  "cost": {
+    "cost_used": 0.0,
+    "n_projects": 0,
+    "c0_star": null,
+    "c1_eff": 27.0,
+    "V_used": 0.0,
+    "S_used": 0.0
+  },
+  "state": {
+    "w_end_min": -56.24981420728725,
+    "w_end_mean": -25.043239524335394,
+    "w_min_ever": -56.24981420728725,
+    "exhausted_frac": 1.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": 4.455506934879533,
+      "censored": false
+    }
+  },
+  "placements": [],
+  "strategy_log": []
+}

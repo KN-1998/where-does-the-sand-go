@@ -1,0 +1,10 @@
+# configs/S2.yaml — nourishment followed by an early major storm (forced event at 2.25 yr)
+inherit: modeling/params.yaml
+scenario: S2
+strategy: once
+bc: open
+seed: 42
+t_end: 15.0
+dx: 25.0
+dt: 0.02
+overrides: {}

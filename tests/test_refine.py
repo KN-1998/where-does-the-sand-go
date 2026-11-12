@@ -18,27 +18,39 @@ from .helpers import P, cfg, simulate
 
 
 def test_t4_dx_consistency():
+    from sim.storms import build_event_table
+    from exp.common import retention_curve
     from .helpers import P0
-    # real erosion field, but no storms -> fully deterministic
+    # real erosion field; storms are replaced by one shared table so the only
+    # difference between the two runs is the grid
     params = P0.clone_with({"lambda_s": 0.0})
     scen = Scenario("S1", params)
-    metrics = {}
+    table = build_event_table(scen, 42, 15.0, 4500.0, "uniform", [])
+    metrics, retention = {}, {}
     for dx in (50.0, 25.0):
-        run = cfg(scenario="S1", strategy="none", bc="open", t_end=15.0, dx=dx)
-        res = simulate(params, scen, run)
-        metrics[dx] = res.metrics
+        run = cfg(scenario="S1", strategy="once", bc="open", t_end=15.0, dx=dx)
+        nour = simulate(params, scen, run, events=table.events)
+        base = simulate(params, scen, cfg(scenario="S1", strategy="none", bc="open",
+                                         t_end=15.0, dx=dx), events=table.events)
+        metrics[dx] = nour.metrics
+        retention[dx] = retention_curve(nour, base, [15.0], float(params["H_dep"]))
     for key in ("E_w", "T_safe_cum_w", "T_safe_cum_b"):
         a, b = metrics[50.0][key], metrics[25.0][key]
         rel = abs(a - b) / max(1e-12, abs(b))
         print(f"T4: {key} dx=50 -> {a:.6g}, dx=25 -> {b:.6g}, rel diff {rel:.2%}")
         assert rel < 0.02, f"T4 failed for {key}: {rel:.2%}"
-    # T_first_fail_w (the key duration metric) must also agree within 2 %
+    # T_first_fail_w and the 15-yr retention are the contract's key indicators
     ta = metrics[50.0]["T_first_fail_w"]["value"]
     tb = metrics[25.0]["T_first_fail_w"]["value"]
     if ta is not None and tb is not None:
         rel = abs(ta - tb) / max(1e-12, tb)
         print(f"T4: T_first_fail_w dx=50 -> {ta:.3f}, dx=25 -> {tb:.3f}, rel {rel:.2%}")
         assert rel < 0.02
+    ra = retention[50.0]["R_ret_15yr"]
+    rb = retention[25.0]["R_ret_15yr"]
+    rel = abs(ra - rb) / max(1e-12, abs(rb))
+    print(f"T4: R_ret_15yr dx=50 -> {ra:.4f}, dx=25 -> {rb:.4f}, rel {rel:.2%}")
+    assert rel < 0.02
 
 
 def test_t5_protection_period():

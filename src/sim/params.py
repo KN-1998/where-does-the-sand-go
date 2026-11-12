@@ -108,13 +108,24 @@ class Params:
         missing = [k for k in overrides if k not in found]
         if missing:
             raise KeyError(f"override key(s) not present in params.yaml: {missing}")
+        # Scenario blocks carry their own lambda_s / dy_ref (S1 and S2 differ from
+        # the global defaults).  A *global* override of these two keys is meant to
+        # replace the scenario values as well (OAT on the storm group); otherwise
+        # the override would silently do nothing to the storm process.
+        # ``rho_e`` is deliberately NOT rewritten: the block key means the
+        # corridor-mean *target*, while the flat key is the background rate.
+        for key in ("lambda_s", "dy_ref"):
+            if key in overrides:
+                for block in (raw.get("scenarios") or {}).values():
+                    if isinstance(block, dict) and key in block:
+                        block[key] = overrides[key]
         obj = Params.__new__(Params)
         obj.raw = raw
         obj.path = self.path
         obj.flat = dict(self.flat)
         obj.flat.update(overrides)
         obj.info = self.info
-        obj.scenarios = self.scenarios
+        obj.scenarios = raw.get("scenarios", {}) or {}
         obj.numerics = self.numerics
         obj.meta = self.meta
         obj.md5 = self.md5

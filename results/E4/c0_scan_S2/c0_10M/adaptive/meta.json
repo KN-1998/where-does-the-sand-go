@@ -1,0 +1,59 @@
+{
+  "code_md5": "7ae8294693108d389dacefd89447cbcb",
+  "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+  "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+  "seed": 42,
+  "runtime_s": null,
+  "config": {
+    "scenario": "S2",
+    "strategy": "adaptive",
+    "bc": "open",
+    "seed": 42,
+    "t_end": 15.0,
+    "dx": 25.0,
+    "dt": 0.02,
+    "Lb": 4500.0,
+    "phi_shape": "uniform",
+    "cost_model": "marginal_plus_fixed",
+    "supply": "local",
+    "limiter": true,
+    "overrides": {
+      "c0": 10000000.0
+    },
+    "forced_events": [],
+    "dirichlet_yb": null,
+    "label": "E4_c0_10M_adaptive",
+    "source_config": null
+  },
+  "scenario": {
+    "name": "S2",
+    "sigma_ln": 0.6926652177436868,
+    "lambda_s_0": 0.4,
+    "lambda_s_15": 0.4,
+    "dy_ref_0": 8.0,
+    "dy_ref_15": 8.0,
+    "target_0": 3.0,
+    "target_15": 3.0,
+    "rho_scale_0": 1.0691252134262372,
+    "rho_scale_15": 1.0691252134262372
+  },
+  "grid": {
+    "nx": 360,
+    "dx": 25.0,
+    "Lb": 4500.0,
+    "length": 9000.0,
+    "n_central": 200,
+    "x_min": -4487.5,
+    "x_max": 4487.5
+  },
+  "python": "3.13.9",
+  "numpy": "2.3.5",
+  "created_unix": 1794497130.0008686,
+  "n_events_applied": 6,
+  "solver": {
+    "scheme": "conservative FV + backward Euler",
+    "limiter": true,
+    "bc": "open"
+  },
+  "experiment": "E4_c0"
+}

@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "scenario": "S1",
+    "strategy": "scripted",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 5,
+    "phi_shape": "uniform",
+    "label": "E1_hotspot",
+    "scenario_law": {
+      "name": "S1",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.2,
+      "lambda_s_15": 0.2,
+      "dy_ref_0": 6.0,
+      "dy_ref_15": 6.0,
+      "target_0": 1.7,
+      "target_15": 1.7,
+      "rho_scale_0": 0.6498397039525878,
+      "rho_scale_15": 0.6498397039525878
+    }
+  },
+  "initial": {
+    "f_w0": 0.09877870977214936,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 8.845771569219716,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 8.748087321085299,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 31259.56339457332,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 1000000.0,
+    "flux_out": 13336.055309987489,
+    "offshore": 189934.41350048326,
+    "chronic": 1790449.3679074007,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 1478722.783290442,
+    "recovery": 1266862.5380482234,
+    "residual_rel_max": 7.764901965856552e-14
+  },
+  "cost": {
+    "cost_used": 0.0,
+    "n_projects": 0,
+    "c0_star": null,
+    "c1_eff": 27.0,
+    "V_used": 0.0,
+    "S_used": 0.0
+  },
+  "state": {
+    "w_end_min": 3.683241914880357,
+    "w_end_mean": 10.525307230167614,
+    "w_min_ever": 3.683241914880357,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 0.0,
+      "tag": "hotspot",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 1000000.0,
+      "volume_actual": 1000000.0,
+      "cost": 0.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": [],
+  "retention": {
+    "R_ret_1yr": 0.9969097888992543,
+    "placed_1yr": 1000000.0,
+    "R_ret_5yr": 0.8398524467929536,
+    "placed_5yr": 1000000.0,
+    "R_ret_15yr": 0.5766046472425523,
+    "placed_15yr": 1000000.0
+  }
+}

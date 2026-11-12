@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "scenario": "S1",
+    "strategy": "adaptive",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 5,
+    "phi_shape": "uniform",
+    "label": "E4_local_all_in_S1_adaptive",
+    "scenario_law": {
+      "name": "S1",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.2,
+      "lambda_s_15": 0.2,
+      "dy_ref_0": 6.0,
+      "dy_ref_15": 6.0,
+      "target_0": 1.7,
+      "target_15": 1.7,
+      "rho_scale_0": 0.6498397039525878,
+      "rho_scale_15": 0.6498397039525878
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 1.54694057561652,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 13.827249728136401,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 5863.75135931799,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 2450000.0,
+    "flux_out": 23631.685762993115,
+    "offshore": 236051.2922754619,
+    "chronic": 1790449.3679074007,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 1840373.2793816822,
+    "recovery": 1574462.1194773307,
+    "residual_rel_max": 7.392372936010361e-09
+  },
+  "cost": {
+    "cost_used": 66150000.0,
+    "n_projects": 1,
+    "c0_star": null,
+    "c1_eff": 27.0,
+    "V_used": 2450000.0,
+    "S_used": 2450000.0
+  },
+  "state": {
+    "w_end_min": 24.3848181438037,
+    "w_end_mean": 29.225029844491374,
+    "w_min_ever": 10.623356675785548,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 2.522516766350192,
+      "tag": "adaptive_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2450000.0,
+      "volume_actual": 2450000.0,
+      "cost": 66150000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": [
+    {
+      "t": 0.0,
+      "why": "initial_assessment",
+      "f_w0": 0.3035899684646725,
+      "f_b0": 0.0,
+      "action": "none"
+    },
+    {
+      "t": 0.7600000000000003,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 2450000.0,
+      "E_b_base": 0.0,
+      "E_b_best": 0.0,
+      "delta_E_b": 0.0,
+      "best_xc": 0.0,
+      "benefit_fallback": true,
+      "T_first_fail_b_forecast": null,
+      "scores": {
+        "-1500.0": 0.0,
+        "-750.0": 0.0,
+        "0.0": 0.0,
+        "750.0": 0.0,
+        "1500.0": 0.0
+      },
+      "decision": "place"
+    },
+    {
+      "t": 1.0025167663501908,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.262516766350191,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.5025167663501913,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.7625167663501915,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.0025167663501917,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.262516766350192,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.502516766350192,
+      "why": "delta_f",
+      "action": "cooldown"
+    }
+  ],
+  "retention": {
+    "R_ret_1yr": null,
+    "placed_1yr": 0.0,
+    "R_ret_5yr": 0.9524439726851139,
+    "placed_5yr": 2450000.0,
+    "R_ret_15yr": 0.6193985585191208,
+    "placed_15yr": 2450000.0
+  }
+}

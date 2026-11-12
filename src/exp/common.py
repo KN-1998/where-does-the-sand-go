@@ -20,10 +20,13 @@ FIGURES = REPO_ROOT / "figures"
 
 
 def central_sand(res: SimResult, i: int, H: float = 10.0) -> float:
-    """Central 5 km (V + O) increment, m^3, at time index ``i``."""
-    g = res.grid
-    return float((H * res.y[i, g.central]).sum() * g.dx
-                 + res.O[i, g.central].sum() * g.dx)
+    """Central 5 km (V + O) increment, m^3, at ledger row ``i``.
+
+    Uses the ledger columns (float64) rather than ``fields.npz`` (float32), so the
+    reference run does not need to store its field history.
+    """
+    row = res.ledger.rows[i]
+    return float(row["V_central"] + row["O_central"])
 
 
 def index_at(res: SimResult, t: float) -> int:

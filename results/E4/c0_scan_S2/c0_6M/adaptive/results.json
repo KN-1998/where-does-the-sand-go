@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "scenario": "S2",
+    "strategy": "adaptive",
+    "bc": "open",
+    "cost_model": "marginal_plus_fixed",
+    "supply": "local",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 6,
+    "phi_shape": "uniform",
+    "label": "E4_c0_6M_adaptive",
+    "scenario_law": {
+      "name": "S2",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.4,
+      "lambda_s_15": 0.4,
+      "dy_ref_0": 8.0,
+      "dy_ref_15": 8.0,
+      "target_0": 3.0,
+      "target_15": 3.0,
+      "rho_scale_0": 1.0691252134262372,
+      "rho_scale_15": 1.0691252134262372
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 0.562586978221088,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 11.431777177785586,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 17841.114111072053,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 2450000.0,
+    "flux_out": 22893.634795927428,
+    "offshore": 318107.435880441,
+    "chronic": 2945671.9110110453,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 2786560.4158065403,
+    "recovery": 2121776.5973225413,
+    "residual_rel_max": 9.837094694375992e-09
+  },
+  "cost": {
+    "cost_used": 32950000.0,
+    "n_projects": 1,
+    "c0_star": null,
+    "c1_eff": 11.0,
+    "V_used": 2450000.0,
+    "S_used": 2450000.0
+  },
+  "state": {
+    "w_end_min": 5.6102309767311525,
+    "w_end_mean": 10.793547792160169,
+    "w_min_ever": 5.6102309767311525,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 2.2612583831750968,
+      "tag": "adaptive_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2450000.0,
+      "volume_actual": 2450000.0,
+      "cost": 32950000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": [
+    {
+      "t": 0.0,
+      "why": "initial_assessment",
+      "f_w0": 0.3035899684646725,
+      "f_b0": 0.0,
+      "action": "none"
+    },
+    {
+      "t": 0.5012583831750954,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 2450000.0,
+      "E_b_base": 0.0,
+      "E_b_best": 0.0,
+      "delta_E_b": 0.0,
+      "best_xc": 0.0,
+      "benefit_fallback": true,
+      "T_first_fail_b_forecast": null,
+      "scores": {
+        "-1500.0": 0.0,
+        "-750.0": 0.0,
+        "0.0": 0.0,
+        "750.0": 0.0,
+        "1500.0": 0.0
+      },
+      "decision": "place"
+    },
+    {
+      "t": 1.5012583831750963,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.7612583831750965,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.0012583831750965,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 2.2612583831750968,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 4.505505578612248,
+      "why": "building_hard",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.26341392345254,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.510458250201651,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 14.750458250201646,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    },
+    {
+      "t": 15.0,
+      "why": "delta_f",
+      "horizon": 5.0,
+      "volume": 0.0,
+      "decision": "no_volume"
+    }
+  ]
+}

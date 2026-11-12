@@ -1,0 +1,11 @@
+# configs/S1.yaml — calm sequence, 15 years, open boundary, no nourishment
+# (E0 baseline; add --strategy/--strategy once for E2/E4)
+inherit: modeling/params.yaml
+scenario: S1
+strategy: none
+bc: open
+seed: 42
+t_end: 15.0
+dx: 25.0
+dt: 0.02
+overrides: {}

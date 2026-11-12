@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "scenario": "S1",
+    "strategy": "targeted",
+    "bc": "open",
+    "cost_model": "all_in",
+    "supply": "external",
+    "seed": 42,
+    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+    "n_events_applied": 5,
+    "phi_shape": "uniform",
+    "label": "E4_external_all_in_S1_targeted",
+    "scenario_law": {
+      "name": "S1",
+      "sigma_ln": 0.6926652177436868,
+      "lambda_s_0": 0.2,
+      "lambda_s_15": 0.2,
+      "dy_ref_0": 6.0,
+      "dy_ref_15": 6.0,
+      "target_0": 1.7,
+      "target_15": 1.7,
+      "rho_scale_0": 0.6498397039525878,
+      "rho_scale_15": 0.6498397039525878
+    }
+  },
+  "initial": {
+    "f_w0": 0.3035899684646725,
+    "f_b0": 0.0,
+    "w_min": 16.001434834592416,
+    "w_mean": 21.842768900672286
+  },
+  "duration": {
+    "T_first_fail_w": {
+      "value": 1.54694057561652,
+      "censored": false
+    },
+    "T_first_fail_b": {
+      "value": null,
+      "censored": true
+    },
+    "T_safe_cum_w": 14.258945063444436,
+    "T_safe_cum_b": 15.0,
+    "T_recovery": {
+      "median": null,
+      "n": 0,
+      "censored": 0
+    }
+  },
+  "exposure": {
+    "E_w": 3705.27468277782,
+    "E_b": 0.0
+  },
+  "mass": {
+    "placed": 4000000.0,
+    "flux_out": 44984.487689583744,
+    "offshore": 260409.92632409555,
+    "chronic": 1790449.3679074007,
+    "R_c": 0.0,
+    "R_c_max": 0.0,
+    "Q_limited": 0.0,
+    "storm_injected": 2031185.113437626,
+    "recovery": 1736934.2085817172,
+    "residual_rel_max": 3.8708094507455826e-09
+  },
+  "cost": {
+    "cost_used": 120000000.0,
+    "n_projects": 2,
+    "c0_star": null,
+    "c1_eff": 30.0,
+    "V_used": 4000000.0,
+    "S_used": 4000000.0
+  },
+  "state": {
+    "w_end_min": 37.414948487696414,
+    "w_end_mean": 48.1541572884713,
+    "w_min_ever": 11.704273440715944,
+    "exhausted_frac": 0.0
+  },
+  "diagnostics": {
+    "T_first_any_w": {
+      "value": 0.0,
+      "censored": false
+    },
+    "T_first_any_b": {
+      "value": null,
+      "censored": true
+    }
+  },
+  "placements": [
+    {
+      "t": 1.7625167663501915,
+      "tag": "targeted_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 2900000.0,
+      "cost": 87000000.0,
+      "skipped_reason": null
+    },
+    {
+      "t": 2.522516766350192,
+      "tag": "targeted_1",
+      "xc": 0.0,
+      "ell": 1000.0,
+      "volume_design": 2900000.0,
+      "volume_actual": 1100000.0,
+      "cost": 33000000.0,
+      "skipped_reason": null
+    }
+  ],
+  "strategy_log": [
+    {
+      "t": 0.7600000000000003,
+      "why": "delta_f",
+      "action": "schedule",
+      "xc": 0.0,
+      "at": 2.5100000000000002
+    },
+    {
+      "t": 1.0025167663501908,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.262516766350191,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.5025167663501913,
+      "why": "delta_f",
+      "action": "cooldown"
+    },
+    {
+      "t": 1.7625167663501915,
+      "why": "delta_f",
+      "action": "cooldown"
+    }
+  ],
+  "retention": {
+    "R_ret_1yr": null,
+    "placed_1yr": 0.0,
+    "R_ret_5yr": 0.9279314524761262,
+    "placed_5yr": 4000000.0,
+    "R_ret_15yr": 0.6164903441235484,
+    "placed_15yr": 4000000.0
+  }
+}
