@@ -1,9 +1,9 @@
 {
-  "code_md5": "8bd648bca7e607bc57c4b9f236be4c92",
+  "code_md5": "4128f8293f51c18554e1df4ab6ff5730",
   "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
-  "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+  "git_commit": "0b110cb17514a702a4bb4f483e9767ceb3a4f67c",
   "seed": 42,
-  "runtime_s": 0.052515268325805664,
+  "runtime_s": 0.05274653434753418,
   "config": {
     "scenario": "S1",
     "strategy": "none",
@@ -46,7 +46,7 @@
   },
   "python": "3.13.9",
   "numpy": "2.3.5",
-  "created_unix": 1794498057.31711,
+  "created_unix": 1794498987.0253632,
   "n_events_applied": 1,
   "solver": {
     "scheme": "conservative FV + backward Euler",
