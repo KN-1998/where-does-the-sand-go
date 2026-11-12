@@ -10,8 +10,8 @@
     "t_end": 15.0,
     "dx": 25.0,
     "dt": 0.02,
-    "runtime_s": 40.80290508270264,
-    "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "runtime_s": 39.86164140701294,
+    "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
     "overrides": {},
     "scenario_law": {
       "name": "S3",
@@ -24,8 +24,7 @@
       "target_15": 5.0,
       "rho_scale_0": 1.0691252134262372,
       "rho_scale_15": 1.5331679299957455
-    },
-    "resummarised": true
+    }
   },
   "summary": {
     "n": 1000,
@@ -92,6 +91,18 @@
       "P90": 0.0,
       "mean": 0.0
     },
+    "retreat_rate_corridor": {
+      "P10": 3.0139545514086827,
+      "P50": 3.103643393150379,
+      "P90": 3.202258462691491,
+      "mean": 3.1071632870220176
+    },
+    "retreat_rate_hotspot": {
+      "P10": 4.006284026030695,
+      "P50": 4.146468578556288,
+      "P90": 4.29968154800225,
+      "mean": 4.15000975563906
+    },
     "T_first_fail_w": {
       "km_censored_fraction": 0.0,
       "km_P10": 0.2844991627569,
@@ -107,8 +118,8 @@
       "observed_median": 6.570608244317858
     },
     "T_recovery": {
-      "observed_median": 0.19999999999999574,
-      "n_observed": 381
+      "observed_median": 0.23999999999999755,
+      "n_observed": 434
     },
     "residual_rel_max": 2.360902726650238e-07
   }

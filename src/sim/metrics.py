@@ -103,6 +103,8 @@ class Metrics:
             self._started = True
             self._last_t = float(t)
             self._last_f_w, self._last_f_b = f_w, f_b
+            _, rb0 = self.risk(y)
+            self._risk_b_prev = rb0.copy()  # so the first event can register cells
             self._f_hist.append((float(t), f_w, f_b))
             self._update_first(t, f_w, f_b, y, prev_t, prev_fw, prev_fb)
             self._update_recovery(t, y)

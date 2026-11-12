@@ -6,7 +6,7 @@
     "cost_model": "all_in",
     "supply": "external",
     "seed": 42,
-    "commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
     "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
     "n_events_applied": 12,
     "phi_shape": "uniform",

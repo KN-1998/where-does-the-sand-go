@@ -532,6 +532,11 @@ class Simulator:
 
         ev_list = list(table.events)
         ei = 0
+        # an event exactly at t=0 (test-only) must be injected *after* the t=0
+        # placement and before the first continuous step (P0-4)
+        while ei < len(ev_list) and ev_list[ei].t <= self.t + 1e-12:
+            self._apply_event(ev_list[ei], self.t)
+            ei += 1
         dt = float(self.run.dt)
         while self.t < T - 1e-12:
             next_t = ev_list[ei].t if ei < len(ev_list) else float("inf")

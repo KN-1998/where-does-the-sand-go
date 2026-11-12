@@ -31,7 +31,7 @@
 
 ## 已落地（2026-11-12，编程手）
 
-`python -m pytest tests -v -s` → **16 passed**（约 4 s）。日志：`results/validation/pytest.log`。
+`python -m pytest tests -v -s` → **17 passed**（约 4 s）。日志：`results/validation/pytest.log`。
 实际文件与覆盖：
 
 | 文件 | 覆盖 | 实测（2026-11-12） |
@@ -41,7 +41,7 @@
 | `test_refine.py` | T4、T5 | $dx=50$ vs 25：$E_w$ 0.01%、$T_{\text{first,fail}}^w$ 0.07%、$R_{ret}(15)$ 0.04%；T5 6.16/7.34/7.38（+0.2%/+0.1%/+0.3%） |
 | `test_storm.py` | T6、T10 | 0.869622（= $k/(k+\lambda)$）；事件在 1.00/1.01/5.00 各注入 1 次、注入量误差 0 |
 | `test_floor.py` | T11 | $y_{\min}=-96$（未裁剪）；$V_{\text{book}}\ge V_{\min}$；$R_c$ 与台账一致；$risk_w/risk_b$ 按公式 |
-| `test_metrics.py` | T12 | $f_w(0)=0.3036$（连续重构；逐格值为 0.3000，二者都在 ±0.005 内）、$f_b(0)=0$；删失语义互斥 |
+| `test_metrics.py` | T12、T12b（恢复时长与删失） | $f_w(0)=0.3036$（连续重构；逐格值为 0.3000，二者都在 ±0.005 内）、$f_b(0)=0$；$T_{\text{recovery}}$ 中位 0.44 yr、$n=140$；删失语义互斥 |
 | `test_bc.py` | T7 | open 外流 0.01%（相对已知损失）；zeroflux 严格 0 |
 | `test_repro.py` | T8 | `results.json` 逐字节相同、`fields.npz` md5 相同 |
 

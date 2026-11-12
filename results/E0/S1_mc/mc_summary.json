@@ -10,8 +10,8 @@
     "t_end": 15.0,
     "dx": 25.0,
     "dt": 0.02,
-    "runtime_s": 37.90331053733826,
-    "git_commit": "34ae62e7a72f61fc6e41c0306398d615af394d70",
+    "runtime_s": 37.001025676727295,
+    "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
     "overrides": {},
     "scenario_law": {
       "name": "S1",
@@ -24,8 +24,7 @@
       "target_15": 1.7,
       "rho_scale_0": 0.6498397039525878,
       "rho_scale_15": 0.6498397039525878
-    },
-    "resummarised": true
+    }
   },
   "summary": {
     "n": 1000,
@@ -92,6 +91,18 @@
       "P90": 0.0,
       "mean": 0.0
     },
+    "retreat_rate_corridor": {
+      "P10": 1.4374228623624898,
+      "P50": 1.5065164542103406,
+      "P90": 1.599342918930892,
+      "mean": 1.5146876557038627
+    },
+    "retreat_rate_hotspot": {
+      "P10": 1.6229190611199635,
+      "P50": 1.7091563870323947,
+      "P90": 1.840796754566599,
+      "mean": 1.72289363330563
+    },
     "T_first_fail_w": {
       "km_censored_fraction": 0.0,
       "km_P10": 0.6638477025455168,
@@ -107,8 +118,8 @@
       "observed_median": 13.95773919017738
     },
     "T_recovery": {
-      "observed_median": 0.25999999999999446,
-      "n_observed": 347
+      "observed_median": 0.25999999999999535,
+      "n_observed": 387
     },
     "residual_rel_max": 1.5305704437196255e-07
   }

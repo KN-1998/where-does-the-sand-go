@@ -1,0 +1,31 @@
+{
+  "git_commit": "5c122d99471bc1fe3a96ab701d288296b9a16e77",
+  "rows": {
+    "i": {
+      "field_mean_rho": 2.313622601629669,
+      "rho_storm_potential": 0.5303207569853919,
+      "expected_total": 2.8439433586150606,
+      "expected_bias_vs_field": 0.22921662185174227,
+      "retreat_corridor_P50": 2.3503009870873184,
+      "retreat_corridor_mean": 2.3560954480062235,
+      "retreat_hotspot_P50": 3.0471002213150555,
+      "retreat_corridor_nostorm": 2.206750044245644,
+      "realised_storm_contribution": 0.14355094284167436,
+      "bias_vs_field": 0.015853227502105938,
+      "E_b_P50": 34786.593010023505
+    },
+    "ii": {
+      "field_mean_rho": 1.79100296312018,
+      "rho_storm_potential": 0.5303207569853919,
+      "expected_total": 2.321323720105572,
+      "expected_bias_vs_field": 0.2961026686753763,
+      "retreat_corridor_P50": 1.8585443431668445,
+      "retreat_corridor_mean": 1.860177343488437,
+      "retreat_hotspot_P50": 2.394392133663763,
+      "retreat_corridor_nostorm": 1.6646033395806807,
+      "realised_storm_contribution": 0.19394100358616373,
+      "bias_vs_field": 0.03771148425628379,
+      "E_b_P50": 22371.911354069107
+    }
+  }
+}

@@ -42,3 +42,26 @@ def test_t12_initial_fractions_and_schema():
         assert 0.0 <= v <= 15.0 + 1e-9, f"{key}={v}"
     assert out["exposure"]["E_w"] >= 0.0 and out["exposure"]["E_b"] >= 0.0
     assert out["mass"]["residual_rel_max"] < 1e-6
+
+
+def test_t12b_recovery_metric():
+    """T_recovery: cells pushed into building risk by an event return to safety."""
+    from sim.model import Simulator
+    from sim.placements import make_strategy
+    from sim.storms import build_event_table
+
+    params = load_params()
+    scen = Scenario("S2", params)
+    run = cfg(scenario="S2", strategy="none", t_end=5.0,
+              forced_events=list(scen.forced_events))
+    table = build_event_table(scen, run.seed, run.t_end, run.Lb, run.phi_shape,
+                              run.forced_events)
+    sim = Simulator(params, scen, run, store_fields=False)
+    res = sim.run_loop(5.0, events=table,
+                       strategy=make_strategy(params, run, sim.budget), collect=True)
+    rec = res.metrics["T_recovery"]
+    print(f"T12b: T_recovery={rec}")
+    assert rec["n"] > 0, "no cell entered building risk despite the forced storm"
+    assert rec["median"] is not None and 0.0 < rec["median"] <= 5.0, rec
+    assert rec["censored"] <= rec["n"]
+    assert rec["n"] >= rec["censored"]

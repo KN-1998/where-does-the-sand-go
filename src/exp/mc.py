@@ -40,10 +40,16 @@ def realisation_seed(base_seed: int, i: int) -> int:
 def _metrics_row(res, i: int, seed_i: int) -> Dict[str, Any]:
     m = res.metrics
     rows = res.ledger.rows
+    g = res.grid
+    tend = float(res.config["t_end"])
+    y_end = np.asarray(res.y_end, dtype=float)
+    hot = np.abs(g.x) <= 750.0
     return {
         "i": i,
         "seed": seed_i,
-        "t_end": float(res.config["t_end"]),
+        "t_end": tend,
+        "retreat_rate_corridor": -float(y_end[g.central].mean()) / tend,
+        "retreat_rate_hotspot": -float(y_end[hot].mean()) / tend,
         "T_first_fail_w": m["T_first_fail_w"]["value"],
         "T_first_fail_w_censored": m["T_first_fail_w"]["censored"],
         "T_first_fail_b": m["T_first_fail_b"]["value"],
@@ -127,7 +133,8 @@ def summarise(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     out: Dict[str, Any] = {"n": len(rows)}
     for key in ("E_w", "E_b", "T_safe_cum_w", "T_safe_cum_b", "w_end_min",
                 "w_end_mean", "exhausted_frac", "R_ret_1yr", "R_ret_5yr",
-                "R_ret_15yr", "placed", "cost", "n_projects"):
+                "R_ret_15yr", "placed", "cost", "n_projects",
+                "retreat_rate_corridor", "retreat_rate_hotspot"):
         vals = np.array([r[key] for r in rows if r.get(key) is not None], dtype=float)
         if vals.size == 0:
             out[key] = {}

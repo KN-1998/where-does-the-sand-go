@@ -36,11 +36,11 @@ python -m pip install -r requirements.txt   # 需要联网时
 python modeling/sanity/discrete_contract.py    # 末行 ALL PASS，退出码 0
 ```
 
-## 2. 验收测试（T1–T13，16 项，约 4 s）
+## 2. 验收测试（T1–T13，17 项，约 4 s）
 
 ```powershell
 python -m pytest tests -v -s
-# 期望：16 passed
+# 期望：17 passed
 # 日志已存：results/validation/pytest.log
 ```
 
@@ -58,6 +58,9 @@ python -m exp.run_one --config configs/base.yaml --strategy none --out results/E
 ## 4. 全部实验 E0–E7（约 5–6 分钟，8 核）
 
 ```powershell
+# L0 双计数核对（口径 i/ii，各 300 次 MC，15 yr）
+python -m exp.experiments --only L0 --jobs 8 --n-mc 300
+
 # E0 基线（3 情景 × 1000 MC + 3 个确定性场）
 python -m exp.experiments --only E0 --jobs 8 --n-mc 1000
 
@@ -75,6 +78,7 @@ python -m exp.experiments --only E6,E7 --jobs 8
 
 | 实验 | 实测耗时（8 workers） | 主要产物 |
 |---|---|---|
+| L0 | 21 s | `results/L0/caliber_{i,ii}_mc/` + `summary.json` |
 | E0 | 124 s | `results/E0/{S1,S2,S3}_{deterministic,mc}/` |
 | E1 | 5 s | `results/E1/{uniform,hotspot,multi}/` |
 | E2 | 203 s | `results/E2/{S1,S2,S3}_mc/` |
@@ -86,6 +90,7 @@ python -m exp.experiments --only E6,E7 --jobs 8
 
 > 单次实验可加 `--force` 强制重跑；默认复用已存在的 `results.json`（可断点续跑）。
 > 单独跑一次：`python -m exp.run_one --config configs/S2.yaml --out results/one --baseline`。
+> 全部实验（L0+E0–E7，含 Sobol 与 6000 次 MC）一次跑完约 **8.5 分钟**（8 workers）。
 
 ## 5. 图 F1–F8（约 10 s）
 

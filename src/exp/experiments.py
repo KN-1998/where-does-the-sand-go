@@ -194,6 +194,73 @@ def _mc_meta(sc: Scenario, run: RunConfig, n: int, pair: bool, runtime: float,
 
 
 # ---------------------------------------------------------------------------
+# L0 un-nourished baseline for the D11 double-counting check (VALIDATION §1.5)
+# ---------------------------------------------------------------------------
+def exp_L0(jobs: int, n_mc: int = 300, force: bool = False) -> Dict[str, Any]:
+    """L0: total shoreline retreat of the un-nourished field, calibers (i)/(ii).
+
+    Caliber (i) keeps the observed rho_e and adds storms -> the model is expected
+    to retreat ~+22.5% faster than the field's own corridor mean (2.31 m/yr).
+    Caliber (ii) removes the storm contribution from the field (rho_bg=1.178,
+    a_h=1.73) and adds it back explicitly -> total returns to ~2.31 m/yr.
+    """
+    out = RESULTS / "L0"
+    rows: Dict[str, Any] = {}
+    for tag, over in (("i", {}), ("ii", {"rho_e": 1.178, "rho_e_hotspot_amp": 1.73})):
+        params = _params(over) if over else _params()
+        sc = _scenario("base", params)
+        run = _mk_run("base", "none", t_end=15.0, overrides=over, label=f"L0_{tag}")
+        mc_dir = out / f"caliber_{tag}_mc"
+        if force or not (mc_dir / "mc_summary.json").exists():
+            t0 = time.time()
+            tasks = build_tasks(params, run, n_mc, pair=False)
+            mc_rows = run_mc(tasks, jobs)
+            payload = write_mc(mc_dir, mc_rows, _mc_meta(sc, run, n_mc, False,
+                                                        time.time() - t0, over))
+        else:
+            import json
+            payload = json.loads((mc_dir / "mc_summary.json").read_text(encoding="utf-8"))
+        s = payload["summary"]
+        # corridor mean of rho_e(x) computed from the field itself (params'
+        # rho_e_corridor_mean is a derived constant and is NOT updated by overrides)
+        field_mean = (float(params["rho_e"])
+                      * (1.0 + float(params["rho_e_hotspot_amp"]) * np.sqrt(2.0 * np.pi)
+                         * float(params["sigma_h"]) / 5000.0))
+        storm = sc.rho_storm(0.0)
+        # reference: the same field with storms switched off (one deterministic run)
+        p0 = params.clone_with({"lambda_s": 0.0})
+        sc0 = _scenario("base", p0)
+        run0 = _mk_run("base", "none", t_end=15.0, overrides={"lambda_s": 0.0},
+                       label=f"L0_{tag}_nostorm")
+        res0 = run_model(p0, sc0, run0, events=EventTable([]), store_fields=False)
+        g0 = res0.grid
+        hot0 = np.abs(g0.x) <= 750.0
+        rate_nostorm = -float(res0.y_end[g0.central].mean()) / 15.0
+        rows[tag] = {
+            "field_mean_rho": field_mean,
+            "rho_storm_potential": storm,
+            "expected_total": field_mean + storm,
+            "expected_bias_vs_field": storm / field_mean,
+            "retreat_corridor_P50": s.get("retreat_rate_corridor", {}).get("P50"),
+            "retreat_corridor_mean": s.get("retreat_rate_corridor", {}).get("mean"),
+            "retreat_hotspot_P50": s.get("retreat_rate_hotspot", {}).get("P50"),
+            "retreat_corridor_nostorm": rate_nostorm,
+            "realised_storm_contribution": (
+                None if s.get("retreat_rate_corridor", {}).get("P50") is None
+                else s["retreat_rate_corridor"]["P50"] - rate_nostorm),
+            "bias_vs_field": (
+                None if s.get("retreat_rate_corridor", {}).get("P50") is None
+                else s["retreat_rate_corridor"]["P50"] / field_mean - 1.0),
+            "E_b_P50": s.get("E_b", {}).get("P50"),
+        }
+        print(f"[L0] caliber ({tag}): corridor P50="
+              f"{rows[tag]['retreat_corridor_P50']}, expected={field_mean + storm:.2f}")
+    out.mkdir(parents=True, exist_ok=True)
+    dump_json(out / "summary.json", {"git_commit": git_commit(), "rows": rows})
+    return {"rows": rows}
+
+
+# ---------------------------------------------------------------------------
 # E0 baseline
 # ---------------------------------------------------------------------------
 def exp_E0(jobs: int, n_mc: int, force: bool = False) -> Dict[str, Any]:
@@ -724,7 +791,7 @@ def exp_E7(jobs: int, force: bool = False) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Run experiments E0-E7")
-    p.add_argument("--only", default="E0,E1,E2,E3,E4,E5,E6,E7")
+    p.add_argument("--only", default="L0,E0,E1,E2,E3,E4,E5,E6,E7")
     p.add_argument("--jobs", type=int, default=DEFAULT_JOBS)
     p.add_argument("--n-mc", type=int, default=1000)
     p.add_argument("--force", action="store_true")
@@ -733,6 +800,8 @@ def main(argv=None) -> int:
     which = {w.strip().upper() for w in args.only.split(",") if w.strip()}
     t0 = time.time()
     out = {}
+    if "L0" in which:
+        out["L0"] = exp_L0(args.jobs, max(200, args.n_mc // 3), args.force)
     if "E0" in which:
         out["E0"] = exp_E0(args.jobs, args.n_mc, args.force)
     if "E1" in which:
