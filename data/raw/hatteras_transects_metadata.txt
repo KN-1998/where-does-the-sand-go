@@ -1,0 +1,486 @@
+Identification_Information:
+  Citation:
+    Citation_Information:
+      Originator: U.S. Geological Survey
+      Publication_Date: 2015
+      Title: HATTERAS_TRANSECTS: Hatteras Island shoreline transects and shoreline change rate calculations: Oregon Inlet to Cape Hatteras Point, North Carolina (geographic, WGS84).
+      Geospatial_Data_Presentation_Form: vector digital data
+      Series_Information:
+        Series_Name: Open-File Report
+        Issue_Identification: 2015–1002
+      Publication_Information:
+        Publication_Place: St. Petersburg, Florida
+        Publisher: U.S. Geological Survey - St. Petersburg Coastal and Marine Science Center
+      Online_Linkage: http://pubs.usgs.gov/of/2015/1002
+      Larger_Work_Citation:
+        Citation_Information:
+          Originator: Cheryl J. Hapke
+          Originator: Rachel E. Henderson (Hehre)
+          Publication_Date: 2015
+          Title: Quantification of Shoreline Change Along Hatteras Island, NC: Oregon Inlet to Cape Hatteras, 1978-2002, and Associated Vector Shoreline Data.
+          Series_Information:
+            Series_Name: Open-File Report
+            Issue_Identification: 2015–1002
+          Publication_Information:
+            Publication_Place: St. Petersburg, Florida
+            Publisher: U.S. Geological Survey - St. Petersburg Coastal and Marine Science Center
+          Other_Citation_Details: Suggested bibliographic reference: Hapke, C. J., Henderson, R. E., 2015, Quantification of Shoreline Change Along Hatteras Island, NC: Oregon Inlet to Cape Hatteras, 1978-2002, and Associated Vector Shoreline Data: U.S. Geological Survey Open-File Report 2015–1002.
+          Online_Linkage: http://pubs.usgs.gov/of/2015/1002/
+  Description:
+    Abstract: The shoreline of Cape Hatteras, North Carolina, is experiencing long-term coastal erosion. In order to better understand and monitor the changing coastline, historical aerial imagery is used to map shoreline change. For the area of Hatteras Island from Cape Point to Oregon Inlet, fourteen aerial datasets from 1978-2002 were scanned and georeferenced for use in a Geographic Information System (GIS). Shoreline positions (high water line) were digitized from georeferenced imagery. The shoreline vectors were then compiled for use in the Digital Shoreline Analysis System (DSAS) ArcGIS extension in order to generate rates of shoreline change.
+    Purpose: This dataset consists of orthogonal transects and shoreline change rates for Hatteras Island, from Oregon Inlet to Cape Hatteras Point, North Carolina. Rate calculations were computed within a GIS using the Digital Shoreline Analysis System (DSAS) version 4.3, an ArcGIS extension developed by the U.S. Geological Survey. Long-term rates of shoreline change were calculated using a linear regression rate based on all available shoreline data. A reference baseline was used as the originating point for the orthogonal transects cast by the DSAS software. The transects intersect each shoreline establishing measurement points, which are then used to calculate long-term rates.
+  Time_Period_of_Content:
+    Time_Period_Information:
+      Single_Date/Time:
+        Calendar_Date: 20100301
+    Currentness_Reference: publication date
+  Status:
+    Progress: Complete
+    Maintenance_and_Update_Frequency: None planned
+  Spatial_Domain:
+    Bounding_Coordinates:
+      West_Bounding_Coordinate: -75.545621
+      East_Bounding_Coordinate: -75.459091
+      North_Bounding_Coordinate: 35.778262
+      South_Bounding_Coordinate: 35.216500
+  Keywords:
+    Theme:
+      Theme_Keyword_Thesaurus: General
+      Theme_Keyword: High Water Line
+      Theme_Keyword: Shoreline
+      Theme_Keyword: Baseline
+      Theme_Keyword: Transect
+      Theme_Keyword: Erosion
+      Theme_Keyword: Accretion
+      Theme_Keyword: Shoreline Change Rate
+      Theme_Keyword: Linear Regression Rate
+      Theme_Keyword: Endpoint Rate
+      Theme_Keyword: Digital Shoreline Analysis System
+      Theme_Keyword: DSAS
+      Theme_Keyword: U.S. Geological Survey
+      Theme_Keyword: USGS
+      Theme_Keyword: Coastal and Marine Geology Program
+      Theme_Keyword: CMGP
+      Theme_Keyword: St. Petersburg Coastal and Marine Science Center
+    Theme:
+      Theme_Keyword_Thesaurus: ISO 19115 Topic Category
+      Theme_Keyword: oceans
+      Theme_Keyword: oceans and estuaries
+      Theme_Keyword: oceans and coastal
+      Theme_Keyword: environment
+      Theme_Keyword: geoscientificInformation
+    Theme:
+      Theme_Keyword_Thesaurus: Cape Hatteras National Seashore Thesaurus
+      Theme_Keyword: Historical Aerial Imagery
+      Theme_Keyword: Geomorphology
+      Theme_Keyword: Storms
+      Theme_Keyword: Shoreline
+      Theme_Keyword: Shoreline Change
+    Theme:
+      Theme_Keyword_Thesaurus: National Park Service Theme Category Thesaurus
+      Theme_Keyword: Geology
+      Theme_Keyword: Monitoring
+    Place:
+      Place_Keyword_Thesaurus: NPS Abbreviations
+      Place_Keyword: Northeast Region
+      Place_Keyword: National Park Service
+      Place_Keyword: Cape Hatteras National Seashore
+      Place_Keyword: North Carolina
+    Place:
+      Place_Keyword_Thesaurus: National Park System Unit Name Thesaurus
+      Place_Keyword: Cape Hatteras National Seashore
+    Place:
+      Place_Keyword_Thesaurus: National Park System Unit Code Thesaurus
+      Place_Keyword: CAHA
+    Place:
+      Place_Keyword_Thesaurus: General
+      Place_Keyword: North America
+      Place_Keyword: Atlantic Coast
+      Place_Keyword: United States
+      Place_Keyword: North Carolina
+      Place_Keyword: Hatteras Island
+      Place_Keyword: Oregon Inlet
+      Place_Keyword: Cape Hatteras Point
+      Place_Keyword: Oregon Inlet Quadrangle
+      Place_Keyword: Pea Island Quadrangle
+      Place_Keyword: Rodanthe Quadrangle
+      Place_Keyword: Little Kinnakeet Quadrangle
+      Place_Keyword: Buxton Quadrangle
+      Place_Keyword: Cape Hatteras Quadrangle
+      Place_Keyword: Atlantic Ocean
+      Place_Keyword: Pamlico Sound
+      Place_Keyword: Pea Island National Wildlife Refuge
+      Place_Keyword: Cape Hatteras Lighthouse
+  Access_Constraints: None
+  Use_Constraints: Public domain data from the U.S. Government are freely redistributable with proper metadata and source attribution. Please recognize the U.S. Geological Survey as the originator of the dataset.
+  Point_of_Contact:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+        Contact_Person: Rachel E. Henderson (Hehre)
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 600 4th Street South
+        City: St. Petersburg
+        State_or_Province: FL
+        Postal_Code: 33701
+        Country: USA
+      Contact_Voice_Telephone: (727)-502-8000
+      Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+  Data_Set_Credit: Suggested bibliographic reference: Hapke, C. J., Henderson, R. E., 2015, Quantification of Shoreline Change Along Hatteras Island, NC: Oregon Inlet to Cape Hatteras, 1978-2002, and Associated Vector Shoreline Data: U.S. Geological Survey Open-File Report 2015–1002. We would also like to thank Bill Berkemeier and Jesse McNinch of the USACE Field Research Facility for providing access to the aerial photograph library. Jeff List contributed to the formulation of the uncertainty calculations for the rates of change, and the initial concept for deriving a shoreline database from the FRF historic photographs came from Rob Thieler, as part of the USGS North Carolina Coastal-Change Processes project.
+  Native_Data_Set_Environment: Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 10.0
+  Cross_Reference:
+    Citation_Information:
+      Originator: E.R. Thieler
+      Originator: E.A. Himmelstoss
+      Originator: J.L. Zichichi
+      Originator: A. Ergul
+      Publication_Date: 2009
+      Title: Digital Shoreline Analysis System (DSAS) version 4.3 - An ArcGIS extension for calculating shoreline change
+      Series_Information:
+        Series_Name: Open-File Report
+        Issue_Identification: 2008-1278
+      Publication_Information:
+        Publication_Place: Woods Hole Coastal and Marine Science Center, Woods Hole, MA
+        Publisher: U.S. Geological Survey, Coastal and Marine Geology Program
+      Other_Citation_Details: Current version of software at time of use was 4.3.
+      Online_Linkage: http://woodshole.er.usgs.gov/project-pages/dsas/
+      Online_Linkage: http://woodshole.er.usgs.gov/project-pages/dsas/version4/index.html
+      Online_Linkage: http://pubs.usgs.gov/of/2008/1278/
+Data_Quality_Information:
+  Attribute_Accuracy:
+    Attribute_Accuracy_Report: The attributes in this layer are based on the requirements for use within the Digital Shoreline Analysis System (DSAS) software (USGS Open-File Report 2008-1278). The data have been quality checked and the attribute value (TransOrder) increments sequentially alongshore.
+  Logical_Consistency_Report: These data were generated using DSAS v4.3, an automated software program, which does not perform checks for fidelity of the input features. The transects were visually inspected and sometimes manually adjusted within a standard ArcMap edit session to adjust the position at which an individual transect intersected the shorelines.
+  Completeness_Report: This dataset contains transects automatically generated by the DSAS software application that were used to calculate long-term shoreline change rates for the region.
+  Lineage:
+    Process_Step:
+      Process_Description: Transect Features Generated using DSAS v4.3 in ArcMap v10.0. Parameters Used: baseline layer=Hatteras_Baseline, baseline group field=NULL, transect spacing=50 meters, transect length=400 meters, cast direction=AUTO-DETECT, baseline location=offshore, cast method=simple baseline, smoothing distance=50 meters, flip baselines=not selected. For additional details on these parameters, please see the DSAS help file distributed with the DSAS software, or visit the USGS website at: http://pubs.usgs.gov/of/2008/1278/.
+      Process_Date: 20101019
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Description: Some transects did not intersect all shorelines at the default transect length. These transects were manually lengthened in an edit session using standard editing tools in ArcMap v10.0.
+      Process_Date: 20101025
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Date: 20140701
+      Process_Description:
+        Three sets of rate calculations were performed in DSAS v4.3 using ArcMap v10.0.
+
+        1) Parameters Used: shoreline layer=Hatteras_shorelines_1978_2002, shoreline date field=DATE_, shoreline uncertainty field name=UNCERT, the default accuracy=4.4 meters, shoreline intersection parameters=nearest, stats calculations=[Net Shoreline Movement (NSM) and Linear Regression Rate (LRR)], confidence interval=95% (95_CI), Output rate table name= Hatteras_Trans_rates_1978_2002.dbf
+
+        2) Parameters Used: shoreline layer=Hatteras_shorelines_1978_1989, shoreline date field=DATE_, shoreline uncertainty field name=UNCERT, the default accuracy=4.4 meters, shoreline intersection parameters=nearest, stats calculations=[Net Shoreline Movement (NSM) and Linear Regression Rate (LRR)], confidence interval=95% (95_CI), Output rate table name= Hatteras_Trans_rates_1978_1989.dbf
+
+        3) Parameters Used: shoreline layer=Hatteras_shorelines_1989_2002, shoreline date field=DATE_, shoreline uncertainty field name=UNCERT, the default accuracy=4.4 meters, shoreline intersection parameters=nearest, stats calculations=[Net Shoreline Movement (NSM) and Linear Regression Rate (LRR)], confidence interval=95% (95_CI), Output rate table name= Hatteras_Trans_rates_1989_2002.dbf
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Description: New fields (LRR78_2002, LRR89_2002, LRR78_1989, DAS_km) were created in the Hatteras_Transects attribute table.
+      Process_Date: 20140708
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Description: The Hatteras_Transects feature class was exported from a personal geodatabase to a shapefile in ArcCatalog (v.10.0) by performing a right-mouse click on the data layer > export > to shapefile (single).
+      Process_Date: 20140710
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Description: Shoreline rate tables (Hatteras_Trans_1978_2002_rates.dbf, Hatteras_Trans_1978_1989_rates.dbf, and Hatteras_Trans_1989_2002_rates.dbf) were individually joined to the Hatteras_Transects.shp feature class in ArcMap v10.0 by right-clicking on the transect layer > joins and relates > join > join attributes from a table. Parameters: join field - ObjectID; table to join - (Hatteras_Trans_1978_2002_rates, Hatteras_Trans_1978_1989_rates, Hatteras_Trans_1989_2002_rates); field in table: TransectID; join options - keep only matching records. Values from the temporary join were copied and pasted to the Hatteras_Transects.shp attribute table, linear regression rates (LRR) from Hatteras_Trans_1978_2002_rates.dbf were used to fill LRR78_2002 field; LRR rates from Hatteras_Trans_1978_1989_rates.dbf were used to fill LRR78_1989, and LRR rates from Hatteras_Trans_1989_2002_rates.dbf were used to fill LRR89_2002 attribute field.
+      Process_Date: 20140714
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+    Process_Step:
+      Process_Description: Hatteras_Transects.shp was projected in ArcToolbox from UTM zone 18N (NAD 83) to geographic (WGS 84) coordinates using: ArcToolbox (v9.3) "Data Management Tools" > "Projections and Transformations" > "Feature" > "Project", and the Geographic Transformation: NAD_1983_To_WGS_1984_5.
+      Process_Date: 20140716
+      Process_Contact:
+        Contact_Information:
+          Contact_Person_Primary:
+            Contact_Person: Rachel E. Henderson (Hehre)
+            Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+          Contact_Address:
+            Address_Type: mailing address
+            Address: 600 4th Street South
+            City: St. Petersburg
+            State_or_Province: FL
+            Postal_Code: 33701
+            Country: USA
+          Contact_Voice_Telephone: (727)-502-8000
+          Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+Spatial_Data_Organization_Information:
+  Direct_Spatial_Reference_Method: Vector
+  Point_and_Vector_Object_Information:
+    SDTS_Terms_Description:
+      SDTS_Point_and_Vector_Object_Type: String
+      Point_and_Vector_Object_Count: 1308
+Spatial_Reference_Information:
+  Horizontal_Coordinate_System_Definition:
+    Geographic:
+      Latitude_Resolution: 0.000001
+      Longitude_Resolution: 0.000001
+      Geographic_Coordinate_Units: Decimal degrees
+    Geodetic_Model:
+      Horizontal_Datum_Name: D_WGS_1984
+      Ellipsoid_Name: WGS_1984
+      Semi-major_Axis: 6378137.000000
+      Denominator_of_Flattening_Ratio: 298.257224
+Entity_and_Attribute_Information:
+  Detailed_Description:
+    Entity_Type:
+      Entity_Type_Label: Hatteras_Transects
+      Entity_Type_Definition: Transects are automatically generated by DSAS at a 90 degree angle to the user-specified baseline.
+      Entity_Type_Definition_Source: U.S. Geological Survey
+    Attribute:
+      Attribute_Label: FID
+      Attribute_Definition: Internal feature number.
+      Attribute_Definition_Source: ESRI
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: Sequential unique whole numbers that are automatically generated.
+    Attribute:
+      Attribute_Label: Shape
+      Attribute_Definition: Feature geometry.
+      Attribute_Definition_Source: ESRI
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: Coordinates defining the features.
+    Attribute:
+      Attribute_Label: BaselineID
+      Attribute_Definition: Unique identification number of the baseline segment. If BaselineID=0 no transects will be generated. Used by DSAS to determine transect ordering alongshore if multiple baseline segments exist.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0
+          Range_Domain_Maximum: unlimited
+    Attribute:
+      Attribute_Label: TransOrder
+      Attribute_Definition: Assigned by DSAS based on ordering of transects along the baseline. Used to allow user to sort transect data along the baseline from baseline start to baseline end.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0
+          Range_Domain_Maximum: unlimited
+    Attribute:
+      Attribute_Label: ProcTime
+      Attribute_Definition: Assigned by DSAS automatically to record the date and time a transect was processed.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: no value (when transect was manually created by user)
+          Range_Domain_Maximum: unlimited (values based on time and date of automatic generation)
+    Attribute:
+      Attribute_Label: Autogen
+      Attribute_Definition: Assigned by DSAS to indicate whether or not a transect was automatically created by DSAS (1= transect was auto generated by DSAS; 0=transect was not auto-generated).
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0
+          Range_Domain_Maximum: 1
+    Attribute:
+      Attribute_Label: StartX
+      Attribute_Definition: Assigned by DSAS automatically to record the X coordinate of the beginning of the transect in meter units (UTM zone 18N, NAD 83).
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 450349.84
+          Range_Domain_Maximum: 458405.08
+    Attribute:
+      Attribute_Label: StartY
+      Attribute_Definition: Assigned by DSAS automatically to record the Y coordinate of the beginning of the transect in meter units (UTM zone 18N, NAD 83).
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 3897181.77
+          Range_Domain_Maximum: 3959484.62
+    Attribute:
+      Attribute_Label: EndX
+      Attribute_Definition: Assigned by DSAS automatically to record the X coordinate of the end of the transect in meter units (UTM zone 18N, NAD 83). This value does not update if the transect is edited, such as when transects need to be extended.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 450543.46
+          Range_Domain_Maximum: 458005.08
+    Attribute:
+      Attribute_Label: EndY
+      Attribute_Definition: Assigned by DSAS automatically to record the Y coordinate of the end of the transect in meter units (UTM zone 18N, NAD 83). This value does not update if the transect is edited, such as when transects need to be extended.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 3897216.79
+          Range_Domain_Maximum: 3959085.63
+    Attribute:
+      Attribute_Label: Azimuth
+      Attribute_Definition: Assigned by DSAS to record the azimuth of the transect measure in degrees clockwise from North. This value does not update if the transect is edited, such as when transects need to be extended, or reoriented.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 28.95
+          Range_Domain_Maximum: 295.2
+    Attribute:
+      Attribute_Label: SHAPE_Leng
+      Attribute_Definition: Length of feature in meter units (UTM zone 18N, NAD 83) automatically calculated by the ESRI software within the geodatabase.
+      Attribute_Definition_Source: ESRI
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 399.999996
+          Range_Domain_Maximum: 1041.888447
+    Attribute:
+      Attribute_Label: LRR78_2002
+      Attribute_Definition: The linear regression rate of shorelines from 1978-2002. A linear regression rate-of-change statistic was calculated by fitting a least-squares regression line to fourteen shorelines from 1978 to 2002 for each transect. The best-fit regression line is placed so that the sum of the squared residuals (determined by squaring the offset distance of each data point from the regression line and adding the squared residuals together) is minimized. The linear regression rate is the slope of the line. The rate is reported in meters per year with positive values indicating accretion and negative values indicating erosion.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: -76.61
+          Range_Domain_Maximum: 19.42
+    Attribute:
+      Attribute_Label: LRR89_2002
+      Attribute_Definition: The linear regression rate of shorelines from 1989 to 2002. A linear regression rate-of-change statistic was calculated by fitting a least-squares regression line to nine shorelines from 1989 to 2002 for each transect. The best-fit regression line is placed so that the sum of the squared residuals (determined by squaring the offset distance of each data point from the regression line and adding the squared residuals together) is minimized. The linear regression rate is the slope of the line. The rate is reported in meters per year with positive values indicating accretion and negative values indicating erosion.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: -40.42
+          Range_Domain_Maximum: 84.13
+    Attribute:
+      Attribute_Label: LRR78_1989
+      Attribute_Definition: The linear regression rate of shorelines from 1978 to 1989. A linear regression rate-of-change statistic was calculated by fitting a least-squares regression line to six shorelines from 1978 to 1989 for each transect. The best-fit regression line is placed so that the sum of the squared residuals (determined by squaring the offset distance of each data point from the regression line and adding the squared residuals together) is minimized. The linear regression rate is the slope of the line. The rate is reported in meters per year with positive values indicating accretion and negative values indicating erosion.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: -76.61
+          Range_Domain_Maximum: 41.1
+    Attribute:
+      Attribute_Label: DAS_km
+      Attribute_Definition: The distance in kilometers along shore, measured at the intersection of transects with the baseline, starting at Fire Island Inlet and ending at Moriches Inlet.
+      Attribute_Definition_Source: U.S. Geological Survey
+      Attribute_Domain_Values:
+        Range_Domain:
+          Range_Domain_Minimum: 0
+          Range_Domain_Maximum: 66.86
+Distribution_Information:
+  Distributor:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 600 4th Street South
+        City: St. Petersburg
+        State_or_Province: FL
+        Postal_Code: 33701
+        Country: USA
+      Contact_Voice_Telephone: (727)-502-8000
+      Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+  Resource_Description: Downloadable Data: USGS Open-File Report 2015–1002
+  Distribution_Liability:
+    Neither the U.S. Government, the Department of the Interior, nor the USGS, nor any of their employees, contractors, or subcontractors, make any warranty, express or implied, nor assume any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, nor represent that its use would not infringe on privately owned rights. The act of distribution shall not constitute any such warranty, and no responsibility is assumed by the USGS in the use of these data or related materials.
+
+    Any use of trade, product, or firm names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
+  Standard_Order_Process:
+    Digital_Form:
+      Digital_Transfer_Information:
+        Format_Name: WinZip
+        Format_Version_Number: 15.5
+        Format_Specification: ESRI polyline shapefile
+        Format_Information_Content: This WinZip file contains a shapefile of transects generated by the Digital Shoreline Analysis System with appended long-term rate calculations for Cape Hatteras, NC from Oregon Inlet to Cape Hatteras Point.
+        File_Decompression_Technique: Use WinZip or pkUnzip
+        Transfer_Size: 107 KB
+      Digital_Transfer_Option:
+        Online_Option:
+          Computer_Contact_Information:
+            Network_Address:
+              Network_Resource_Name: http://pubs.usgs.gov/of/2015/1002
+          Access_Instructions: Data are downloadable via the World Wide Web (WWW).
+    Fees: None
+  Technical_Prerequisites: This zip file contains data available in Environmental Systems Research Institute (ESRI) polyline shapefile format. The user must have ArcGIS or ArcView 3.0 or greater software to read and process the data file. In lieu of ArcView or ArcGIS, the user may utilize another GIS application package capable of importing the data. A free data viewer, ArcExplorer, capable of displaying the data is available from ESRI at www.esri.com.
+Metadata_Reference_Information:
+  Metadata_Date: 20140901
+  Metadata_Contact:
+    Contact_Information:
+      Contact_Person_Primary:
+        Contact_Person: Rachel E. Henderson (Hehre)
+        Contact_Organization: U.S. Geological Survey, St. Petersburg Coastal and Marine Science Center, St. Petersburg, Florida
+      Contact_Address:
+        Address_Type: mailing address
+        Address: 600 4th Street South
+        City: St. Petersburg
+        State_or_Province: FL
+        Postal_Code: 33701
+        Country: USA
+      Contact_Voice_Telephone: (727)-502-8000
+      Contact_Electronic_Mail_Address: rehenderson@usgs.gov
+  Metadata_Standard_Name: FGDC Content Standards for Digital Geospatial Metadata
+  Metadata_Standard_Version: FGDC-STD-001-1998
+  Metadata_Time_Convention: local time
+  Metadata_Extensions:
+    Online_Linkage: http://www.esri.com/metadata/esriprof80.html
+    Profile_Name: ESRI Metadata Profile
