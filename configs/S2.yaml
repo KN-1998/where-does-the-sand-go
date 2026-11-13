@@ -1,0 +1,5 @@
+# Paired severe-storm scenario. The forced event is at absolute t=2.25 yr.
+inherit: base.yaml
+scenario: S2
+t_end: 15.0
+storm_enabled: true

@@ -1,0 +1,5 @@
+# Diagnostic only: disable event shocks while retaining the scenario's computed
+# chronic component (target rate minus expected storm contribution).
+# This is not a rate-matched no-storm physical scenario.
+inherit: base.yaml
+storm_enabled: false

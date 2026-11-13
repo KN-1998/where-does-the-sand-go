@@ -5,6 +5,7 @@ inherit: modeling/params.yaml
 scenario: S1          # S1 平静
 strategy: none        # 只跑基线，不补沙
 bc: zeroflux          # 先零通量：T1 最容易闭合（切换 open 前必须先过 T1）
+storm_enabled: true   # E0 基线保留 S1 风暴；无风暴退化见 configs/no_storm.yaml
 
 seed: 42
 t_end: 5.0            # 先跑 5 年，不是 15 年
@@ -12,3 +13,17 @@ dx: 25.0              # 360 个控制体
 dt: 0.02
 
 overrides: {}         # 不覆盖任何参数，先用主算
+
+# Programmer decisions R2: all are ASSUME, not fitted monitoring data.
+adaptive_options:
+  forecast_years: 5.0
+  members: 8
+  forecast_dx: 100.0
+  forecast_dt: 0.10
+  candidate_centers_m: [-1500.0, 0.0, 1500.0]
+  candidate_lengths_m: [1000.0, 2000.0]
+  volume_shares: [0.5, 1.0]
+  protection_quantile: 0.10
+  survey_cost_usd: 50000.0
+  nearshore_sigma_m2: 30.0
+  minimum_benefit_myr: 0.000001

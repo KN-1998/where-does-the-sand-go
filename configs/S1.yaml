@@ -1,0 +1,4 @@
+inherit: configs/base.yaml
+scenario: S1
+t_end: 15.0
+bc: open

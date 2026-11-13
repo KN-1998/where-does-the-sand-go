@@ -1,0 +1,5 @@
+# Repeated-storm and worsening-background scenario.
+inherit: base.yaml
+scenario: S3
+t_end: 15.0
+storm_enabled: true
