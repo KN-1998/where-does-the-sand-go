@@ -51,3 +51,9 @@ results/*.nc
 # 交付包产物
 dist/
 
+# R2 计算产物通过 GitHub Release 附件交付；不纳入源码 Git 历史
+results/
+*.npz
+*.mat
+*.bin
+

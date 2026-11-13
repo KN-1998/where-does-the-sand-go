@@ -4,6 +4,15 @@
 > Outer Banks · Rodanthe 附近 5 km 走廊 · 2027–2042。
 > **这是独立训练/练习赛题（PDF 标注 TRAINING / PRACTICE），不是已核实的正式 COMAP 题目。**
 
+> **编程 R2 入口（2026-11-13）：** 当前实现和结果使用
+> [`PROGRAMMING_HANDOFF_R2.md`](PROGRAMMING_HANDOFF_R2.md)（完整交接、注意事项和潜在问题）、
+> [`REPRODUCE.md`](REPRODUCE.md)、[`本轮检查与结果.md`](本轮检查与结果.md)
+> 及 `results/release_20261113_r2/`。GitHub code-r1 的复核见
+> [`REVIEW_UPSTREAM_R2.md`](REVIEW_UPSTREAM_R2.md)。下方排期和旧上手文档保留为历史工作记录。
+> 数值验收与现场验证分开：独立资料缺口见 [`VALIDATION_GAPS.md`](VALIDATION_GAPS.md)。
+> 完整结果附件：[R2 GitHub Release](https://github.com/KN-1998/where-does-the-sand-go/releases/tag/programming-r2-20261113)。
+> 源码分支为 `programming-r2-handoff`；大场数据从 Release 下载明确命名的交接 ZIP。
+
 > **排期 / 节点 DDL / 降级方案：见 [`SCHEDULE.md`](SCHEDULE.md)（2026-11-11 重排）。**
 > **编程手请先读 [`START_HERE.md`](START_HERE.md)：60 分钟让能跑的先跑起来。**
 

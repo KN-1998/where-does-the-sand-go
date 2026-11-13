@@ -1,0 +1,15 @@
+{
+  "environment": {
+    "MATLAB": "25.1.0.2943329 (R2025a); license test passed",
+    "PyYAML": "6.0.3",
+    "numpy": "2.5.1",
+    "python": "3.14.6",
+    "scipy": "1.18.1"
+  },
+  "git_HEAD": "bce02d5259e8e87a0f0cfffd51356a46f8688b39",
+  "github_handoff_branch": "programming-r2-handoff",
+  "github_release_tag": "programming-r2-20261113",
+  "note": "git_HEAD records the original local baseline, not the later GitHub publication commit. src_sha256 identifies the frozen scientific implementation. Release packages include current source and tests; GitHub Source code archives do not include result assets.",
+  "src_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "upstream_reviewed": "1e32280 / origin/code / code-r1"
+}

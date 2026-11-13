@@ -17,3 +17,6 @@
 *.gif   binary
 *.svg   text
 *.pyc   binary
+
+# R2 科学源码指纹按原始字节生成；保留发布时的换行字节
+src/** -text
