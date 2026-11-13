@@ -15,6 +15,7 @@
 
 > **排期 / 节点 DDL / 降级方案：见 [`SCHEDULE.md`](SCHEDULE.md)（2026-11-11 重排）。**
 > **编程手请先读 [`START_HERE.md`](START_HERE.md)：60 分钟让能跑的先跑起来。**
+> **论文手请先读 [`handoff/CHANGE_REQUEST_PAPER_R1.md`](handoff/CHANGE_REQUEST_PAPER_R1.md)：4 处修改（2 个 P0），每条给可粘贴的英文替换。**
 
 本仓库是一支三人队 + 建模助理 agent 的**协作工作区**，而不是一份成品论文。
 它把"模型 → 参数 → 情景 → 策略 → 交接口径"拆成互相锁定的文档与台账，
