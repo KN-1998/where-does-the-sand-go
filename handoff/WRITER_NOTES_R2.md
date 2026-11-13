@@ -53,11 +53,11 @@
 
 | 项 | 内容 |
 |---|---|
-| **结论句** | "With the same placed volume, **hotspot placement retains more sand and delivers more safe shoreline-years than uniform placement**, but the advantage is single-digit percent, not an order of magnitude; most placed sand stays inside the 9-km domain." |
-| **用哪张图** | **F2**（三种布置的 $w$ 剖面）+ **F12**（干预−基线的沙量分解）+ **F9**（$\mathcal V_{\rm thr}$） |
-| **用什么数** | $\mathcal V_{\rm thr}=H L (w_{\rm mgmt}-w_{\min})=10\times5000\times4=2.0\times10^{5}$ m³（均匀铺满使全段达标的**瞬时**下限）；R2 三布置的留存/暴露数字见附件包 `results/release_20261113_r2/` 的 E1 表（**待我核完填入**，位置见 §5） |
-| **不能写** | ❌ "wide beach ⇒ long protection"（宽滩不持久）；❌ 把 $\mathcal V_{\rm thr}$ 当成"长期保护的门槛"——它只保证**投放瞬间**达标；❌ 把"补进去的沙"说成可追踪的颗粒（模型是**有/无干预的差**） |
-| **一句话机理** | 寿命 $\propto \ell^2/D$（$T_{1/2}=0.2748\ell^2/D$）；沙去向 = 域内留存 + 出 9 km + 永久离岸（三块，慢性汇不进这个饼图） |
+| **结论句（已按 R2 实测更正）** | "At the available local volume (2.45 M m³, about **12×** the instantaneous coverage threshold), **uniform placement dominates**: median 15-year width exposure is **3.0 m·yr** versus 18.6 (multi-segment) and 38.6 (hotspot). Spreading keeps the whole corridor above the 20 m management width, whereas concentrating leaves the remaining 4 km below it." |
+| **用哪张图** | **F2**（三种布置的 $w$ 剖面）+ **F9**（$\mathcal V_{\rm thr}$ 判据）+ **F12**（沙量分解） |
+| **用什么数** | S1、同方量 2.45 M m³、1000 次 MC 的 $E_w$ 中位：**uniform 3.05 / multi 18.64 / hotspot 38.59**；seed 42 确定性：0 / 18.6 / 38.6，$w_{\rm end,min}$ 21.3 / 21.7 / 22.2 m；$\mathcal V_{\rm thr}=H L (w_{\rm mgmt}-w_{\min})=2.0\times10^{5}$ m³，$\mathcal V/\mathcal V_{\rm thr}\approx12$；质量残差 $\le2.6\times10^{-15}$ |
+| **不能写** | ❌ "热点集中更优"（R2 实测相反；R1 的旧结论已作废）；❌ 把 $\mathcal V_{\rm thr}$ 说成"长期保护门槛"——它只保证**投放瞬间**全段达标；❌ 说"宽滩必然持久" |
+| **一句话机理** | 当 $\mathcal V\gg\mathcal V_{\rm thr}$ 时，匀铺把整段抬到阈值以上，集中投放把沙堆在已达标处而在其余岸段留下欠账；**只有当 $\mathcal V<\mathcal V_{\rm thr}$ 时，集中才是唯一能救热点的办法**（这是 Q2 的判别条件） |
 
 ### Q3 — Connect the model to evidence
 
@@ -83,11 +83,11 @@
 
 | 项 | 内容 |
 |---|---|
-| **结论句** | "Because **local sand (2.45 M m³) binds before the budget does**, every fixed-calendar strategy spends exactly 66.15 M USD and places the same volume; the only differences are timing and location. Under building-clearance exposure `repeat` wins in S3 (1958 vs 4892 m·yr), under beach-width exposure `once` wins (33 948 vs 52 219 m·yr): **the ranking flips with the risk metric, so no single 'optimal' strategy exists**." |
-| **用哪张图** | **F3**（暴露条形）+ **F14**（耐用性相图）+ **F15**（自适应设置）+ **F16**（施工与监测）+ **F17**（风暴足迹） |
-| **用什么数** | S1/S2/S3 × {none, once, repeat, targeted, adaptive} 的 $E_b/E_w$/用沙/花费；配对差见 `policy_pairwise.csv`；自适应 S2：$E_b$ 1418 vs once 0，花费 60.21 vs 66.15 M |
-| **不能写** | ❌ "adaptive is always better"（中位数上 S2 不如 once）；❌ "one-off is optimal"；❌ "$c_0^*$ 有交叉点"（R2 未检出）；❌ "retreat is optimal"（只有 `retreat_assessment` 标志，没有搬迁成本模型） |
-| **一句话机理** | 供需约束决定策略空间；两个风险指标不可互相替代 |
+| **结论句（按配对 MC 更正）** | "Sand, not money, is the binding constraint: all fixed-calendar strategies place the same **2.45 M m³** and spend the same **66.15 M USD**. Against the one-off benchmark, **no alternative is better on beach-width exposure in any scenario**, and only *repeat* under S3 improves the building-clearance metric (paired difference **−2 693 m·yr**, 95 % MC CI [−2 813, −2 573]). Cheaper adaptive policies save 6–16 M USD but increase exposure." |
+| **用哪张图** | **F3**（暴露条形）+ **F14**（耐用性相图）+ **F15**（自适应设置）+ **F16**（施工/监测）+ **F17**（风暴足迹） |
+| **用什么数** | 配对差（策略 − once，正=更差）：S1 repeat $E_b{+}5.5,[2.0,9.0]$、$E_w{+}2\,269$；S2 repeat $E_b{+}445$、$E_w{+}27\,129$，adaptive $E_b{+}3\,249$（省 5.9 M）；S3 repeat $E_b\mathbf{-2\,693}$、$E_w{+}17\,339$，adaptive $E_b{+}6\,976$（省 16.4 M）；`policy_pairwise.csv` |
+| **不能写** | ❌ "adaptive 更好"（中位与配对都不支持）；❌ "存在唯一最优策略"（S3 两指标相反）；❌ "$c_0^*$ 有交叉点"（未检出）；❌ "retreat 最优"（只有评估标志） |
+| **一句话机理** | 供需约束先绑定 → 策略只能用同一批沙；差别全在**时机与空间分配**，而两个风险指标对这两件事的偏好相反 |
 
 ---
 
@@ -122,15 +122,22 @@
 
 ---
 
-## 5. 待补的两处（我 11/14 06:00 前给）
+## 5. 数据来源与已核对项（2026-11-13 22:20 更新）
 
-1. **Q2 三布置的数字**（留存率、$T_{\rm safe,cum}$、沙去向三块）——在附件包
-   `results/release_20261113_r2/` 的 E1 表，我正在下载核对（`dist/r2/`）；
-2. **Q4/Q5 的配对分位带**（`mc_comparison.csv` / `policy_pairwise.csv`）。
+审查包 `review_handoff_20261113_r2.zip` 已下载并 **SHA256 校验通过**（`9ab3aea0…35252f`），解压在 `dist/r2/review/`。
 
-在那之前，Q2/Q5 的表格先留空占位，**不要**去 R1 的旧数字里凑。
+已从包内 CSV 核对并写入本文：
 
----
+| 项 | 来源文件 | 状态 |
+|---|---|---|
+| Q2 三布置暴露（3.05 / 18.64 / 38.59） | `mc_comparison.csv` + `summary.csv` | ✅ 已写入 §2 Q2 |
+| Q5 配对差（含 CI） | `policy_pairwise.csv` | ✅ 已写入 §2 Q5 |
+| 三情景实现速率 1.511 / 2.628 / 3.108 | `erosion_target_diagnostic.csv` | ✅ 已写入 §2 Q4 |
+| 全场质量残差（MC 最大 2.107e-08） | `audit.json` | ✅ 已写入 §3 |
+
+> **口径提醒**：`once` 与三布置（uniform/hotspot/multi）不是同一类实验——**布置是理想 $t=0$ 投放、不计许可与施工时滞**，`once` 要等 1.75 yr。所以除了"哪种布置好"，还要看到"**时滞本身就让 $E_w$ 从 3.0 涨到 3 335**"（seed 42）。
+> 论文里这两组数要分开写，不能混成一张"策略对比"表。
+
 
 ## 6. 禁止表述（汇总，红队会抓）
 
