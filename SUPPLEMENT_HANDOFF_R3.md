@@ -37,6 +37,8 @@ python tools/package_r3.py
 python tools/verify_handoff.py dist/supplement_handoff_20261114_r3.zip --out dist/HANDOFF_VERIFICATION_R3.json
 ```
 
+无 `.git` 的ZIP解压目录使用 `python tools/check_caliber_r2.py --skip-git`；仍检查冻结源码、新工具字节及全部样本统计，但明确跳过Git提交祖先校验。完整clone默认严格验证提交。
+
 诊断：9km域、360格、dx=25m、dt=.02yr、open、15yr、无补沙、lambda=.4/yr、对数正态中位8m，无强制事件。A_det/B_det为seed42；MC种子为 `(42*1000003+i) mod 2^32`。确定性完整时空矩阵保留于ZIP，Git保留CSV/JSON/YAML轻量证据。
 
 ## 任务回执

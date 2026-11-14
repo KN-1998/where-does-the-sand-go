@@ -94,7 +94,7 @@ def check_git_provenance(commit, diagnostic_hash):
             "git_commit does not contain the recorded diagnostic implementation")
 
 
-def check(root):
+def check(root, skip_git=False):
     summary = read_json(root / "summary.json")
     n = summary["n_pairs"]
     require(isinstance(n, int) and n >= 200, "At least 200 paired realizations required")
@@ -106,7 +106,8 @@ def check(root):
             == tree_sha256(ROOT / "src"), "R2 source identity mismatch")
     require(provenance["diagnostic_sha256"] == sha256((ROOT / "tools/caliber_r2.py").read_bytes()).hexdigest(),
             "diagnostic source identity mismatch")
-    check_git_provenance(provenance["git_commit"], provenance["diagnostic_sha256"])
+    if not skip_git:
+        check_git_provenance(provenance["git_commit"], provenance["diagnostic_sha256"])
 
     config_paths = [root / f"{group}_det/resolved_config.yaml" for group in ("A", "B")]
     texts = [path.read_bytes() for path in config_paths]
@@ -218,13 +219,16 @@ def check(root):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT / "results/caliber_R2")
+    parser.add_argument("--skip-git", action="store_true",
+                        help="For unpacked archives without .git: skip commit ancestry/content verification; retain current source/hash and numerical checks")
     args = parser.parse_args()
     try:
-        n, residual = check(args.root.resolve())
+        n, residual = check(args.root.resolve(), skip_git=args.skip_git)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.CalledProcessError) as error:
         print(f"FAIL caliber_R2: {error}", file=sys.stderr)
         return 1
-    print(f"PASS caliber_R2: {n} paired seeds; configs, events, statistics and provenance verified; residual={residual:.3e}")
+    git_status = "git verification skipped" if args.skip_git else "git commit verified"
+    print(f"PASS caliber_R2: {n} paired seeds; configs, events, statistics and source hashes verified; {git_status}; residual={residual:.3e}")
     return 0
 
 
