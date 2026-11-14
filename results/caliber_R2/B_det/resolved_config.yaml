@@ -1,0 +1,903 @@
+meta:
+  version: '0.6'
+  date: '2026-11-10'
+  contract: MODEL_SPEC v0.6 + CODER_SPEC v0.6（整改 R1：A1–A7 冻结）
+  units: SI (m, m^2, m^3, yr, s)
+  author: modeling-agent
+domain:
+  L_corridor:
+    value: 5000.0
+    unit: m
+    source_type: ASSUME
+    evidence_id: A-01
+    note: 题面给定的代表性 5 km 走廊（竞赛假设，非政府规划区）
+  L_buffer:
+    value: 2000.0
+    unit: m
+    source_type: ASSUME
+    evidence_id: A-02
+    note: 两侧各留 2 km 缓冲，计算域共 9 km；理由见 meta/planning/建议.txt
+  x_h:
+    symbol: x_h
+    name: 侵蚀热点中心位置
+    unit: m
+    value: 0.0
+    source_type: ASSUME
+    evidence_id: A-03
+    note: 热点中心置于走廊中央 x=0；真实位置待数据确认
+  T_sim:
+    value: 15.0
+    unit: yr
+    source_type: ASSUME
+    evidence_id: A-17
+    note: 2027–2042（题面设定，不是自然观测）
+geometry:
+  h_star:
+    symbol: h_*
+    name: 闭合深度
+    unit: m
+    value: 8.0
+    range:
+    - 6.0
+    - 10.0
+    source_type: ASSUME
+    evidence_id: P1
+    calibrate: sens
+    note: Buxton 2017-18 设计闭合深度 -7.3 m（P1）是锚点；主算取 8 m 是量级取整，不是实测，故标 ASSUME
+  B_berm:
+    symbol: B
+    name: 滩肩高度
+    unit: m
+    value: 2.0
+    range:
+    - 1.5
+    - 2.5
+    source_type: ASSUME
+    evidence_id: A-04
+    calibrate: sens
+    note: 外滩典型滩肩 1.5–2.5 m
+  H_dep:
+    symbol: H
+    name: 岸线-体积换算深度 h_*+B
+    unit: m
+    value: 10.0
+    range:
+    - 8.0
+    - 12.0
+    source_type: MODEL
+    evidence_id: M-01
+    calibrate: false
+    derived_from:
+    - h_star
+    - B_berm
+    note: 由 h_star + B_berm 导出；1 m 岸线 <=> 10 m^3/m 沙
+  A_dean:
+    symbol: A
+    name: Dean 平衡剖面参数
+    unit: m^(1/3)
+    value: 0.1
+    range:
+    - 0.08
+    - 0.12
+    source_type: OBS
+    evidence_id: O-08
+    calibrate: false
+    note: 对应 D50 ~0.2 mm 的中砂
+  D50:
+    symbol: D_50
+    name: 中值粒径
+    unit: mm
+    value: 0.2
+    range:
+    - 0.15
+    - 0.3
+    source_type: OBS
+    evidence_id: O-08
+    calibrate: false
+    note: 外滩砂质海滩典型值
+waves:
+  Hs_mean:
+    symbol: H_s
+    name: 平均有效波高
+    unit: m
+    value: 1.0
+    range:
+    - 0.8
+    - 1.3
+    source_type: OBS
+    evidence_id: W1
+    calibrate: false
+    note: 外滩约 1 m（MDPI 2024）；FRF Duck 年均 0.9 m；原 1.3 m 偏高
+  T_peak_mean:
+    symbol: T_peak
+    name: 平均谱峰周期
+    unit: s
+    value: 8.5
+    range:
+    - 7.0
+    - 10.0
+    source_type: OBS
+    evidence_id: W7
+    calibrate: false
+    note: W7 给 Oregon Inlet 区域约 9 s；8.5 为同一量级的设计值。改名为避免与保护期 T_p 冲突
+  Hb:
+    symbol: H_b
+    name: 破碎波高（用于 D 的估算）
+    unit: m
+    value: 0.9
+    range:
+    - 0.8
+    - 1.2
+    source_type: MODEL
+    evidence_id: M-09
+    calibrate: false
+    note: 由 H_s=1.0 m 与浅化/破碎估算；W9 的外海 1.26 m 不是 Hb
+  K_SPM:
+    symbol: K_SPM
+    name: CERC/SPM 无量纲输沙系数
+    unit: dimensionless
+    value: 0.39
+    range:
+    - 0.2
+    - 0.8
+    source_type: OBS
+    evidence_id: O-10
+    calibrate: false
+    note: SPM 口径（H_s 时为 0.39；H_rms 时约 0.77）。注意与量纲化的 K_c 区分
+  K_c:
+    symbol: K_c
+    name: 量纲化 CERC 系数（=K_SPM/[16(s-1)(1-p)]*sqrt(g/gamma_b)）
+    unit: m^0.5/s
+    value: 0.0873
+    range:
+    - 0.04
+    - 0.18
+    source_type: MODEL
+    evidence_id: M-02
+    calibrate: false
+    note: 由 K_SPM=0.39、s=2.65、p=0.4、gamma_b=0.78 换算；D=2*K_c*Hb^2.5*cos(2a)/H*3.156e7
+  alpha_b:
+    symbol: alpha_b
+    name: 特征破碎波入射角
+    unit: deg
+    value: 8.0
+    range:
+    - 0.0
+    - 15.0
+    source_type: ASSUME
+    evidence_id: A-05
+    calibrate: false
+    note: 线性化用；cos(2a) 在 0-15 deg 内变化很小
+  s_sed:
+    symbol: s
+    name: 泥沙相对密度（rho_s/rho_w）
+    unit: dimensionless
+    value: 2.65
+    range:
+    - 2.6
+    - 2.7
+    source_type: OBS
+    evidence_id: O-16
+    calibrate: false
+  p_por:
+    symbol: p
+    name: 沉积物孔隙率
+    unit: dimensionless
+    value: 0.4
+    range:
+    - 0.35
+    - 0.45
+    source_type: OBS
+    evidence_id: O-16
+    calibrate: false
+  gamma_b:
+    symbol: gamma_b
+    name: 破碎波高/水深比
+    unit: dimensionless
+    value: 0.78
+    range:
+    - 0.7
+    - 0.9
+    source_type: OBS
+    evidence_id: O-16
+    calibrate: false
+transport:
+  D_diff:
+    symbol: D
+    name: 岸线扩散系数
+    unit: m^2/yr
+    value: 300000.0
+    range:
+    - 100000.0
+    - 800000.0
+    source_type: MODEL
+    evidence_id: M-02
+    calibrate: false
+    note: CERC 在 Hb=0.8-1.2 时给 3.0-8.4e5（alpha=8 度）；Hb=0.9 中心值 4.1e5。采用 3e5 位于区间下沿：理由为有效扩散率
+      < 总输沙能力；注意这使 T_p 偏乐观，敏感性必须覆盖到 8e5（T_p 约减半）
+  u_drift:
+    symbol: u
+    name: 净沿岸漂移速度
+    unit: m/yr
+    value: 50.0
+    range:
+    - 0.0
+    - 150.0
+    source_type: ASSUME
+    evidence_id: A-06
+    calibrate: true
+    note: 弱可辨识；与 D 通过'重心位移 vs 二阶矩增长'分离
+  rho_e:
+    symbol: rho_e
+    name: 长期平均岸线侵蚀率（D11 口径 i：保留观测值，不扣风暴）
+    unit: m/yr
+    value: 1.7
+    range:
+    - 1.62
+    - 1.83
+    source_type: OBS
+    evidence_id: E2
+    calibrate: 固定先验（不拟合）
+    note: DEQ 2011/2019 段平均 5.3-6.0 ft/yr；按 D11 口径 (i) 直接进方程，模型总速率因此偏高约 +22%（保守）；口径
+      (ii) 的 rho_bg 只作敏感性，见 rho_bg_sens
+  rho_storm:
+    symbol: rho_storm
+    name: 风暴年均永久贡献（仅诊断/核对，不扣除）
+    unit: m/yr
+    value: 0.522
+    range:
+    - 0.4
+    - 0.7
+    source_type: MODEL
+    evidence_id: M-11
+    calibrate: false
+    derived_from:
+    - lambda_s
+    - dy_ref
+    - k_rec
+    - lam_off
+    note: =lambda_s*E[dy]*lambda/(k+lambda)；E[dy] 取对数正态均值 10.17（非中位 8），本值按 E=10.0
+      舍入；用精确均值时为 0.530。只作诊断，不进方程
+  rho_e_hotspot_amp:
+    symbol: a_h
+    name: 热点侵蚀率放大倍数
+    unit: dimensionless
+    value: 1.2
+    range:
+    - 1.0
+    - 1.4
+    source_type: MODEL
+    evidence_id: M-11
+    calibrate: 由 DEQ 热点标定
+    note: 峰值 1.7*2.2=3.74 m/yr，落在 DEQ 12.5-13 ft/yr (3.8-4.0) 带内；若按口径 (ii) 的 rho_bg=1.178，需
+      a_h=1.73 才保持同一峰值
+  sigma_h:
+    symbol: sigma_h
+    name: 热点高斯宽度
+    unit: m
+    value: 600.0
+    range:
+    - 300.0
+    - 1200.0
+    source_type: ASSUME
+    evidence_id: A-03
+    calibrate: false
+    note: A-03 的高斯热点定义；DEQ 只给分段与极值，无连续剖面
+  rho_e_corridor_mean:
+    symbol: rho_c
+    name: 走廊均值（侵蚀场，不含风暴）
+    unit: m/yr
+    value: 2.31
+    range:
+    - 2.0
+    - 2.6
+    source_type: MODEL
+    evidence_id: M-11
+    calibrate: false
+    derived_from:
+    - rho_e
+    - rho_e_hotspot_amp
+    - sigma_h
+    note: 1.7*(1+1.2*sqrt(2pi)*600/5000)=2.314；D13 的 rho_c=2.3 指的就是这个量
+  rho_bg_sens:
+    symbol: rho_bg
+    name: 口径 (ii) 的背景速率（仅敏感性）
+    unit: m/yr
+    value: 1.178
+    range:
+    - 1.0
+    - 1.5
+    source_type: MODEL
+    evidence_id: M-11
+    calibrate: false
+    note: 口径 (ii)：整场减去 rho_storm=0.522，形状不变 => rho_bg=1.178、a_h=1.73、走廊 1.79，加风暴后回到
+      2.31
+storm:
+  lambda_s:
+    symbol: lambda_s
+    name: 侵蚀性事件到达率
+    unit: 1/yr
+    value: 0.4
+    range:
+    - 0.2
+    - 1.5
+    source_type: ASSUME
+    evidence_id: A-10
+    calibrate: true
+    note: 仅计造成 >3 m 等效后退的事件；风暴浪(>=1.5m)约 30/yr、NC 飓风登陆约 0.5/yr，两者都不是此口径
+  dy_ref:
+    symbol: dy_ref
+    name: 单事件等效后退中位值
+    unit: m
+    value: 8.0
+    range:
+    - 4.0
+    - 12.0
+    source_type: ASSUME
+    evidence_id: A-11
+    calibrate: true
+    note: W11 的 Matthew 折合 6.8 m 为量级锚点
+  dy_p95:
+    symbol: dy_95
+    name: 单事件等效后退 95 分位
+    unit: m
+    value: 25.0
+    range:
+    - 15.0
+    - 40.0
+    source_type: ASSUME
+    evidence_id: A-11
+    calibrate: false
+    note: 2025 Buxton 连续风暴观测到最大 43 m（W10），说明 25 m 是设计事件分位而非观测上界；敏感性必须扫到 40 m
+  dy_cut:
+    symbol: dy_cut
+    name: 已废弃：单事件越过滩宽的余量
+    unit: m
+    value: 0.0
+    range:
+    - 0.0
+    - 0.0
+    source_type: ASSUME
+    evidence_id: A-11
+    calibrate: false
+    note: 2026-11-09 起废弃：上限改为 w_eff，不允许事件把 w 推到负值；保留键仅为兼容旧文件
+  gamma_s:
+    symbol: gamma
+    name: 强度-侵蚀非线性指数
+    unit: dimensionless
+    value: 1.5
+    range:
+    - 1.0
+    - 2.0
+    source_type: ASSUME
+    evidence_id: A-12
+    calibrate: false
+    note: 仅在按 R_k 强度参数化时使用；若直接按对数正态抽样 Delta_y_pot，则本参数不参与主算，只作敏感性
+  w_sat:
+    symbol: w_s
+    name: 侵蚀饱和滩宽尺度
+    unit: m
+    value: 20.0
+    range:
+    - 10.0
+    - 40.0
+    source_type: ASSUME
+    evidence_id: A-12
+    calibrate: false
+    note: S_k 中 [1-exp(-w_eff/w_s)] 因子，w_eff=max(w,0)
+  k_rec:
+    symbol: k
+    name: 沙坝回滩恢复率
+    unit: 1/yr
+    value: 0.667
+    range:
+    - 0.33
+    - 2.0
+    source_type: ASSUME
+    evidence_id: O-11
+    calibrate: true
+    note: 对应恢复时间 0.5-3 yr
+  lam_off:
+    symbol: lambda
+    name: 近岸沙库永久离岸损失率
+    unit: 1/yr
+    value: 0.1
+    range:
+    - 0.02
+    - 0.3
+    source_type: ASSUME
+    evidence_id: A-13
+    calibrate: true
+    note: 对应 10 yr 损失时间；Kitty Hawk 3.3 年留存 79-87.5% 反推 lambda_eff=0.04-0.07（N19），取
+      0.1 偏保守
+  sigma_e:
+    symbol: sigma_e
+    name: 风暴沿岸足迹高斯宽度（敏感性）
+    unit: m
+    value: 2000.0
+    range:
+    - 500.0
+    - 5000.0
+    source_type: ASSUME
+    evidence_id: A-22
+    calibrate: false
+    note: 主算足迹为全域均匀；高斯足迹仅作敏感性
+beach_state:
+  V_ref:
+    symbol: V_ref
+    name: 参考剖面沙量（常数基准）
+    unit: m^2
+    value: 250.0
+    range:
+    - 200.0
+    - 300.0
+    source_type: MODEL
+    evidence_id: M-01
+    calibrate: false
+    note: =H*w_ref=10*25；绝对量任取基准，只有差值有意义；V_min(x)=V_ref-H*w0(x) => 远场 0、热点 90 m^2
+  w_ref:
+    symbol: w_ref
+    name: 参考滩宽（V_ref 对应）
+    unit: m
+    value: 25.0
+    source_type: MODEL
+    evidence_id: M-01
+    calibrate: false
+    note: =w0_far；用于定义 V_min 的基准
+  w0_far:
+    symbol: w_far
+    name: 初始干滩宽度（热点外远场值）
+    unit: m
+    value: 25.0
+    range:
+    - 20.0
+    - 40.0
+    source_type: ASSUME
+    evidence_id: A-07
+    calibrate: false
+    note: 热点外远场值；走廊均值约 21.8 m，热点最小 16 m；无实测剖面，必须做敏感性
+  w0_corridor_mean:
+    symbol: w_c
+    name: 初始干滩宽度（走廊均值）
+    unit: m
+    value: 21.84
+    range:
+    - 15.0
+    - 30.0
+    source_type: MODEL
+    evidence_id: M-07
+    calibrate: false
+    derived_from:
+    - w0_far
+    - w0_min
+    - sigma_w
+    note: 25-9*sqrt(2pi)*700/5000=21.84 m
+  sigma_w:
+    symbol: sigma_w
+    name: 滩宽热点高斯宽度
+    unit: m
+    value: 700.0
+    range:
+    - 400.0
+    - 1200.0
+    source_type: ASSUME
+    evidence_id: A-07
+    calibrate: false
+    note: w0(x)=w_far-(w_far-w_min)exp(-x^2/2sigma_w^2)
+  w0_min:
+    symbol: w_min
+    name: 初始干滩宽度（最窄处）
+    unit: m
+    value: 16.0
+    range:
+    - 8.0
+    - 22.0
+    source_type: ASSUME
+    evidence_id: A-07
+    calibrate: false
+  d_bldg:
+    symbol: d_b
+    name: 建筑退距（距 2027 基准 MHW 线）
+    unit: m
+    value: 28.0
+    range:
+    - 20.0
+    - 45.0
+    source_type: ASSUME
+    evidence_id: A-08
+    calibrate: false
+    note: A-08；不再用它反推 w_mgmt。建筑净距 r=d_b+y；无逐栋数据，须做敏感性
+  m_safe:
+    symbol: m_s
+    name: 安全余量（爬高+不确定性）
+    unit: m
+    value: 8.0
+    range:
+    - 5.0
+    - 12.0
+    source_type: ASSUME
+    evidence_id: A-08
+    calibrate: false
+  w_mgmt:
+    symbol: w_mgmt
+    name: 管理滩宽阈值（设计选择，非建筑退距推导）
+    unit: m
+    value: 20.0
+    range:
+    - 12.0
+    - 32.0
+    source_type: ASSUME
+    evidence_id: A-18
+    calibrate: false
+    note: 仅用于 w>=20 m 的管理指标；建筑风险用 r=d_b+y<m_s，见 MODEL_SPEC 6.2
+management:
+  V15_total:
+    symbol: V15_total
+    name: 15 年总沙量
+    unit: m^3
+    value: 5000000.0
+    range:
+    - 2500000.0
+    - 9000000.0
+    source_type: ASSUME
+    evidence_id: A-19
+    calibrate: 敏感性
+    note: N4 的 3.8M cy 是“2.3M cy 亏空 + 5 年 x 0.3M cy/yr”（5 年方案）；15 年总量 = 2.3 + 15 x
+      0.3 = 6.8M cy ≈ 5.2M m3，取 5.0M（Q-41）
+  V_event_max:
+    symbol: V_event_max
+    name: 单次工程沙量上限
+    unit: m^3
+    value: 2900000.0
+    range:
+    - 1500000.0
+    - 3500000.0
+    source_type: MODEL
+    evidence_id: N4
+    calibrate: 敏感性
+    note: CSE 2023 的 3.8M cy=2.9M m3 是一次 5 年工程；单次投放不得超过此量
+  S_borrow_total:
+    symbol: S_borrow_total
+    name: 本地可采沙源上限
+    unit: m^3
+    value: 2450000.0
+    range:
+    - 1500000.0
+    - 3200000.0
+    source_type: ASSUME
+    evidence_id: A-20
+    calibrate: 敏感性
+    note: N21 的 3.2M cy 潜在储量换算值；主算直接用此上限，可用率 0.8（约 1.96M m3）仅作敏感性
+  supply_scenario:
+    symbol: supply
+    name: 供沙情景开关
+    unit: dimensionless
+    value: local
+    options:
+    - local
+    - external
+    source_type: ASSUME
+    evidence_id: A-20
+    note: 'local: Sum V <= S_borrow_total*availability; external: 放宽到 V15_total，另计运输成本'
+  supply_availability:
+    symbol: a_borrow
+    name: 沙源可用率（勘探/许可/开采损失，仅敏感性）
+    unit: dimensionless
+    value: 1.0
+    range:
+    - 0.5
+    - 1.0
+    source_type: ASSUME
+    evidence_id: A-20
+    calibrate: false
+    note: 主算 1.0；敏感性点 0.8
+  permit_delay:
+    symbol: tau_permit
+    name: 许可/勘探延迟
+    unit: yr
+    value: 1.0
+    range:
+    - 0.5
+    - 2.0
+    source_type: ASSUME
+    evidence_id: A-21
+    calibrate: false
+  transport_cost_add:
+    symbol: c_transport
+    name: 外调沙附加运输成本
+    unit: USD/m^3
+    value: 3.0
+    range:
+    - 0.0
+    - 10.0
+    source_type: ASSUME
+    evidence_id: A-21
+    calibrate: false
+  tau_build:
+    symbol: tau_build
+    name: 批准到施工的时滞
+    unit: yr
+    value: 0.75
+    range:
+    - 0.5
+    - 1.0
+    source_type: ASSUME
+    evidence_id: A-21
+    calibrate: false
+  cost_model:
+    symbol: cost_mode
+    name: 成本模型开关
+    unit: dimensionless
+    value: all_in
+    options:
+    - all_in
+    - marginal_plus_fixed
+    source_type: ASSUME
+    evidence_id: A-09
+    note: '主算 all_in: c1=27, c0=0；marginal_plus_fixed: c1~11 + c0 in [0,10]M，仅敏感性'
+  trigger_delta:
+    symbol: delta_trig
+    name: 触发缓冲（高于阈值多少开始评估）
+    unit: m
+    value: 5.0
+    range:
+    - 2.0
+    - 10.0
+    source_type: ASSUME
+    evidence_id: A-23
+    calibrate: false
+  c0:
+    symbol: c_0
+    name: 单次工程固定成本（仅敏感性）
+    unit: USD
+    value: 0.0
+    range:
+    - 0.0
+    - 10000000.0
+    source_type: ASSUME
+    evidence_id: A-09
+    calibrate: false
+    note: 主算 c0=0：c1 已是 all-in，再加 c0 会重复计入动员/设计（Q-42）。c0>0 只作替代成本结构的敏感性；2026 两工程反推
+      0.5-4M 也支持 c0 很小
+  c1:
+    symbol: c_1
+    name: 单位方量全成本（all-in，主算）
+    unit: USD/m^3
+    value: 27.0
+    range:
+    - 20.0
+    - 35.0
+    source_type: OBS
+    evidence_id: N17
+    calibrate: false
+    note: 2026 Buxton 27.6、Avon 26.8 USD/m3（含调遣/设计/融资/监测/环境）；仅用于 cost_model=all_in
+  c1_marginal:
+    symbol: c1_marg
+    name: 单位方量施工边际成本（替代结构）
+    unit: USD/m^3
+    value: 11.0
+    range:
+    - 10.0
+    - 12.0
+    source_type: OBS
+    evidence_id: N14
+    calibrate: false
+    note: 2011-2019 施工单价 10-12 USD/m3；仅与 c0 搭配用于 cost_model=marginal_plus_fixed（A6/D12）
+  C_max:
+    symbol: C_max
+    name: 15 年总预算上限（估算，不是已批准预算）
+    unit: USD
+    value: 120000000.0
+    range:
+    - 40000000.0
+    - 200000000.0
+    source_type: ASSUME
+    evidence_id: N6
+    calibrate: false
+    note: PSDS 引 CSE：120M 是按每次撑 5 年算的 15 年维护估算（3x40M），不是已批准预算。预算不是最紧约束：本地沙主算 N 次总量都受
+      S_borrow_total=2.45M 约束；外调沙情景 N=1 受 2.9M 单次上限、N>=2 受预算 4.0M（c1_eff=30）（Q-33/Q-41）
+  f_thr:
+    symbol: f_thr
+    name: T_first_fail 的空间聚合阈值（失败岸线占比）
+    unit: dimensionless
+    value: 0.5
+    range:
+    - 0.3
+    - 0.7
+    source_type: ASSUME
+    evidence_id: A-24
+    calibrate: false
+    note: MODEL_SPEC §6.3：f_c(t)>=f_thr 才算整体失守；避开初始热点 w0=16<20 造成的 T=0 退化
+  delta_f_trig:
+    symbol: delta_f
+    name: 触发所需的失败占比增量
+    unit: dimensionless
+    value: 0.1
+    range:
+    - 0.05
+    - 0.2
+    source_type: ASSUME
+    evidence_id: A-24
+    calibrate: false
+    note: 相对上次投放（或 t=0）的增量；取代旧的绝对阈值 min w < 25 m（A5）
+  sigma_m:
+    symbol: sigma_m
+    name: 滩宽监测误差标准差
+    unit: m
+    value: 3.0
+    range:
+    - 1.5
+    - 5.0
+    source_type: ASSUME
+    evidence_id: A-24
+    calibrate: false
+    note: 季度采样；触发判断用带噪测量 w_hat=w+N(0,sigma_m^2)
+  cooldown_extra:
+    symbol: t_cd
+    name: 触发冷却附加时滞
+    unit: yr
+    value: 1.0
+    range:
+    - 0.5
+    - 2.0
+    source_type: ASSUME
+    evidence_id: A-24
+    calibrate: false
+    note: 冷却 = tau_permit + tau_build + t_cd
+  w_trig:
+    symbol: w_trig
+    name: 【已废止】绝对阈值触发（仅兼容保留）
+    unit: m
+    value: 25.0
+    source_type: MODEL
+    evidence_id: M-05
+    calibrate: false
+    note: 2026-11-10 起不再用于触发（初始热点 16 m 会使 t=0 必触发）；改为 delta_f_trig + 建筑硬触发
+  T_min:
+    symbol: T_min
+    name: 可接受的最短保护期（低于则考虑撤退）
+    unit: yr
+    value: 3.0
+    range:
+    - 2.0
+    - 5.0
+    source_type: ASSUME
+    evidence_id: A-15
+    calibrate: false
+climate_scenarios:
+  slr_base:
+    symbol: R_SLR
+    name: 相对海平面上升速率（基准）
+    unit: mm/yr
+    value: 4.88
+    range:
+    - 3.4
+    - 5.5
+    source_type: OBS
+    evidence_id: S4
+    calibrate: false
+    note: NOAA 现行 Duck 1978-2023 = 4.88+-0.56 mm/yr（S4）；旧值 4.55（1978-2016，S1）只作敏感性。Oregon
+      Inlet 4.17；Beaufort 2.99；不得直接换算为岸线后退
+  slr_2027:
+    symbol: R_SLR,2027
+    name: S3 情景初期速率标签
+    unit: mm/yr
+    value: 4.0
+    source_type: ASSUME
+    evidence_id: A-14
+    calibrate: false
+    note: 情景标签，不是动态 SLR；rho_e(t) 由 S3_repeat.rho_e=[3,5] 插值，不由 4->8 换算
+  slr_2042:
+    symbol: R_SLR,2042
+    name: S3 情景末期速率标签
+    unit: mm/yr
+    value: 8.0
+    source_type: ASSUME
+    evidence_id: A-14
+    calibrate: false
+    note: 同 slr_2027；4->8 mm/yr 只作情景标签，与 rho_e 3->5 是两组独立假设
+  Hs_trend:
+    symbol: dHs/dt
+    name: S3 情景波高趋势
+    unit: '%/decade'
+    value: 3.0
+    range:
+    - 0.0
+    - 6.0
+    source_type: ASSUME
+    evidence_id: A-14
+    calibrate: false
+scenarios:
+  S1_calm:
+    lambda_s: 0.2
+    dy_ref: 6.0
+    rho_e: 1.7
+    slr: 4.0
+  S2_storm_soon:
+    lambda_s: 0.4
+    dy_ref: 8.0
+    rho_e: 3.0
+    slr: 4.3
+    forced_event_at: 2.25
+    forced_dy: 25.0
+    forced_dy_semantics: actual
+    event_table: shared_per_scenario
+  S3_repeat:
+    lambda_s:
+    - 0.4
+    - 0.8
+    dy_ref:
+    - 8.0
+    - 11.0
+    rho_e:
+    - 3.0
+    - 5.0
+    slr:
+    - 4.0
+    - 8.0
+    Hs_trend: 3.0
+  L0_diag:
+    lambda_s: 0.4
+    dy_ref: 8.0
+    rho_e: 2.3136
+numerics:
+  dx:
+    value: 25.0
+    unit: m
+    note: 沿 9 km 计算域约 360 个单元
+  dt:
+    value: 0.02
+    unit: yr
+    note: 隐式格式可用；显式需满足 D*dt/dx^2 <= 0.5
+  scheme:
+    value: conservative FV + backward Euler
+    note: 见 CODER_SPEC §2
+  rtol:
+    value: 1.0e-06
+    note: 沙量收支闭合相对残差阈值
+  metric_domain:
+    value: central
+    options:
+    - central
+    - domain
+    note: 时长/暴露/失败比例只在中央 5 km 上算；沙量闭合用全域 9 km
+  phi_shape:
+    value: uniform
+    options:
+    - uniform
+    - gaussian
+    note: 主算全域均匀(phi=1)；高斯仅敏感性，按峰值归一化
+  seed_rule:
+    value: seed*1000003+i mod 2^32
+    note: MC 第 i 次实现的种子；必须写进 meta.json
+  placement_time_rule:
+    value: snap_up_to_step
+    note: 计划时刻吸附到第一个 >= t_s 的步边界；超过 T 则取消并记 skipped_due_to_window
+scenario: L0_diag
+strategy: none
+bc: open
+storm_enabled: true
+seed: 42
+t_end: 15.0
+dx: 25.0
+dt: 0.02
+overrides: {}
+adaptive_options:
+  forecast_years: 5.0
+  members: 8
+  forecast_dx: 100.0
+  forecast_dt: 0.1
+  candidate_centers_m:
+  - -1500.0
+  - 0.0
+  - 1500.0
+  candidate_lengths_m:
+  - 1000.0
+  - 2000.0
+  volume_shares:
+  - 0.5
+  - 1.0
+  protection_quantile: 0.1
+  survey_cost_usd: 50000.0
+  nearshore_sigma_m2: 30.0
+  minimum_benefit_myr: 1.0e-06

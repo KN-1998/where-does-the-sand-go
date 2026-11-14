@@ -1,0 +1,80 @@
+
+=== A. 参数内部自洽 ===
+  [PASS] H = h* + B = 10 m  — 8.0+2.0=10.0 vs 记录 10.0
+  [PASS] V_ref = H * w_ref  — 10.0*25.0 vs 250.0
+  [PASS] V_min: 远场=0、热点=90  — far=0.0, hotspot=90.0
+  [PASS] sigma_ln = 0.693  — 0.6927
+  [PASS] E[dy] = 中位*exp(s^2/2) ≈ 10.2 m  — 10.169
+  [PASS] k/(k+lambda) = 0.870  — 0.8696
+  [PASS] rho_storm ≈ 0.522 (E=10.0 舍入)  — 0.5215 vs 记录 0.522
+  [PASS] 走廊均值 2.31  — 2.3136 vs 记录 2.31
+  [PASS] 热点峰值 3.74 落在 DEQ 3.8-4.0 带内  — peak=3.74
+  [PASS] 双计数偏差 ≈ +22.5%  — 22.5%
+  [PASS] f_w(0) = 0.3036  — 半宽=759.0 m, f=0.3036
+  [PASS] CERC 中心值落在 4.0-4.3e5  — D=4.234e+05
+  [PASS] 主算 D=3e5 低于 CERC（偏乐观，已披露）  — 3e5 vs 4.23e+05
+       S1: rho_storm=0.199, scale=0.649
+  [PASS] S1 缩放 = 0.649  — 0.649
+       S2: rho_storm=0.530, scale=1.067
+  [PASS] S2 缩放 = 1.068  — 1.067
+  [PASS] S3 缩放 1.068 → 1.531 ±0.01  — 1.067 -> 1.531
+
+=== B. 文档一致性 ===
+  [PASS] 无残留「1.283」(旧的 rho_bg)
+  [PASS] 无残留「0.417」(旧的 rho_storm)
+  [PASS] 无残留「0.214」(旧的 f_w(0))
+  [PASS] 无残留「a_h=1.78」(旧的热点幅值)
+  [PASS] 无残留「1.78-1」(旧的热点幅值)
+  [PASS] 无残留「D12 · 成本结构」(旧 D 编号)
+  [PASS] 无残留「D12，两种结构」(旧 D 编号)
+  [PASS] 关键值「0.3036」已写入文档  — DECISIONS.md,MODEL_SPEC.md,SCENARIOS_STRATEGIES.md,CODER_SPEC.md
+  [PASS] 关键值「2.31」已写入文档  — DECISIONS.md,MODEL_SPEC.md,SCENARIOS_STRATEGIES.md,VALIDATION_PLAN.md
+  [PASS] 关键值「0.522」已写入文档  — DECISIONS.md,MODEL_SPEC.md,VALIDATION_PLAN.md,WRITER_NOTES.md
+  [PASS] 关键值「22.5」已写入文档  — DECISIONS.md,MODEL_SPEC.md,VALIDATION_PLAN.md,WRITER_NOTES.md
+
+=== B2. 可执行口径 ===
+  [PASS] 情景缩放不再用 target/2.3
+  [PASS] 缩放公式含 rho_storm
+  [PASS] 台账列含 R_c_cum
+  [PASS] 闭合式中 R_c 为减项
+  [PASS] MODEL_SPEC 恒等式 R_c 为减项
+  [PASS] discrete_contract.py 存在
+  [PASS] CODER 有全局数值口径 §3.5
+  [PASS] CODER 有足迹归一化 §2.4d
+  [PASS] R_c 为当前亏空（可恢复）
+  [PASS] 明确禁止峰值写法
+  [PASS] 原型含 refill 测试
+  [PASS] 网格 360 格
+  [PASS] 原型含断言与退出码
+  [PASS] S2 用绝对 2.25 + 共享事件表
+  [PASS] params 事件表需共享
+  [PASS] numerics.metric_domain 已定义
+  [PASS] numerics.phi_shape 已定义
+  [PASS] numerics.seed_rule 已定义
+  [PASS] numerics.placement_time_rule 已定义
+  [PASS] T12 已按 360 格离散值 0.3000
+  [PASS] discrete_contract 含投放/风暴测试
+  [PASS] SCHEDULE.md 存在
+  [PASS] START_HERE.md 存在
+  [PASS] CODER 有 §0.0 第一小时
+  [PASS] configs/base.yaml 存在
+  [PASS] tests/README.md 存在
+  [PASS] CODER 有 §0 立即执行令
+  [PASS] CODER 有自主决断清单
+  [PASS] PROGRESS 有编程手提问段
+  [PASS] WRITER_NOTES 有 §0 执行令
+  [PASS] README 指向 SCHEDULE
+  [PASS] 无「只增不减」残留
+  [PASS] 无「不回退」残留
+  [PASS] R_c_cum 语义已澄清
+  [PASS] 有冲突裁决权 §0.6
+
+=== C. 结构完整性 ===
+  [PASS] D 编号无重复  — 共 18 条
+  [PASS] D1–D18 连续齐全  — 缺=set()
+  [PASS] claims 列数 10  — 10
+  [PASS] claims 无重复 ID  — 110 行
+  [PASS] params 的 evidence_id 全部命中台账  — 缺=[]
+
+===== 结果：67 通过 / 0 失败 =====
+全部通过。

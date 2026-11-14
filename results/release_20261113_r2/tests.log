@@ -1,0 +1,64 @@
+test_approved_projects_have_positive_benefit_and_real_delay (test_adaptive.AdaptiveTests.test_approved_projects_have_positive_benefit_and_real_delay) ... ok
+test_batched_forecast_matches_production_transport (test_adaptive.AdaptiveTests.test_batched_forecast_matches_production_transport) ... ok
+test_future_realized_events_do_not_enter_forecast (test_adaptive.AdaptiveTests.test_future_realized_events_do_not_enter_forecast) ... ok
+test_multisegment_layout_is_one_project (test_adaptive.AdaptiveTests.test_multisegment_layout_is_one_project) ... ok
+test_parameter_only_change_rejects_completed_cache (test_batch_resume.BatchResumeTests.test_parameter_only_change_rejects_completed_cache) ... ok
+test_gaussian_erf_limit_converges_second_order (test_erf.DiffusionLimitTests.test_gaussian_erf_limit_converges_second_order) ... ok
+test_inheritance_cycle_is_reported (test_io.ConfigTests.test_inheritance_cycle_is_reported) ... ok
+test_recursive_no_storm_inheritance (test_io.ConfigTests.test_recursive_no_storm_inheritance) ... ok
+test_adaptive_does_not_spend_on_zero_building_benefit (test_mass.MassTests.test_adaptive_does_not_spend_on_zero_building_benefit) ... ok
+test_adaptive_is_executable_and_dirichlet_requires_values (test_mass.MassTests.test_adaptive_is_executable_and_dirichlet_requires_values) ... ok
+test_direct_strategy_respects_local_supply_cap (test_mass.MassTests.test_direct_strategy_respects_local_supply_cap) ... ok
+test_dirichlet_constant_boundary_preserves_constant_state (test_mass.MassTests.test_dirichlet_constant_boundary_preserves_constant_state) ... ok
+test_dirichlet_flux_signs_match_inward_boundary_convention (test_mass.MassTests.test_dirichlet_flux_signs_match_inward_boundary_convention) ... ok
+test_exposure_and_cost_fields_are_computed (test_mass.MassTests.test_exposure_and_cost_fields_are_computed) ... ok
+test_grid_and_zero_source (test_mass.MassTests.test_grid_and_zero_source) ... ok
+test_historical_deficit_uses_unclipped_shoreline (test_mass.MassTests.test_historical_deficit_uses_unclipped_shoreline) ... ok
+test_initial_metric_fractions_follow_length_weighted_definition (test_mass.MassTests.test_initial_metric_fractions_follow_length_weighted_definition) ... ok
+test_limiter_does_not_move_more_than_donor_stock (test_mass.MassTests.test_limiter_does_not_move_more_than_donor_stock) ... ok
+test_non_grid_event_is_applied_once (test_mass.MassTests.test_non_grid_event_is_applied_once) ... ok
+test_nonzero_restart_state_has_correct_initial_ledger (test_mass.MassTests.test_nonzero_restart_state_has_correct_initial_ledger) ... ok
+test_open_boundary_has_outflow_and_zeroflux_does_not (test_mass.MassTests.test_open_boundary_has_outflow_and_zeroflux_does_not) ... ok
+test_open_boundary_model_closes_with_recorded_outflow (test_mass.MassTests.test_open_boundary_model_closes_with_recorded_outflow) ... ok
+test_recovery_metric_reports_recovery_and_right_censoring (test_mass.MassTests.test_recovery_metric_reports_recovery_and_right_censoring) ... ok
+test_s3_interpolation_uses_fixed_15_year_horizon (test_mass.MassTests.test_s3_interpolation_uses_fixed_15_year_horizon) ... ok
+test_s3_wave_trend_changes_diffusivity (test_mass.MassTests.test_s3_wave_trend_changes_diffusivity) ... ok
+test_same_seed_and_events_are_reproducible (test_mass.MassTests.test_same_seed_and_events_are_reproducible) ... ok
+test_same_time_storm_then_placement_preserves_instant_failure (test_mass.MassTests.test_same_time_storm_then_placement_preserves_instant_failure) ... ok
+test_single_storm_recovery_fraction (test_mass.MassTests.test_single_storm_recovery_fraction) ... ok
+test_strategy_runs_share_scenario_event_table (test_mass.MassTests.test_strategy_runs_share_scenario_event_table) ... ok
+test_t13_refill (test_mass.MassTests.test_t13_refill) ... ok
+test_t1_closure (test_mass.MassTests.test_t1_closure) ... ok
+test_terminal_storm_is_applied_and_recorded_once (test_mass.MassTests.test_terminal_storm_is_applied_and_recorded_once) ... ok
+test_mc_controls_and_paired_retention_are_exported (test_mc.EnsembleTests.test_mc_controls_and_paired_retention_are_exported) ... ok
+test_central_mask_and_next_storm_censor (test_metrics.MetricTests.test_central_mask_and_next_storm_censor) ... ok
+test_crossing_interpolates_and_safe_exposure_are_complements (test_metrics.MetricTests.test_crossing_interpolates_and_safe_exposure_are_complements) ... ok
+test_historical_deficit_is_sum_of_cellwise_peaks (test_metrics.MetricTests.test_historical_deficit_is_sum_of_cellwise_peaks) ... ok
+test_jump_does_not_smear_backwards (test_metrics.MetricTests.test_jump_does_not_smear_backwards) ... ok
+test_non_midpoint_crossing_integrates_exactly (test_metrics.MetricTests.test_non_midpoint_crossing_integrates_exactly) ... ok
+test_nourishment_censors_natural_recovery (test_metrics.MetricTests.test_nourishment_censors_natural_recovery) ... ok
+test_raw_km_handles_actual_censor_times_and_ties (test_metrics.MetricTests.test_raw_km_handles_actual_censor_times_and_ties) ... ok
+test_within_step_failure_can_be_hidden_at_both_endpoints (test_metrics.MetricTests.test_within_step_failure_can_be_hidden_at_both_endpoints) ... ok
+test_cli_overrides_are_in_resolved_snapshot (test_reproducibility.ReproducibilityTests.test_cli_overrides_are_in_resolved_snapshot) ... ok
+test_paired_retention_uses_shared_events (test_reproducibility.ReproducibilityTests.test_paired_retention_uses_shared_events) ... ok
+test_same_seed_outputs_identical_results_and_fields (test_reproducibility.ReproducibilityTests.test_same_seed_outputs_identical_results_and_fields) ... ok
+test_known_interaction_has_second_order_effect (test_sensitivity_reporting.SensitivityReportingTests.test_known_interaction_has_second_order_effect) ... ok
+test_matrix_order_survives_sorted_json_and_shuffled_rows (test_sensitivity_reporting.SensitivityReportingTests.test_matrix_order_survives_sorted_json_and_shuffled_rows) ... ok
+test_gaussian_keeps_peak_and_conserves_exchange_with_lower_total (test_storm_footprint.StormFootprintTests.test_gaussian_keeps_peak_and_conserves_exchange_with_lower_total) ... ok
+test_limiter_actually_caps_flux_from_empty_donors (test_validation.ValidationTests.test_limiter_actually_caps_flux_from_empty_donors) ... ok
+test_no_action_adaptive_equals_paired_baseline (test_validation.ValidationTests.test_no_action_adaptive_equals_paired_baseline) ... ok
+test_safe_time_identity_in_production_and_exhausted_reservoir (test_validation.ValidationTests.test_safe_time_identity_in_production_and_exhausted_reservoir) ... ok
+test_supply_budget_and_alternate_cost_modes (test_validation.ValidationTests.test_supply_budget_and_alternate_cost_modes) ... ok
+test_t2_be_first_order_with_dt_proportional_dx (test_validation.ValidationTests.test_t2_be_first_order_with_dt_proportional_dx) ... ok
+test_t4_all_scenarios_first_failure_and_central_inventory (test_validation.ValidationTests.test_t4_all_scenarios_first_failure_and_central_inventory) ... ok
+test_t5_analytic_center_protection_benchmark (test_validation.ValidationTests.test_t5_analytic_center_protection_benchmark) ... ok
+test_t7_known_outflow_matches_infinite_gaussian_estimate (test_validation.ValidationTests.test_t7_known_outflow_matches_infinite_gaussian_estimate) ... ok
+
+----------------------------------------------------------------------
+Ran 55 tests in 20.833s
+
+OK
+wrote C:\Users\lg835\AppData\Local\Temp\tmp24em70j4\override residual_rel_max=5.966e-10
+wrote C:\Users\lg835\AppData\Local\Temp\tmpxhk60dhc\paired residual_rel_max=1.901e-15
+wrote C:\Users\lg835\AppData\Local\Temp\tmpq7i43xzh\first residual_rel_max=1.339e-09
+wrote C:\Users\lg835\AppData\Local\Temp\tmpq7i43xzh\second residual_rel_max=1.339e-09

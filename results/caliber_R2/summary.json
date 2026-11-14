@@ -1,0 +1,69 @@
+{
+  "A_nostorm": {
+    "CI95": [
+      2.2115896952140477,
+      2.2115896952140477
+    ],
+    "MCSE": 1.4050360811886545e-17,
+    "n": 1000,
+    "retreat_mean": 2.2115896952140477
+  },
+  "B_storm": {
+    "CI95": [
+      2.355327901912956,
+      2.3648215939101593
+    ],
+    "MCSE": 0.0024218602033682776,
+    "n": 1000,
+    "retreat_mean": 2.3600747479115576
+  },
+  "CI_method": "mean +/- 1.96*MCSE; storm sampling only, fixed parameters",
+  "base_seed": 42,
+  "bias_definition": "mean_i[(A_i + (B_i-A_i) - 2.3136)/2.3136]; total with-storm bias vs field",
+  "bias_vs_field": 0.02008763308763723,
+  "deterministic": {
+    "A_nostorm": {
+      "event_table_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "events": 0,
+      "forced_events": 0,
+      "index": 0,
+      "residual_central_rel_max": 3.562308847904205e-08,
+      "residual_rel_max": 2.0780134946107864e-08,
+      "retreat_mean": 2.2115896952140472,
+      "rho_corridor_mean": 2.3136036604653865,
+      "seed": 42
+    },
+    "B_storm": {
+      "event_table_sha256": "3ade527defa55678466fa9d0d7721ede72c40cc2f63ec2d04038db9bf7282273",
+      "events": 4,
+      "forced_events": 0,
+      "index": 0,
+      "residual_central_rel_max": 3.3527612686157227e-08,
+      "residual_rel_max": 2.1420419216156006e-08,
+      "retreat_mean": 2.3128595118742905,
+      "rho_corridor_mean": 2.3136036604653865,
+      "seed": 42
+    }
+  },
+  "diagnostic_file": "tools/caliber_r2.py",
+  "diagnostic_sha256": "e65bccba177ba217c7f7487a2be3b16338d76ddeb06fa24e46126803bbb70ef2",
+  "field_mean_rho": 2.3136,
+  "field_mean_rho_grid": 2.3136036604653865,
+  "git_commit": "ee3578025ece2b39de6aa9395b690fd9832d8f33",
+  "metric": "(initial raw corridor mean w - final raw corridor mean w) / 15 yr; no zero clipping",
+  "n_pairs": 1000,
+  "paired_difference": {
+    "CI95": [
+      0.14373820669890855,
+      0.15323189869611217
+    ],
+    "MCSE": 0.0024218602033682776,
+    "n": 1000,
+    "retreat_mean": 0.14848505269751036
+  },
+  "realised_storm_contribution": 0.14848505269751036,
+  "residual_rel_max": 3.573950380086899e-08,
+  "source_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "storm_contribution_relative": 0.06417922402209127,
+  "storm_contribution_relative_definition": "mean_i[(B_i-A_i)/2.3136]"
+}

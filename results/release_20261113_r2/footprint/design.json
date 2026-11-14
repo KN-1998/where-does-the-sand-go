@@ -1,0 +1,19 @@
+{
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "gaussian_center": "independent U(-4500,4500); forced stress event remains at x=0",
+  "limits": "Same arrival/retreat marks and Gaussian centers across widths/strategies; peak-normalized footprint reduces integrated erosion. Not an equal-integrated-energy comparison. S2 forced actual retreat still depends on beach state.",
+  "n_per_cell": 100,
+  "runs": 1200,
+  "seed_rule": "(4400*1000003+i) mod 2**32",
+  "sigma_m": [
+    0.0,
+    1000.0,
+    2000.0,
+    5000.0
+  ],
+  "strategies": [
+    "once",
+    "repeat",
+    "fixed_hotspot"
+  ]
+}

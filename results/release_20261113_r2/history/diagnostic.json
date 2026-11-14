@@ -1,0 +1,29 @@
+{
+  "limits": "Historical window, overlapping time periods; not independent of rate priors. Synthetic future corridor lacks georeferenced buildings/profiles. Metadata default shoreline-position accuracy is 4.4 m; this is not a slope error bar. DAS_km references an unrelated New York study area and is not used for selection.",
+  "model_chronic_corridor_mean_m_per_year": 2.47353200727878,
+  "n_all": 1308,
+  "n_selected": 101,
+  "observations": {
+    "LRR78_2002": {
+      "max": -2.16,
+      "mean_m_per_year": -3.427425742574258,
+      "median_m_per_year": -3.43,
+      "min": -4.92,
+      "n": 101,
+      "p10_m_per_year": -4.52,
+      "p90_m_per_year": -2.35
+    },
+    "LRR89_2002": {
+      "max": 0.07,
+      "mean_m_per_year": -4.579306930693069,
+      "median_m_per_year": -5.04,
+      "min": -8.27,
+      "n": 101,
+      "p10_m_per_year": -7.23,
+      "p90_m_per_year": -1.54
+    }
+  },
+  "rule": "3937500 <= StartY <= 3942500 m; NAD83 UTM18N; no rate-based filtering",
+  "source_file": "F:\\数模\\1\\数学建模acm\\数学建模acm\\data\\raw\\Hatteras_Transects.dbf",
+  "source_sha256": "909e1c22da678dccf7ac73f437afe7d778be12c0fc841e27953e1933370b1812"
+}

@@ -1,0 +1,194 @@
+{
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "design_seed": 20261113,
+  "group": "storm",
+  "indices": [
+    {
+      "index": 0.39415854749835083,
+      "order": "first",
+      "output": "local_once_E_b",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.62802471340101,
+      "order": "total",
+      "output": "local_once_E_b",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.28837196376027185,
+      "order": "first",
+      "output": "local_once_E_b",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.3713005958270941,
+      "order": "total",
+      "output": "local_once_E_b",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.08009952714970558,
+      "order": "first",
+      "output": "local_once_E_b",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.2988448776846384,
+      "order": "total",
+      "output": "local_once_E_b",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.02816944919019121,
+      "order": "second",
+      "output": "local_once_E_b",
+      "parameter": "lambda_s:dy_ref"
+    },
+    {
+      "index": 0.19954429598802553,
+      "order": "second",
+      "output": "local_once_E_b",
+      "parameter": "lambda_s:k_rec"
+    },
+    {
+      "index": 0.040183193233881254,
+      "order": "second",
+      "output": "local_once_E_b",
+      "parameter": "dy_ref:k_rec"
+    },
+    {
+      "index": 0.5082187939962021,
+      "order": "first",
+      "output": "local_once_E_w",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.6692962878828481,
+      "order": "total",
+      "output": "local_once_E_w",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.030447532820331424,
+      "order": "first",
+      "output": "local_once_E_w",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.1047704845004799,
+      "order": "total",
+      "output": "local_once_E_w",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.294425300257195,
+      "order": "first",
+      "output": "local_once_E_w",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.4015279425239294,
+      "order": "total",
+      "output": "local_once_E_w",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.05147980962089026,
+      "order": "second",
+      "output": "local_once_E_w",
+      "parameter": "lambda_s:dy_ref"
+    },
+    {
+      "index": 0.09472146670890597,
+      "order": "second",
+      "output": "local_once_E_w",
+      "parameter": "lambda_s:k_rec"
+    },
+    {
+      "index": 0.020934514750854727,
+      "order": "second",
+      "output": "local_once_E_w",
+      "parameter": "dy_ref:k_rec"
+    },
+    {
+      "index": 0.004495994228449668,
+      "order": "first",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.5442141150227262,
+      "order": "total",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "lambda_s"
+    },
+    {
+      "index": 0.15469775354915138,
+      "order": "first",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.5949975113884222,
+      "order": "total",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "dy_ref"
+    },
+    {
+      "index": 0.20672035696760685,
+      "order": "first",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.6275131447881317,
+      "order": "total",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "k_rec"
+    },
+    {
+      "index": 0.042006746521287386,
+      "order": "second",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "lambda_s:dy_ref"
+    },
+    {
+      "index": 0.12362096093646749,
+      "order": "second",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "lambda_s:k_rec"
+    },
+    {
+      "index": 0.006672286073493544,
+      "order": "second",
+      "output": "local_once_T_first_fail_w_restricted15",
+      "parameter": "dy_ref:k_rec"
+    }
+  ],
+  "limits": "Exploratory Sobol first/total/second order; independent uniform design ranges, not posterior priors. Common storm seeds average stochastic outputs; low sample/seed count may give negative or >1 estimates. Do not rank uncertain indices without replication/convergence. Restricted failure time caps right-censored realizations at 15 solely for sensitivity, not reported as observed failure.",
+  "n_base": 512,
+  "output_labels": [
+    "local_once_E_b",
+    "local_once_E_w",
+    "local_once_T_first_fail_w_restricted15"
+  ],
+  "ranges": {
+    "dy_ref": [
+      4.0,
+      12.0
+    ],
+    "k_rec": [
+      0.33,
+      1.0
+    ],
+    "lambda_s": [
+      0.2,
+      0.8
+    ]
+  },
+  "seeds": [
+    4200012600,
+    4200012601
+  ]
+}

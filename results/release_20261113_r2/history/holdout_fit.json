@@ -1,0 +1,68 @@
+{
+  "active_parameter_bounds": [
+    0,
+    -1,
+    0
+  ],
+  "coordinate": "StartY-3940000 in NAD83 UTM18N m; northing proxy, not surveyed alongshore arclength",
+  "fitted_model": "rho0 + A*exp(-x^2/(2*sigma^2)); center fixed at preselected corridor center",
+  "holdout_constant_training_mean": {
+    "R_squared": -4.295151774784232,
+    "bias_pred_minus_obs_myr": -4.309108910891089,
+    "mae_myr": 4.333880992059602,
+    "n": 101,
+    "rmse_myr": 4.784509484447078
+  },
+  "holdout_field": "LRR89_2002",
+  "holdout_local_rate_persistence": {
+    "R_squared": -6.775909902742673,
+    "bias_pred_minus_obs_myr": -4.309108910891089,
+    "mae_myr": 4.917227722772276,
+    "n": 101,
+    "rmse_myr": 5.79794142368438
+  },
+  "jacobian_condition": null,
+  "jacobian_rank": 2,
+  "limits": "Reduced empirical net-rate field only, not calibration/validation of D,H,k,lambda or full storm PDE. Periods share 1989 shoreline, giving potentially correlated errors. Spatial samples are dependent, no regression-rate SE is supplied, and no independent local nourishment response is observed. A Gaussian shape may fail; test results never tune the fit. Parameters are not substituted into the synthetic future scenarios.",
+  "mean_test_retreat_myr": 4.579306930693069,
+  "mean_train_retreat_myr": 0.2701980198019802,
+  "n_geographic": 101,
+  "n_paired": 101,
+  "parameter_bounds": [
+    [
+      0.0,
+      20.0
+    ],
+    [
+      0.0,
+      30.0
+    ],
+    [
+      200.0,
+      2000.0
+    ]
+  ],
+  "parameters": {
+    "A_myr": 1.4196339648095286e-12,
+    "rho0_myr": 0.27019771234432094,
+    "sigma_m": 200.00000489566455
+  },
+  "rate_sign": "positive=erosion; original LRR sign reversed",
+  "selection": "3937500<=StartY<=3942500; complete paired periods; missing sentinels only",
+  "source_sha256": "909e1c22da678dccf7ac73f437afe7d778be12c0fc841e27953e1933370b1812",
+  "temporal_holdout": {
+    "R_squared": -4.295152387707457,
+    "bias_pred_minus_obs_myr": -4.309109218348606,
+    "mae_myr": 4.333881269075767,
+    "n": 101,
+    "rmse_myr": 4.784509761354807
+  },
+  "train": {
+    "R_squared": -1.1146639167236572e-13,
+    "bias_pred_minus_obs_myr": -3.074575164672265e-07,
+    "mae_myr": 1.7865326959175256,
+    "n": 101,
+    "rmse_myr": 2.1543095102002336
+  },
+  "train_field": "LRR78_1989"
+}

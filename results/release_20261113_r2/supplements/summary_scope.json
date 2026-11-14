@@ -1,0 +1,6 @@
+{
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "joint": "Assumed independent parameter distributions plus storms; no empirical posterior. Marginal bands must not be subtracted as paired effects against the separate fixed-parameter ensemble.",
+  "phase": "32 common storm seeds per point; safe years are length-weighted cumulative safety, not uninterrupted protection. Null first-failure times stay censored.",
+  "policy": "100 realized-storm seeds matched to default; decision-dependent extra surveys can alter later observation noise. Normal mean CI describes finite Monte Carlo error only."
+}

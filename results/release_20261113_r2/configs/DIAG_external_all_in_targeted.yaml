@@ -1,0 +1,6 @@
+inherit: F:\数模\1\数学建模acm\数学建模acm\configs\S2.yaml
+overrides:
+  supply_scenario: external
+  cost_model: all_in
+  c0: 0.0
+strategy: targeted

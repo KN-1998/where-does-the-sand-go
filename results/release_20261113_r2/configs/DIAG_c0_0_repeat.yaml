@@ -1,0 +1,5 @@
+inherit: F:\数模\1\数学建模acm\数学建模acm\configs\S2.yaml
+overrides:
+  cost_model: marginal_plus_fixed
+  c0: 0.0
+strategy: repeat

@@ -1,0 +1,270 @@
+{
+  "pdf": [
+    {
+      "name": "F1_S2_width_heatmap.pdf",
+      "pages": 1,
+      "sha256": "4b27ba98c8546c30b558076c201dcc36c5ca3d1773547a140e0fdb1a359ee01c",
+      "render_size": [
+        1094,
+        578
+      ],
+      "text_characters": 0,
+      "content": "300dpi raster heatmap"
+    },
+    {
+      "name": "F2_layout_profiles.pdf",
+      "pages": 1,
+      "sha256": "9bdbee6c94f1c18511ce94a2522ee1acda01a31cb965e1c1e112b02a8c75c86b",
+      "render_size": [
+        903,
+        628
+      ],
+      "text_characters": 436,
+      "content": "vector chart"
+    },
+    {
+      "name": "F3_strategy_exposure.pdf",
+      "pages": 1,
+      "sha256": "f55380cf1e54ad35e22162f164292f2dc099a50bb22eee7ec7e606d29bf24a0f",
+      "render_size": [
+        1029,
+        656
+      ],
+      "text_characters": 357,
+      "content": "vector chart"
+    },
+    {
+      "name": "F4_MC_S2_uncertainty.pdf",
+      "pages": 1,
+      "sha256": "945ae0ae97d83de746d2e0c23befa1b41f9580aa0a247446d109e2fc7d885e84",
+      "render_size": [
+        1064,
+        723
+      ],
+      "text_characters": 489,
+      "content": "vector chart"
+    },
+    {
+      "name": "F5_OAT_sensitivity.pdf",
+      "pages": 1,
+      "sha256": "60965a06f0ba17bf57967d045b631de732f3b06889ff690f8f12dc8409fc7d86",
+      "render_size": [
+        987,
+        676
+      ],
+      "text_characters": 265,
+      "content": "vector chart"
+    },
+    {
+      "name": "F6_S2_trajectories.pdf",
+      "pages": 1,
+      "sha256": "05a188225d47438147322eec864e8743ed69739a629cee8aef0caeff8f6cf442",
+      "render_size": [
+        949,
+        690
+      ],
+      "text_characters": 292,
+      "content": "vector chart"
+    },
+    {
+      "name": "F7_sand_accounting.pdf",
+      "pages": 1,
+      "sha256": "5ca1b3268c79ec8db5d23ede45ec50445d036af6178bd224fbd6a92e56a106a6",
+      "render_size": [
+        963,
+        676
+      ],
+      "text_characters": 290,
+      "content": "vector chart"
+    },
+    {
+      "name": "F8_storm_timing.pdf",
+      "pages": 1,
+      "sha256": "aebbc985aa0684dcca5e0e8fc84150ae6612f2a17b425de9b2447f9b94cd60f1",
+      "render_size": [
+        954,
+        668
+      ],
+      "text_characters": 252,
+      "content": "vector chart"
+    },
+    {
+      "name": "F9_initial_feasibility.pdf",
+      "pages": 1,
+      "sha256": "0c0ea2fc33cdafe8a983387d4fada5963ec33fdefa18d3aec65f696c9a235236",
+      "render_size": [
+        906,
+        554
+      ],
+      "text_characters": 216,
+      "content": "vector chart"
+    },
+    {
+      "name": "F10_history_diagnostic.pdf",
+      "pages": 1,
+      "sha256": "59805423dea62cb159d76da867bc690e939a2ce3bad7ae9bac1563846350cf18",
+      "render_size": [
+        940,
+        769
+      ],
+      "text_characters": 383,
+      "content": "vector chart"
+    },
+    {
+      "name": "F11_exploratory_global_sensitivity.pdf",
+      "pages": 1,
+      "sha256": "dcdb5df83bdcd4eddc2fe1273f23c1f23cf25a6f8b257158a1ccaef6bd1cd299",
+      "render_size": [
+        1041,
+        624
+      ],
+      "text_characters": 351,
+      "content": "vector chart"
+    },
+    {
+      "name": "F12_paired_sand_attribution.pdf",
+      "pages": 1,
+      "sha256": "533b2e5345beb15a47e6dff97e19c5d25f907c2b150a67da15aea2d93a0f21eb",
+      "render_size": [
+        1038,
+        532
+      ],
+      "text_characters": 357,
+      "content": "vector chart"
+    },
+    {
+      "name": "F13_width_spacetime_quantiles.pdf",
+      "pages": 1,
+      "sha256": "d16b01ef1ad93f319adb8d6a5739d4ec5be7b253d980edb8eb6e441ce64b219e",
+      "render_size": [
+        1324,
+        693
+      ],
+      "text_characters": 0,
+      "content": "300dpi raster heatmap"
+    },
+    {
+      "name": "F14_durable_phase_map.pdf",
+      "pages": 1,
+      "sha256": "575ce68b37f3305d92443e7af7e2148ce320bc4ec16353495844d7a7eb7a2af5",
+      "render_size": [
+        1265,
+        578
+      ],
+      "text_characters": 0,
+      "content": "300dpi raster heatmap"
+    },
+    {
+      "name": "F15_joint_and_policy_uncertainty.pdf",
+      "pages": 1,
+      "sha256": "830da83f9724cb63ddacce00d5ef0762ad72b2567af43e3ffe2a2de27c1c1fd0",
+      "render_size": [
+        1172,
+        641
+      ],
+      "text_characters": 336,
+      "content": "vector chart"
+    },
+    {
+      "name": "F16_adaptive_decisions_and_monitoring.pdf",
+      "pages": 1,
+      "sha256": "d38b2c55917a570635669e23dd05149afff2284315c4a5d90713a6d7c60f0c7b",
+      "render_size": [
+        1056,
+        628
+      ],
+      "text_characters": 337,
+      "content": "vector chart"
+    },
+    {
+      "name": "F17_storm_footprint_sensitivity.pdf",
+      "pages": 1,
+      "sha256": "7cd8adcfe57c2fdc3fdcca959ddbf63e98b1cbf87d6d8b82c3279c3ca1517ca3",
+      "render_size": [
+        1210,
+        506
+      ],
+      "text_characters": 510,
+      "content": "vector chart"
+    }
+  ],
+  "png": [
+    {
+      "name": "F1_S2_width_heatmap.png",
+      "sha256": "c8549645b200d2ffd471d9905a833e428f2e84574c1f1e86eed085d2c1bec9e4"
+    },
+    {
+      "name": "F2_layout_profiles.png",
+      "sha256": "c5312c769ee44fc9b775b1da5891c72157fb39e04de89413a32785f6008d2aea"
+    },
+    {
+      "name": "F3_strategy_exposure.png",
+      "sha256": "acc79d99c6f6997eb38a04541db6547b15dad86fded7776f9436c164527b1e34"
+    },
+    {
+      "name": "F4_MC_S2_uncertainty.png",
+      "sha256": "d9881dcb215e4493b1df3d87d837d94ed61b2031704074e79bc46e2d2722830c"
+    },
+    {
+      "name": "F5_OAT_sensitivity.png",
+      "sha256": "19cf8bab1976935d078de6c7915b78816dd29ab708668bc25bb0afa3639b0649"
+    },
+    {
+      "name": "F6_S2_trajectories.png",
+      "sha256": "beacdd65efe666402d45ea38650602eeb13aa45c332709bb031fc41f29ddf924"
+    },
+    {
+      "name": "F7_sand_accounting.png",
+      "sha256": "e0a8f072f89e20b90b4767c3aa6c7a0d90639b6c28d9a88c208c5c3604f085ee"
+    },
+    {
+      "name": "F8_storm_timing.png",
+      "sha256": "0ff52727bef82acb3a714ab6e8559d4d4729c9719f99c38e63de21b6f0b24d13"
+    },
+    {
+      "name": "F9_initial_feasibility.png",
+      "sha256": "0b25b3b72a2f68f68425526d3b9d288bb58e5b067e503f4eacab4ffe9da1a76c"
+    },
+    {
+      "name": "F10_history_diagnostic.png",
+      "sha256": "0cdab0b6369a17352ad9a18264505261d7586ded23eb29b7de7b2400d1701323"
+    },
+    {
+      "name": "F11_exploratory_global_sensitivity.png",
+      "sha256": "adb98cbb9784e3ab289c23908ef3aaacf5a14e039ad1ce78e9be23f7709bb5a4"
+    },
+    {
+      "name": "F12_paired_sand_attribution.png",
+      "sha256": "6190114925c5fcb84e20968ff87174d04c016fe5bab17ac3b7ed525fe7d0b2ef"
+    },
+    {
+      "name": "F13_width_spacetime_quantiles.png",
+      "sha256": "b740b26d6f88fb17d66b3637dca18fd2ecad60a46d92b461e1664618d4e1fdbd"
+    },
+    {
+      "name": "F14_durable_phase_map.png",
+      "sha256": "0139a5429e363fde80708c47e545654bc53799513d3c1320a419fd32f803a943"
+    },
+    {
+      "name": "F15_joint_and_policy_uncertainty.png",
+      "sha256": "18a638c63d2bb74d843a2c0a1fc3c99ea3a85277089fc2d1dc4e833e32e5e224"
+    },
+    {
+      "name": "F16_adaptive_decisions_and_monitoring.png",
+      "sha256": "8eb35bfa429f4e12cf547aa836543bdd94955ea1ade0904ec88e6a1862a455db"
+    },
+    {
+      "name": "F17_storm_footprint_sensitivity.png",
+      "sha256": "f8c944cb4f5159fac8f1f18fb3f897e5ca3c882f98c2b66b0778e0070c504d80"
+    }
+  ],
+  "contacts": [
+    "PDF_contact_1.png",
+    "PDF_contact_2.png",
+    "PDF_contact_3.png",
+    "PNG_contact_1.png",
+    "PNG_contact_2.png",
+    "PNG_contact_3.png"
+  ],
+  "status": "RENDERED_PENDING_VISUAL_INSPECTION"
+}

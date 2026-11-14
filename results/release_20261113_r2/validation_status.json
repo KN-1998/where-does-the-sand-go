@@ -1,0 +1,22 @@
+{
+  "full_physics_independent_field_validation": "NOT_AVAILABLE",
+  "historical_fixed_rate_temporal_holdout": "NO_PREDICTIVE_SKILL",
+  "interpretation": "Programming deliverables complete; conditional scientific results, not an empirically validated deployment policy.",
+  "monitoring_posterior": "SYNTHETIC_ONLY",
+  "numerical_acceptance": "PASS",
+  "sobol_stability": {
+    "economy": {
+      "key_estimates": 8,
+      "stable_key_estimates": 8
+    },
+    "storm": {
+      "key_estimates": 6,
+      "stable_key_estimates": 5
+    },
+    "transport": {
+      "key_estimates": 6,
+      "stable_key_estimates": 6
+    }
+  },
+  "visual_QA": "PASS"
+}

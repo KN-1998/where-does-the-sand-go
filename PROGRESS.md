@@ -464,6 +464,13 @@
 
 ## 编程手提问（实时接口；建模手 2 小时内回）
 
+### R3 补跑回执（2026-11-14）
+
+- 13:37 | 任务 A 完成：`python tools/check_release.py` 退出码0；R2轻量结果481文件（含门禁所需YAML），Windows干净clone已验证 | 见 `SUPPLEMENT_HANDOFF_R3.md`
+- 13:37 | 任务 B 完成：1000对，A=2.211590、B=2.360075 m/yr，贡献=0.148485 m/yr，总偏差=+2.00876%，贡献占比=6.41792%；守恒最大3.574e-8 | 见 `results/caliber_R2/summary.json`
+- 13:37 | C/E完成：布置P10/P50/P90已导出，原R2交付包637 payload与source校验PASS；可选D未跑 | 见 `layout_quantiles.csv`、`original_archive_verification.json`
+
+
 > 格式：`HH:MM | 问题 | 我倾向的解法 | 阻塞等级(A/B/C)`
 > 建模手在下一行回：`→ 决定：...`
 > 超过 2 小时未回 ⇒ 按 `CODER_SPEC.md` §0.4 自决（取更保守），标 `[自决]` 后继续。

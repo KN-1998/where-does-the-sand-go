@@ -4,6 +4,12 @@
 > Outer Banks · Rodanthe 附近 5 km 走廊 · 2027–2042。
 > **这是独立训练/练习赛题（PDF 标注 TRAINING / PRACTICE），不是已核实的正式 COMAP 题目。**
 
+> **R3 补跑交付（2026-11-14）：** 先看 [`SUPPLEMENT_HANDOFF_R3.md`](SUPPLEMENT_HANDOFF_R3.md)。
+> R2轻量结果现已入库，干净clone可直接运行 `python tools/check_release.py`。
+> 新增1000对L0诊断见 [`results/caliber_R2/summary.json`](results/caliber_R2/summary.json)，
+> 验收命令 `python tools/check_caliber_r2.py`。代码和数据同步至主分支及 `programming-r2-handoff`；
+> [R3打包下载](https://github.com/KN-1998/where-does-the-sand-go/releases/tag/programming-r3-20261114)。
+
 > **编程 R2 入口（2026-11-13）：** 当前实现和结果使用
 > [`PROGRAMMING_HANDOFF_R2.md`](PROGRAMMING_HANDOFF_R2.md)（完整交接、注意事项和潜在问题）、
 > [`REPRODUCE.md`](REPRODUCE.md)、[`本轮检查与结果.md`](本轮检查与结果.md)

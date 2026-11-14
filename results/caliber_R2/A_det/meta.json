@@ -1,0 +1,15 @@
+{
+  "diagnostic_file": "tools/caliber_r2.py",
+  "diagnostic_sha256": "e65bccba177ba217c7f7487a2be3b16338d76ddeb06fa24e46126803bbb70ef2",
+  "event_table_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "events": 0,
+  "forced_events": 0,
+  "git_commit": "ee3578025ece2b39de6aa9395b690fd9832d8f33",
+  "index": 0,
+  "residual_central_rel_max": 3.562308847904205e-08,
+  "residual_rel_max": 2.0780134946107864e-08,
+  "retreat_mean": 2.2115896952140472,
+  "rho_corridor_mean": 2.3136036604653865,
+  "seed": 42,
+  "source_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be"
+}

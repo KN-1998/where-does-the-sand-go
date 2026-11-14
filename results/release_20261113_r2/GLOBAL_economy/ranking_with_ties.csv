@@ -1,0 +1,7 @@
+supply,best_set_with_ties,n_of_design_points,base_n,storm_seeds
+local,once,188,512,2
+local,repeat,208,512,2
+local,fixed_hotspot,116,512,2
+external,repeat,373,512,2
+external,once,127,512,2
+external,once+repeat,12,512,2

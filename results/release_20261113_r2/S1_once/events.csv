@@ -1,0 +1,3 @@
+t,potential_retreat,actual_center_retreat,center,gaussian,sigma_e,forced,forced_actual_retreat,injected_full_m3,injected_central_m3,depleted_cells
+4.470744231105271,7.878006672083723,7.361814109281275,0.0,False,,False,,617418.0959847129,367174.2714353109,0
+5.016033601809254,6.492425960493406,5.881700310209733,0.0,False,,False,,488992.43753902894,293692.8087140092,0

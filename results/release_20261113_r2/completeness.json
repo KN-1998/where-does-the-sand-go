@@ -1,0 +1,12 @@
+{
+  "MATLAB_pdf": 17,
+  "MATLAB_png": 17,
+  "MC_groups": 18,
+  "MC_max_full_or_central_residual": 2.10711732506752e-08,
+  "MC_runs": 18000,
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "deterministic_runs": 47,
+  "errors": [],
+  "limits": "Numerical completeness only. Ensemble adaptive uses synthetic observations and assumed monitoring costs; Sobol diagnostics assess replication without guaranteeing convergence; no empirical posterior or independent field validation.",
+  "status": "PASS"
+}

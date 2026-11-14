@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "method": "Manual inspection of all 17 final PDF renders via three contact sheets, plus PNG spot checks; 17 single-page PDFs and paired PNGs decoded successfully.",
+  "inspected_contacts": [
+    "validation/PDF_contact_1.png",
+    "validation/PDF_contact_2.png",
+    "validation/PDF_contact_3.png"
+  ],
+  "exporter": "MATLAB R2025a; final batch exit 0",
+  "pdf_content": {
+    "vector_charts": 14,
+    "raster_heatmaps_300dpi": [
+      "F1",
+      "F13",
+      "F14"
+    ]
+  },
+  "resolved_findings": [
+    "F2 threshold moved inside visible axes; human-readable layout/policy legends.",
+    "F4 and F16 thresholds given headroom; F8 and F17 category endpoints given margins.",
+    "F17 panels share exposure scale.",
+    "F1/F13/F14 vector shading replaced with 300 dpi raster PDF to remove stitching seams."
+  ],
+  "final_observation": "No clipped labels, overlapping legends, unreadable glyphs or heatmap seams observed in final renders. MODEL/OBS/ANALYTIC/SYNTHETIC labels retained.",
+  "figure_code_sha256": "99e3cff7314b51c5498c9c1f87f4589cbcec8e27506e8b894a75f8abe85b6ce7",
+  "figures": {
+    "F10_history_diagnostic.pdf": "59805423dea62cb159d76da867bc690e939a2ce3bad7ae9bac1563846350cf18",
+    "F10_history_diagnostic.png": "0cdab0b6369a17352ad9a18264505261d7586ded23eb29b7de7b2400d1701323",
+    "F11_exploratory_global_sensitivity.pdf": "dcdb5df83bdcd4eddc2fe1273f23c1f23cf25a6f8b257158a1ccaef6bd1cd299",
+    "F11_exploratory_global_sensitivity.png": "adb98cbb9784e3ab289c23908ef3aaacf5a14e039ad1ce78e9be23f7709bb5a4",
+    "F12_paired_sand_attribution.pdf": "533b2e5345beb15a47e6dff97e19c5d25f907c2b150a67da15aea2d93a0f21eb",
+    "F12_paired_sand_attribution.png": "6190114925c5fcb84e20968ff87174d04c016fe5bab17ac3b7ed525fe7d0b2ef",
+    "F13_width_spacetime_quantiles.pdf": "d16b01ef1ad93f319adb8d6a5739d4ec5be7b253d980edb8eb6e441ce64b219e",
+    "F13_width_spacetime_quantiles.png": "b740b26d6f88fb17d66b3637dca18fd2ecad60a46d92b461e1664618d4e1fdbd",
+    "F14_durable_phase_map.pdf": "575ce68b37f3305d92443e7af7e2148ce320bc4ec16353495844d7a7eb7a2af5",
+    "F14_durable_phase_map.png": "0139a5429e363fde80708c47e545654bc53799513d3c1320a419fd32f803a943",
+    "F15_joint_and_policy_uncertainty.pdf": "830da83f9724cb63ddacce00d5ef0762ad72b2567af43e3ffe2a2de27c1c1fd0",
+    "F15_joint_and_policy_uncertainty.png": "18a638c63d2bb74d843a2c0a1fc3c99ea3a85277089fc2d1dc4e833e32e5e224",
+    "F16_adaptive_decisions_and_monitoring.pdf": "d38b2c55917a570635669e23dd05149afff2284315c4a5d90713a6d7c60f0c7b",
+    "F16_adaptive_decisions_and_monitoring.png": "8eb35bfa429f4e12cf547aa836543bdd94955ea1ade0904ec88e6a1862a455db",
+    "F17_storm_footprint_sensitivity.pdf": "7cd8adcfe57c2fdc3fdcca959ddbf63e98b1cbf87d6d8b82c3279c3ca1517ca3",
+    "F17_storm_footprint_sensitivity.png": "f8c944cb4f5159fac8f1f18fb3f897e5ca3c882f98c2b66b0778e0070c504d80",
+    "F1_S2_width_heatmap.pdf": "4b27ba98c8546c30b558076c201dcc36c5ca3d1773547a140e0fdb1a359ee01c",
+    "F1_S2_width_heatmap.png": "c8549645b200d2ffd471d9905a833e428f2e84574c1f1e86eed085d2c1bec9e4",
+    "F2_layout_profiles.pdf": "9bdbee6c94f1c18511ce94a2522ee1acda01a31cb965e1c1e112b02a8c75c86b",
+    "F2_layout_profiles.png": "c5312c769ee44fc9b775b1da5891c72157fb39e04de89413a32785f6008d2aea",
+    "F3_strategy_exposure.pdf": "f55380cf1e54ad35e22162f164292f2dc099a50bb22eee7ec7e606d29bf24a0f",
+    "F3_strategy_exposure.png": "acc79d99c6f6997eb38a04541db6547b15dad86fded7776f9436c164527b1e34",
+    "F4_MC_S2_uncertainty.pdf": "945ae0ae97d83de746d2e0c23befa1b41f9580aa0a247446d109e2fc7d885e84",
+    "F4_MC_S2_uncertainty.png": "d9881dcb215e4493b1df3d87d837d94ed61b2031704074e79bc46e2d2722830c",
+    "F5_OAT_sensitivity.pdf": "60965a06f0ba17bf57967d045b631de732f3b06889ff690f8f12dc8409fc7d86",
+    "F5_OAT_sensitivity.png": "19cf8bab1976935d078de6c7915b78816dd29ab708668bc25bb0afa3639b0649",
+    "F6_S2_trajectories.pdf": "05a188225d47438147322eec864e8743ed69739a629cee8aef0caeff8f6cf442",
+    "F6_S2_trajectories.png": "beacdd65efe666402d45ea38650602eeb13aa45c332709bb031fc41f29ddf924",
+    "F7_sand_accounting.pdf": "5ca1b3268c79ec8db5d23ede45ec50445d036af6178bd224fbd6a92e56a106a6",
+    "F7_sand_accounting.png": "e0a8f072f89e20b90b4767c3aa6c7a0d90639b6c28d9a88c208c5c3604f085ee",
+    "F8_storm_timing.pdf": "aebbc985aa0684dcca5e0e8fc84150ae6612f2a17b425de9b2447f9b94cd60f1",
+    "F8_storm_timing.png": "0ff52727bef82acb3a714ab6e8559d4d4729c9719f99c38e63de21b6f0b24d13",
+    "F9_initial_feasibility.pdf": "0c0ea2fc33cdafe8a983387d4fada5963ec33fdefa18d3aec65f696c9a235236",
+    "F9_initial_feasibility.png": "0b25b3b72a2f68f68425526d3b9d288bb58e5b067e503f4eacab4ffe9da1a76c"
+  },
+  "limits": "Visual and export quality only; not empirical model validation."
+}

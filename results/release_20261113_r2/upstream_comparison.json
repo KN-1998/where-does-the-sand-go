@@ -1,0 +1,34 @@
+{
+  "False": {
+    "E_b": 0.0,
+    "T_first_fail_b": {
+      "censored": true,
+      "value": null
+    }
+  },
+  "True": {
+    "E_b": 4999.999999999996,
+    "T_first_fail_b": {
+      "censored": false,
+      "value": 0.0
+    }
+  },
+  "matched_no_floor_transport": {
+    "local_relative_mass_residual": 4.656612873077393e-10,
+    "max_abs_y_difference_m": 3.1030733538273125e-14
+  },
+  "source": {
+    "export_path": "F:\\数模\\1\\upstream_code_r1_1e32280",
+    "interpretation": "Tests passing do not establish forecast metrics or jump timing correctness.",
+    "upstream_ref": "origin/code @ 1e32280 / code-r1"
+  },
+  "terminal_event": {
+    "expected_E_w": 0.0,
+    "expected_first_fail_w": 1.0,
+    "reported_E_w": 49.99999999999672,
+    "reported_first_fail_w": {
+      "censored": false,
+      "value": 0.9950000000000003
+    }
+  }
+}

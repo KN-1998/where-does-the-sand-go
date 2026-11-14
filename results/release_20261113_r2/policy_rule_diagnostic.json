@@ -1,0 +1,42 @@
+{
+  "checked_deterministic_runs": 3,
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "contract": "SCENARIOS_STRATEGIES section 4.1: maximize benefit/cost, then veto the best proposal by protection period.",
+  "examples": [
+    {
+      "highest_score_passing_protection": {
+        "candidate_index": 3,
+        "center": -1500.0,
+        "cost": 8268750.0,
+        "delta_E_b": 2350.858296426173,
+        "first_fail_censored_count": 3,
+        "length": 2000.0,
+        "protection_q10": 3.6142066504425254,
+        "score": 0.00028430636993816155,
+        "volume": 306250.0
+      },
+      "minimum_years": 3.0,
+      "rejected_highest_score": {
+        "candidate_index": 7,
+        "center": 0.0,
+        "cost": 8268750.0,
+        "delta_E_b": 3543.270177354465,
+        "first_fail_censored_count": 2,
+        "length": 2000.0,
+        "protection_q10": 2.3234396685528296,
+        "score": 0.00042851340013357097,
+        "volume": 306250.0
+      },
+      "run": "S3_adaptive",
+      "t": 9.0
+    }
+  ],
+  "input_sha256": {
+    "S1_adaptive/results.json": "2397dee43b528bedf06a945834279a1d1e64613a740812c1a8ab7dfe37addf2b",
+    "S2_adaptive/results.json": "814815a2e57534d3e5eb9e5178e0f07aaed7060ab52cd743f66ef9c12833fa5e",
+    "S3_adaptive/results.json": "c33246e932ce878c2e1036b560a46d885056677cd9301335c530a1f641ec0f6b"
+  },
+  "interpretation": "Implementation follows the current contract. This is not optimization over all protection-feasible candidates. A feasible-first rule is a policy change and needs a paired rerun; no alternate-policy outcome is inferred here.",
+  "protection_veto_decisions": 2,
+  "vetoes_with_passing_alternative": 1
+}

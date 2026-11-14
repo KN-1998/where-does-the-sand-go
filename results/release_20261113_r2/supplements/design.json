@@ -1,0 +1,51 @@
+{
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "joint_assumed_distributions": {
+    "D": "log-uniform [1e5,8e5]",
+    "H": "triangular [8,10,12]",
+    "k_multiplier": "uniform [.5,1.5]",
+    "lambda_off_multiplier": "uniform [.5,1.5]",
+    "rho_background_multiplier": "uniform [.8,1.2]"
+  },
+  "joint_n": 1000,
+  "limits": "Independent assumed inputs, not fitted priors. Phase map includes S1 storms. Policy comparison shares realized storms and survey seed but decision-dependent extra surveys can change later observation noise.",
+  "phase_n": 32,
+  "policy_n": 100,
+  "policy_settings": [
+    [
+      "default",
+      {}
+    ],
+    [
+      "refined",
+      {
+        "forecast_dt": 0.05,
+        "forecast_dx": 50.0,
+        "members": 16
+      }
+    ],
+    [
+      "survey_10k",
+      {
+        "survey_cost_usd": 10000.0
+      }
+    ],
+    [
+      "survey_100k",
+      {
+        "survey_cost_usd": 100000.0
+      }
+    ],
+    [
+      "nearshore_noisier",
+      {
+        "nearshore_sigma_m2": 60.0
+      }
+    ]
+  ],
+  "rows": {
+    "joint": 3000,
+    "phase": 4096,
+    "policy": 500
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "archives": [
+    {
+      "archive": "review_handoff_20261113_r2.zip",
+      "status": "PASS",
+      "sha256": "9ab3aea09695abcc03d578e338faf27f56eacc52175d789d0fb06d64ef35252f",
+      "bytes": 28390492,
+      "verified_payloads": 637,
+      "src_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+      "archived_source_rehashed": true
+    }
+  ]
+}

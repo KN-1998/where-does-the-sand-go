@@ -1,0 +1,12 @@
+{
+  "release": "programming-r3-20261114",
+  "baseline_branch": "programming-r2-handoff",
+  "diagnostic_git_commit": "ee3578025ece2b39de6aa9395b690fd9832d8f33",
+  "src_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "diagnostic_sha256": "e65bccba177ba217c7f7487a2be3b16338d76ddeb06fa24e46126803bbb70ef2",
+  "diagnostic_file": "tools/caliber_r2.py",
+  "n_pairs": 1000,
+  "results_root": "results/caliber_R2",
+  "frozen_results_root": "results/release_20261113_r2",
+  "note": "CODE_VERSION.json remains the unchanged R2 source identity; this supplement extends only tools/configs and preserves src and modeling/params.yaml bytes."
+}

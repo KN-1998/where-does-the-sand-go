@@ -1,0 +1,6 @@
+{
+  "driver_sha256": "364d0fed20a6e7749b2675e3c2267b00fa77ad24eadfd798bb425c7aef956fc8",
+  "method": "parallel cache; reference serial evaluator and estimator unchanged",
+  "unique_points": 5120,
+  "workers": 8
+}

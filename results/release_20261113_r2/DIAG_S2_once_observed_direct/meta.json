@@ -1,0 +1,19 @@
+{
+  "S2_forced_event_scope": "state-conditioned fixed actual retreat stress; potential forcing may differ between interventions",
+  "adaptive_method": null,
+  "bc": "open",
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "commit": "bce02d5259e8e87a0f0cfffd51356a46f8688b39",
+  "config_md5": "9e39034d1806e8fbd6b0bcc168bfc901",
+  "cost_model": "all_in",
+  "dt": 0.02,
+  "dx": 25.0,
+  "metric_integration": "linear spatial/time states; analytic piecewise exposure; bounded first crossing; all jumps saved",
+  "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+  "resolved_config_sha256": "425738a598ee711f2a5e9b6cf0af9c78122532c85242454a62d0afc87a780390",
+  "run_seconds": 3.65811020000001,
+  "scenario": "S2",
+  "seed": 42,
+  "strategy": "once",
+  "supply": "local"
+}

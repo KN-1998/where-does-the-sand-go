@@ -1,0 +1,19 @@
+{
+  "S2_forced_event_scope": "state-conditioned fixed actual retreat stress; potential forcing may differ between interventions",
+  "adaptive_method": "five-year independent-storm ensemble; observed state; cost-normalized building benefit; synthetic posterior updates",
+  "bc": "open",
+  "code_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "commit": "bce02d5259e8e87a0f0cfffd51356a46f8688b39",
+  "config_md5": "72ceb3c9eed26de6602b55bf50688e02",
+  "cost_model": "marginal_plus_fixed",
+  "dt": 0.02,
+  "dx": 25.0,
+  "metric_integration": "linear spatial/time states; analytic piecewise exposure; bounded first crossing; all jumps saved",
+  "params_md5": "22ce5d7d87f1fb4769bd25a1c5ecf38d",
+  "resolved_config_sha256": "07b096e98b5b34200cfea7ed32e590ecc914be0fec6993b0a5ddc53f3f2590c9",
+  "run_seconds": 16.300388699999985,
+  "scenario": "S2",
+  "seed": 42,
+  "strategy": "targeted",
+  "supply": "local"
+}

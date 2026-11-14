@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "field_arrays_identical": {
+    "y": true,
+    "O": true,
+    "w": true,
+    "x": true,
+    "t": true,
+    "exhausted": true
+  },
+  "scientific_results_identical": {
+    "exposure": true,
+    "duration": true,
+    "cost": true,
+    "mass": true,
+    "retention": true,
+    "sand_attribution": true
+  },
+  "fields_npz_byte_identical": true,
+  "scope": "S2 adaptive portable resolved YAML replay; config-file MD5 differs by design. Full scientific outputs unchanged."
+}
