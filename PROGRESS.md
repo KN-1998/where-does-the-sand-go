@@ -466,6 +466,8 @@
 
 ### R3 补跑回执（2026-11-14）
 
+最终验收：独立clean clone（快照 `672669c`）中 R2门禁与R3逐对核查均退出0，检查后工作区干净；60项测试、67项合同与参考离散均通过。详见 `results/caliber_R2/validation.json`。
+
 - 13:37 | 任务 A 完成：`python tools/check_release.py` 退出码0；R2轻量结果481文件（含门禁所需YAML），Windows干净clone已验证 | 见 `SUPPLEMENT_HANDOFF_R3.md`
 - 13:37 | 任务 B 完成：1000对，A=2.211590、B=2.360075 m/yr，贡献=0.148485 m/yr，总偏差=+2.00876%，贡献占比=6.41792%；守恒最大3.574e-8 | 见 `results/caliber_R2/summary.json`
 - 13:37 | C/E完成：布置P10/P50/P90已导出，原R2交付包637 payload与source校验PASS；可选D未跑 | 见 `layout_quantiles.csv`、`original_archive_verification.json`

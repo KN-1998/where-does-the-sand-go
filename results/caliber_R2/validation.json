@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "verified_snapshot_commit": "672669ce05b5d8473fbaf6154f8921eba1a5494e",
+  "diagnostic_run_commit": "ee3578025ece2b39de6aa9395b690fd9832d8f33",
+  "source_sha256": "5ff6da62fbd11a0d481f990140883a2640cef1b911370f4521598e56ef5dd2be",
+  "clean_clone": {
+    "check_release_exit_code": 0,
+    "check_caliber_r2_exit_code": 0,
+    "tracked_R2_result_files": 481,
+    "tracked_caliber_result_files": 19,
+    "git_status_clean_after_checks": true
+  },
+  "unit_tests": {
+    "command": "python -X utf8 -m unittest discover -s tests -v",
+    "passed": 60,
+    "exit_code": 0
+  },
+  "discrete_contract": {
+    "status": "ALL PASS",
+    "exit_code": 0
+  },
+  "document_contract": {
+    "passed": 67,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "paired_ensembles": {
+    "n_pairs": 1000,
+    "max_full_or_central_residual": 3.573950380086899e-08,
+    "configuration_only_difference": "storm_enabled",
+    "per_seed_differences_verified": true
+  },
+  "optional": {
+    "C": "completed",
+    "D": "not run",
+    "E_original_archive": "PASS; 637 payloads plus transport and source rehash"
+  },
+  "scope": "Numerical consistency and release reproducibility only; fixed-parameter storm uncertainty, not independent field validation."
+}
