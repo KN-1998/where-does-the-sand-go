@@ -132,3 +132,42 @@ $$\bar E_w = 3.05\ (\text{uniform}) < 18.64\ (\text{multi}) < 38.59\ (\text{hots
 2. **P0-2**（表 1 / §4.4 末段）——不改与 T13 断言直接冲突；
 3. P1-1（Q2 加三个数）——**性价比最高**，一行数 + 一句判别条件；
 4. P1-2（口径标注）——半句话。
+
+---
+
+## 8. v2 复核（2026-11-14 11:30，`2701(1).pdf`，22 页）
+
+### 8.1 四处修改：全部到位
+
+| 项 | 判定 | 证据（v2 原文） |
+|---|---|---|
+| **P0-1** 口径 | ✅ 改对 | A6："The main simulation nevertheless retains the observed rate (ρobs = 1.7 m/yr) … A de-duplicated rate (ρbg = 1.178 m/yr) is retained as a sensitivity case"；§4.3："convention (i) … 1.7 … upper bound ≈23% … convention (ii) … 1.178 … sensitivity only"；表 2："ρobs 1.7 — **Main production rate**"、"ρbg 1.178 — **Sensitivity rate**" |
+| **P0-2** $R_c$ | ✅ 改对 | 表 1："Current unresolved sediment deficit … **recoverable** when the profile is replenished"＋"A separate diagnostic Dmax = max_t Rc"；§4.4："Only the descriptive diagnostic Dmax … is monotone; it is absent from the ledger"；全文 "not erased" 出现 0 次 |
+| **P1-1** Q2 三数 | ✅ 改对 | §5.1："median 15-year beach-width exposure is 3.05 … 18.64 … 38.59"，$\mathcal V/\mathcal V_{
+m thr}pprox12$，$\mathcal V_{
+| **P1-1** Q2 三数 | ✅ 改对 | §5.1：median 15-year beach-width exposure 为 3.05 / 18.64 / 38.59；给出 V/V_thr ≈ 12 与 V_thr = 2.0e5 m³，并注明「tests instantaneous coverage; it does not by itself identify an optimal layout」 |
+| **P1-2** 口径标注 | ✅ 改对 | §8："paired mean difference $\Delta E_b=-2{,}693$ m·yr (95% MC interval $[-2{,}813,-2{,}573]$) but $\Delta E_w=+17{,}339$" — 与 `policy_pairwise.csv` 逐字一致 |
+
+### 8.2 未被误改（回归检查）
+
+- **Table 4 的 60 个数全部保持**（10 行 × 6 列逐项比对）；
+- 摘要 8 个关键数（2.11e−8、66.15、60.21、1,418、1,958、4,892、33,948、52,219）全部保持；
+- 表 1–4、图 1–6 编号连续、正文均有引用；
+- 22 页 ≤ 25；摘要页与技术信仍在。
+
+### 8.3 新发现 2 处（不阻塞）
+
+**[P2] §4.3 的 "0.14 m/yr / 1.6%" 来源是 R1，不是 R2。**
+v2 §4.3 写："the simulated storm contribution over 15 years is about 0.14 m/yr, or 1.6% relative to the corridor mean"。
+但 R2 发布包里**没有口径核对实验**（无 L0 / caliber 目录，`erosion_target_diagnostic.csv` 只有三情景的实现速率）。该数字来自 R1 的 `results/L0/summary.json`（`realised_storm_contribution=0.1436`，`bias_vs_field=0.0159`）。
+而 §6.2.4 明确写："All reported production values … come from results/release_20261113_r2 … R1 outputs are not combined with the R2 results." → **自相矛盾**。
+
+两条修法（二选一，约 10 分钟）：
+1. **让编程手在 R2 下补跑口径核对**（无补沙、风暴开/关各一次，15 yr），得到 R2 版本的贡献值，替换 0.14/1.6%；
+2. 或删掉精确值，只保留："the realised bias is much smaller than the analytic bound because the narrow-beach cap and dry-beach exhaustion suppress later events"（不引数字）。
+
+**[P3] §5.1 新增的布置对比表没有表号。** 其余三张表都有 "Table N:" 标题；这张以 "Layout | Placement length | Median Ew" 直接起行。补齐为 "Table 3" 并把后续表顺延，或写成正文行内三联数（更省事）。
+
+### 8.4 判决
+
+**通过**。P2/P3 建议在冻结前顺手改掉；不构成阻塞。

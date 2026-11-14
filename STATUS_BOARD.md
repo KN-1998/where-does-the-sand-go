@@ -31,7 +31,7 @@
 | 验收测试 | `tests/`（55 项） | ✅ 全绿 |
 | 结果 | `results/`（轻量）/ Release 附件（完整 595 MB） | ✅ 发布 |
 | 17 张图 | `PAPER_FIGURE_CAPTIONS_R2.md` + 发布包 `figures/` | ✅ |
-| **论文 v1** | 群里 `2701.pdf`（21 页，含摘要页与技术信） | 🟡 待 4 处修改 |
+| **论文 v2** | 群里 `2701(1).pdf`（22 页） | ✅ 4 处修改全部通过；剩 P2/P3 两处小问题 |
 | 数字核对 | `handoff/DATA_AUDIT_2026-11-14.md` | ✅ 已完成 |
 | 论文修改单 | `handoff/CHANGE_REQUEST_PAPER_R1.md` | ✅ 已发出 |
 | 提交包 | 待建 | ❌ |
@@ -107,3 +107,4 @@
 | 11-13 22:15 | 论文包 `WRITER_NOTES_R2.md` 按 R2 实测更正 Q2/Q5 |
 | 11-14 00:35 | 论文审查 `PAPER_REVIEW_R1.md` + 修改单 `CHANGE_REQUEST_PAPER_R1.md` |
 | 11-14 01:45 | 数字核对 `DATA_AUDIT_2026-11-14.md`（Table 4 全对）+ 本看板 |
+| 11-14 11:30 | 论文 v2 复核通过（4 处全改对，Table 4 与摘要数未受损）；新提 P2（0.14/1.6% 来自 R1）与 P3（布置表无表号） |
