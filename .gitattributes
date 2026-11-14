@@ -20,3 +20,9 @@
 
 # R2 科学源码指纹按原始字节生成；保留发布时的换行字节
 src/** -text
+
+# Frozen R2 file hashes must survive cross-platform checkout.
+matlab/plot_results.m -text
+results/release_20261113_r2/** -text
+results/caliber_R2/** -text
+tools/caliber_r2.py -text

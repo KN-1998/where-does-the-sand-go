@@ -3,6 +3,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -13,8 +14,11 @@ from tools.policy_rule_diagnostic import diagnose
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',default='results/release_20261113')
-    args=p.parse_args();root=Path(args.root);code=tree_sha256('src');errors=[];maximum=0.
+    project_root=Path(__file__).resolve().parents[1]
+    p=argparse.ArgumentParser();p.add_argument('--root',default=str(project_root/'results/release_20261113_r2'))
+    args=p.parse_args();root=Path(args.root).resolve()
+    os.chdir(project_root)
+    code=tree_sha256('src');errors=[];maximum=0.
     design=json.loads((root/'batch_design.json').read_text(encoding='utf-8'))
     deterministic=list(root.glob('*/results.json'))
     if len(deterministic)!=design['deterministic_expected']:errors.append('deterministic count')

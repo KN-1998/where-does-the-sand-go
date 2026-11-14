@@ -51,8 +51,11 @@ results/*.nc
 # 交付包产物
 dist/
 
-# R2 计算产物通过 GitHub Release 附件交付；不纳入源码 Git 历史
-results/
+# Keep the frozen lightweight R2 evidence in Git; full fields stay in Releases.
+results/*
+!results/release_20261113_r2/
+!results/release_20261113_r2/**/*.log
+!results/caliber_R2/
 *.npz
 *.mat
 *.bin

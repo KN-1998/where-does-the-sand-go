@@ -1,0 +1,7 @@
+inherit: configs/base.yaml
+scenario: L0_diag
+bc: open
+t_end: 15.0
+scenarios:
+  L0_diag: {lambda_s: 0.4, dy_ref: 8.0, rho_e: 2.3136}
+storm_enabled: false
