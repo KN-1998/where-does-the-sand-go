@@ -50,11 +50,17 @@ v6 全文搜不到 `local-supply` / `external sand` / `budget binds`。专家的
 
 > 这句话既回答了专家的"结构性不绑定"，又用**已有数据**把外调情景变成"已覆盖"，不需要补跑。
 
-## 4. 【P1-c】表 3 的 OBS 行仍无来源注
+## 4. 【P1-c】表 3 的 OBS 行仍无来源注（引用映射已更正）
 
-表下加一行：
+我上一版建议的「ρ from [1,5]; c_1 from [5]」**是错的**（[1]=Flynn 2023 岸线、[5]=CSE 2023 Needs Assessment，都不是 1.7 的出处）。
 
-> "OBS entries: $\rho_{\rm obs}$ from [1, 5]; $c_1$ is the planning-level all-in unit cost (27 USD/m³) for recent Dare County projects, consistent with [5]; the USGS transect rates used in the Q3 holdout are from [2]."
+表下改为：
+
+> "OBS entries: $\rho_{\rm obs}$ is the NC DEQ segment-average rate; the 2.45 M m³ design cap is converted from the potential offshore
+> reserves reported by CSE (2013, p. ix; body p. 92); $c_1=27$ USD/m³ is an `ASSUME` planning value for recent Dare County projects
+> and is **not** an observed unit price."
+
+三源各自独立成条：NC DEQ 速率、CSE **2013**（借沙）、CSE 2023（其他）。
 
 ## 5. 【P1-d】参考文献 [12] 的 URL 被截断
 
