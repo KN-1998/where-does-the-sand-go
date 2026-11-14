@@ -171,3 +171,65 @@ v2 §4.3 写："the simulated storm contribution over 15 years is about 0.14 m/y
 ### 8.4 判决
 
 **通过**。P2/P3 建议在冻结前顺手改掉；不构成阻塞。
+
+---
+
+## 9. v3 复核（2026-11-14 17:35，`2701(2).pdf`，23 页）
+
+### 9.1 两处遗留：全部改对
+
+| 项 | 判定 | v3 原文 / 依据 |
+|---|---|---|
+| **P2** 0.14/1.6% 的来源 | ✅ 换成 R2 实测 | *"In the R3 paired no-storm/with-storm diagnostic, mean retreat is **2.2116** and **2.3601** m/yr … the realized storm increment is **0.1485** m/yr (95% MC interval **0.1437–0.1532**), equal to **6.42%** of the 2.3136 m/yr corridor field mean; total with-storm retreat exceeds that field mean by only **2.01%**"* |
+| **P3** 布置表无表号 | ✅ | 表增至 5 张（Table 1–5），**全部有标题且正文均引用**；布置表已编号 |
+
+**逐字核对** `results/caliber_R2/summary.json`：
+
+| 量 | 论文 | summary.json |
+|---|---|---|
+| A 无风暴 | 2.2116 | `A_nostorm.retreat_mean = 2.2115896952` ✅ |
+| B 有风暴 | 2.3601 | `B_storm.retreat_mean = 2.3600747479` ✅ |
+| 增量 | 0.1485 | `paired_difference.retreat_mean = 0.1484850527` ✅ |
+| 95% CI | 0.1437–0.1532 | `[0.1437382067, 0.1532318987]` ✅ |
+| 相对贡献 | 6.42% | `storm_contribution_relative = 0.06417922` ✅ |
+| 总偏差 | 2.01% | `bias_vs_field = 0.02008763` ✅ |
+
+### 9.2 回归检查
+
+- 政策表 10 行 × P10/P50/P90 **全部保持**；
+- 摘要 8 个关键数**全部保持**；
+- **23 页** ≤ 25；摘要页、技术信仍在；表 1–5、图 1–6 编号连续。
+
+### 9.3 编程手 R3 交付验收（我本地跑过）
+
+| 任务 | 结果 |
+|---|---|
+| A 轻量结果入库 | ✅ 仓库内 **481** 个 `results/release_20261113_r2/` 文件 |
+| A 修门禁 | ✅ `python tools/check_release.py` → **PASS, exit 0**（`code_sha256 = 5ff6da62…`） |
+| B 口径核对 | ✅ `results/caliber_R2/`（1000 配对种子）；`tools/check_caliber_r2.py` → PASS，残差 3.57e−08 |
+| C 布置分位带 | ✅ `layout_quantiles.csv` |
+| 测试 | ✅ **60 passed**（含 5 条 caliber 新测试） |
+
+> ⚠ **一个环境坑（不是 bug）**：`check_release.py` 对 `matlab/plot_results.m` 做**字节级**哈希。若本地 `core.autocrlf=true` 且该文件是在 `-text` 规则生效**之前**检出的，工作副本为 CRLF，哈希对不上，会误报 *"MATLAB plot source changed after visual QA"*。
+> 解法：`rm matlab/plot_results.m && git checkout -- matlab/plot_results.m`（强制按 `-text` 重写）。**干净 clone 不会有此问题。**
+
+### 9.4 一个可加分的发现（建议论文补一句）
+
+`layout_quantiles.csv`（S1，同 2.45 M m³，1000 次）：
+
+| 布置 | $E_w$ P10 | P50 | **P90** |
+|---|---|---|---|
+| uniform | 0.0 | **3.05** | **3 125** |
+| multi | 18.64 | 18.64 | 2 851 |
+| hotspot | 38.59 | 38.59 | **1 953** |
+
+**中位数排序 uniform < multi < hotspot，但 P90 排序完全相反（hotspot 最稳）。**
+即：匀铺把整段抬到达标后，一旦遇到极端风暴序列，**整段同时失守**；热点集中虽然中位差，但尾部更稳。
+
+建议在 §5.1 末尾加一句（与 Q5 的"中位 vs 尾部"互相呼应）：
+
+> "The ordering reverses in the tail: uniform placement has the lowest median exposure but the highest 90th percentile (3 125 vs 1 953 m·yr for the hotspot), because a uniform lift fails everywhere at once under an extreme sequence whereas a concentrated lift leaves a reserve of untouched coastline."
+
+### 9.5 判决
+
+**v3 通过，可冻结。** 唯一建议是 §9.4 那句话（可选，加分项）。

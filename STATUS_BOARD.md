@@ -31,9 +31,9 @@
 | 模型合同 D1–D18 | `modeling/MODEL_SPEC.md`、`modeling/DECISIONS.md` | ✅ 冻结 |
 | 求解器 R2 | `src/`（生产源码 SHA256 `5ff6da62…`） | ✅ 冻结 |
 | 验收测试 | `tests/`（55 项） | ✅ 全绿 |
-| 结果 | `results/`（轻量）/ Release 附件（完整 595 MB） | ✅ 发布 |
+| 结果 | `results/release_20261113_r2/`（481 文件，已入库）+ `results/caliber_R2/` | ✅ 入库且门禁 PASS |
 | 17 张图 | `PAPER_FIGURE_CAPTIONS_R2.md` + 发布包 `figures/` | ✅ |
-| **论文 v2** | 群里 `2701(1).pdf`（22 页） | ✅ 4 处修改全部通过；剩 P2/P3 两处小问题 |
+| **论文 v3** | 群里 `2701(2).pdf`（23 页） | ✅ **P0-1/P0-2/P1-1/P1-2/P2/P3 全部通过 → 可冻结** |
 | 数字核对 | `handoff/DATA_AUDIT_2026-11-14.md` | ✅ 已完成 |
 | 论文修改单 | `handoff/CHANGE_REQUEST_PAPER_R1.md` | ✅ 已发出 |
 | 提交包 | 待建 | ❌ |
@@ -109,5 +109,6 @@
 | 11-13 22:15 | 论文包 `WRITER_NOTES_R2.md` 按 R2 实测更正 Q2/Q5 |
 | 11-14 00:35 | 论文审查 `PAPER_REVIEW_R1.md` + 修改单 `CHANGE_REQUEST_PAPER_R1.md` |
 | 11-14 01:45 | 数字核对 `DATA_AUDIT_2026-11-14.md`（Table 4 全对）+ 本看板 |
+| 11-14 17:35 | 论文 v3 复核通过（P2 换成 R2 口径 0.1485/6.42%/2.01%，P3 表号补齐）；编程手 R3 三项全交付（481 文件入库、caliber 1000 配对、布置分位带）；60 tests、check_release PASS |
 | 11-14 11:35 | **截止时间更正**：系统实为 11/15 24:00；内部硬停提前到 11/15 18:00；立 `SUBMISSION_CHECKLIST.md` |
 | 11-14 11:30 | 论文 v2 复核通过（4 处全改对，Table 4 与摘要数未受损）；新提 P2（0.14/1.6% 来自 R1）与 P3（布置表无表号） |
